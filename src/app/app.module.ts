@@ -7,8 +7,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from "./shared/shared.module";
 import { CoreModule } from "./core/core.module";
 import { StartComponent } from './componenta/start/start.component';
-import { StoreModule } from "@ngrx/store";
-import { mainReducer } from "./store/reducer";
+// import { StoreModule } from "@ngrx/store";
+// import { mainReducer } from "./store/reducer";
 
 @NgModule({
   declarations: [
@@ -20,7 +20,7 @@ import { mainReducer } from "./store/reducer";
     AppRoutingModule,
     NoopAnimationsModule,
     SharedModule,
-    StoreModule.forRoot({ gallery: mainReducer }),
+    // StoreModule.forRoot({ gallery: mainReducer }),
     CoreModule
   ],
   providers: [],
