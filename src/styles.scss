@@ -1,4 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+@use 'assets/mixin';
+html, body { height: 100vh; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; padding: 0 }
+*, *::after, *:before {
+  box-sizing: border-box;
+}
+.center {
+  @include mixin.align-center;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.dialog-default {
+  background-color: pink;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  overflow-y: scroll;
+  background: grey;
+  box-shadow: inset 0 0 4px #707070;
+}
+
+::-webkit-scrollbar-thumb {
+  background: darkslateblue;
+  border-radius: 10px;
+}

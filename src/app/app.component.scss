@@ -1,0 +1,19 @@
+:host {
+  height: 100%;
+  display: grid;
+  grid-template-areas:
+    'header'
+    'content';
+
+  grid-template-rows: auto 1fr;
+}
+.header {
+  grid-area: header;
+  z-index: 20;
+  //grid-area: 2 / 1 / 2 / 2;
+}
+
+main {
+  grid-area: content;
+  overflow: auto;
+}

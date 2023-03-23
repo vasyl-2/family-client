@@ -1,0 +1,65 @@
+<ng-container [formGroup]="addPhotoForm" >
+  <div class="add-photo-wrapper">
+    <mat-form-field appearance="fill">
+      <mat-label>название </mat-label>
+      <input formControlName="name" matInput>
+      <mat-error *ngIf="addPhotoForm?.get('name')?.hasError('required')">название обязательно указать</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>расширение (jpeg, png, ...)</mat-label>
+      <mat-select>
+        <ng-container *ngFor="let ext of photoExtensions; index as i">
+          <mat-option [value]="ext">
+            {{ ext }}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>раздел</mat-label>
+      <mat-select>
+        <ng-container *ngFor="let chapterA of photoChapters; index as i">
+          <mat-option [value]="chapterA.id">
+            {{ chapterA.title }}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field appearance="fill">
+      <input matInput>
+    </mat-form-field>
+
+    <mat-form-field class='description' appearance="fill">
+      <mat-label>краткое описание</mat-label>
+      <textarea  matInput
+                 cdkTextareaAutosize
+                 #autosize="cdkTextareaAutosize"
+                 cdkAutosizeMinRows="1"
+                 cdkAutosizeMaxRows="5"
+      ></textarea>
+    </mat-form-field>
+
+
+    <div class="description">
+      <label class="file">
+        <mat-icon>attach_file</mat-icon>
+        <span>выбери файл с диска</span>
+        <input class='file' id="upload-photo" type="file" (change)="uploadPhoto($event)">
+      </label>
+
+    </div>
+
+  </div>
+
+  <div class="actions">
+    <p class="description">Чтобы активизировать кнопку, заполни все обязательные поля *</p>
+    <button mat-button color="primary" (click)="addPhoto()" [disabled]="addPhotoForm.invalid">
+      Добавить фото
+    </button>
+  </div>
+
+</ng-container>
