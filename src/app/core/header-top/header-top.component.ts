@@ -1,4 +1,13 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy, OnDestroy} from '@angular/core';
+import {MatDialog} from "@angular/material/dialog";
+import {Store} from "@ngrx/store";
+import {filter, tap} from "rxjs/operators";
+import {Subscription} from "rxjs";
+
+import {CreatePhotoComponent} from "../../shared/components/create-photo/create-photo.component";
+import {GalleryState} from "../../store/reducer";
+import {Chapter} from "../../models/chapter";
+import {createdChapter, createPhoto} from "../../store/action";
 
 @Component({
   selector: 'app-header-top',
@@ -6,15 +15,45 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./header-top.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderTopComponent implements OnInit {
+export class HeaderTopComponent implements OnInit, OnDestroy {
 
-  constructor() { }
+  private sub = new Subscription();
+
+  constructor(
+    private dialog: MatDialog,
+    private store: Store<GalleryState>
+  ) { }
 
   ngOnInit(): void {
   }
 
-  addPhoto(): void {
-
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
+  addPhoto(): void {
+    this.sub.add(
+      this.sub.add(
+        this.dialog.open(CreatePhotoComponent).afterClosed()
+          .pipe(
+            filter((photo) => !!photo),
+            tap((photo) => console.log('ADD_PHOTO__________', photo))
+          )
+          .subscribe((photo) => this.store.dispatch(createPhoto({ payload: photo })))
+      )
+    )
+  }
+
+  addChapter(): void {
+    this.sub.add(
+      this.dialog.open(CreatePhotoComponent).afterClosed()
+        .pipe(
+          filter((chapter: Chapter | undefined) => !!chapter),
+          tap((chapter: Chapter | undefined) => console.log('FILLED_CHAPTER___________', chapter))
+        )
+        .subscribe((chapter: Chapter | undefined) =>
+            chapter && this.store.dispatch(createdChapter({ chapter }))
+          )
+    )
+  }
 }

@@ -9,10 +9,8 @@
 }
 .header {
   grid-area: header;
-  //height: 80px;
-  //padding: 0 20px;
-  //background: #e68a00;
-  //z-index: 20;
+  z-index: 20;
+  //grid-area: 2 / 1 / 2 / 2;
 }
 
 main {
