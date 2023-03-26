@@ -1,9 +1,13 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {DialogRef } from "@angular/cdk/dialog";
+import { MatDialogRef } from "@angular/material/dialog";
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {BehaviorSubject} from "rxjs";
+
 import {extensions} from "../../../data/extensions";
 import {chapters} from "../../../data/chapters";
-import {BehaviorSubject} from "rxjs";
-import {DialogRef} from "@angular/cdk/dialog";
+
 
 @Component({
   selector: 'app-create-photo',
@@ -22,7 +26,8 @@ export class CreatePhotoComponent implements OnInit {
 
   constructor(
     private fromBuilder: FormBuilder,
-    private dialogRef: DialogRef
+    private dialogRef: MatDialogRef<any>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
   }
 
@@ -39,7 +44,7 @@ export class CreatePhotoComponent implements OnInit {
   }
 
   addPhoto(): void {
-    this.dialogRef.close({ file: this.fileSubject.value })
+    this.dialogRef.close({ fileA: this.fileSubject.value });
   }
 
   private initForm(): void {

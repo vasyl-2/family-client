@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import {createChapter} from "./action";
+import {createChapter, createdPhoto, createPhoto} from "./action";
 import {Chapter} from "../models/chapter";
 
 export interface GalleryState {
@@ -15,6 +15,11 @@ export const mainReducer = createReducer(
   on(createChapter, (state: GalleryState, action) => {
 
     console.log('CREATED_________', action);
+    return state;
+  }),
+
+  on(createdPhoto, (state: GalleryState, action) => {
+    console.log('DONE____________________', action);
     return state;
   })
 )

@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {EMPTY, Observable, of} from 'rxjs';
 import { map, exhaustMap, catchError } from 'rxjs/operators';
 import {UploadPhotoService} from "../services/upload-photo.service";
-import {CREATE_ACTION, CREATE_PHOTO_ACTION, createdChapter} from "./action";
+import {CREATE_ACTION, CREATE_PHOTO_ACTION, createdChapter, createdPhoto} from "./action";
 import {Chapter} from "../models/chapter";
 import {CreateChapter} from "../models/dto/create-chapter";
 import {Action, Store} from "@ngrx/store";
@@ -20,8 +20,11 @@ export class GalleryEffects {
 
   createPhoto$ = createEffect(() => this.actions$.pipe(
     ofType(CREATE_PHOTO_ACTION),
-    exhaustMap((photo) => this.uploadService.createChapter(photo)),
-    map((chapter: any) => createdChapter({ chapter })),
+    exhaustMap((photo) => {
+      console.log('PHOTO__EFFECT____________', photo);
+      return this.uploadService.uploadPhoto(photo);
+    }),
+    map((photo: any) => createdPhoto({ photo })),
     catchError(() => EMPTY)
   ));
 

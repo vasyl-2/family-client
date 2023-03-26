@@ -32,15 +32,19 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
   }
 
   addPhoto(): void {
+    const dialogRef = this.dialog.open(CreatePhotoComponent, {
+      panelClass: 'dialog-property',
+      // position: { top: '80px' },
+      data: {},
+    });
+
     this.sub.add(
-      this.sub.add(
-        this.dialog.open(CreatePhotoComponent).afterClosed()
-          .pipe(
-            filter((photo) => !!photo),
-            tap((photo) => console.log('ADD_PHOTO__________', photo))
-          )
-          .subscribe((photo) => this.store.dispatch(createPhoto({ payload: photo })))
-      )
+      dialogRef.afterClosed()
+        .pipe(
+          filter((photo) => !!photo),
+          tap((photo) => console.log('ADD_PHOTO__________', photo))
+        )
+        .subscribe((photo) => this.store.dispatch(createPhoto({ payload: photo })))
     )
   }
 

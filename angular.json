@@ -77,7 +77,8 @@
               "browserTarget": "family-client:build:production"
             },
             "development": {
-              "browserTarget": "family-client:build:development"
+              "browserTarget": "family-client:build:development",
+              "proxyConfig": "proxy.config.json"
             }
           },
           "defaultConfiguration": "development"

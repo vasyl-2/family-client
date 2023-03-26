@@ -14,6 +14,8 @@ import { StartComponent } from './componenta/start/start.component';
 
 import { mainReducer } from "./store/reducer";
 import { DIALOG_CONFIG } from "./data/dialog-config";
+import {EffectsModule} from "@ngrx/effects";
+import {GalleryEffects} from "./store/effect";
 
 
 @NgModule({
@@ -29,6 +31,7 @@ import { DIALOG_CONFIG } from "./data/dialog-config";
     // ReactiveFormsModule,
     // FormsModule,
     StoreModule.forRoot({ gallery: mainReducer }),
+    EffectsModule.forRoot([GalleryEffects]),
     CoreModule,
     HttpClientModule,
   ],

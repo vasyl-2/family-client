@@ -25,6 +25,6 @@ export const createPhoto = createAction(
 
 export const createdPhoto = createAction(
   CREATED_PHOTO_ACTION,
-  props<{ chapter: any }>()
+  props<{ photo: any }>()
 );
 
