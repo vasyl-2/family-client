@@ -20,7 +20,7 @@ export const createdChapter = createAction(
 
 export const createPhoto = createAction(
   CREATE_PHOTO_ACTION,
-  props<{ payload: any }>()
+  props<{ payload: File }>()
 );
 
 export const createdPhoto = createAction(

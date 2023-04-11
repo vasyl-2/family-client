@@ -16,24 +16,32 @@ export class UploadPhotoService implements IUploadPhotoService {
   ) { }
 
   uploadPhoto(photo: any): Observable<any> {
-    const file = photo.payload.fileA;
+    const file = photo.payload;
     const { name } = file;
     console.log('PHOTO_____1', file);
     console.log('PHOTO_____2', name);
 
-    const formData: FormData = new FormData();
-    formData.append('file', file, name);
+    let reader = new FileReader();
+
+    const formData = new FormData();
+    formData.append('photo', file, name);
 
     const body = {
       image: formData
     };
 
-    return this.http.post(`${environment.apiUrl}/upload-photo/uploadfile`, body);
+    console.log('BODY______________', formData);
+
+    return this.http.post(`${environment.apiUrl}/upload-photo/uploadfile`, formData, { responseType: 'text', reportProgress: true });
     // return of({ hi: 'HI_____________' });
   }
 
   createChapter(chapter: CreateChapter): Observable<any> {
 
     return of('');
+  }
+
+  getAllPhotos(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/photos`);
   }
 }

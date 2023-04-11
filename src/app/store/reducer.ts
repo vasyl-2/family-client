@@ -19,7 +19,7 @@ export const mainReducer = createReducer(
   }),
 
   on(createdPhoto, (state: GalleryState, action) => {
-    console.log('DONE____________________', action);
+    console.log('DONE____________________', JSON.parse(action.photo));
     return state;
   })
 )

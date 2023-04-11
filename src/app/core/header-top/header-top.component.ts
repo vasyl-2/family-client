@@ -17,6 +17,8 @@ import {createdChapter, createPhoto} from "../../store/action";
 })
 export class HeaderTopComponent implements OnInit, OnDestroy {
 
+  imageUrl!: string;
+
   private sub = new Subscription();
 
   constructor(
@@ -44,7 +46,20 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
           filter((photo) => !!photo),
           tap((photo) => console.log('ADD_PHOTO__________', photo))
         )
-        .subscribe((photo) => this.store.dispatch(createPhoto({ payload: photo })))
+        .subscribe((photo) => {
+          // let reader: FileReader = new FileReader();
+          //
+          // reader.readAsDataURL(photo.fileA);
+          //
+          // reader.onload = () => {
+          //
+          //   console.log('RESULT__________', reader.result)
+          //   this.imageUrl = reader.result as string;
+          // };
+
+
+          this.store.dispatch(createPhoto({ payload: photo.fileA }));
+        })
     )
   }
 

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HeaderTopComponent } from './header-top/header-top.component';
 import {SharedModule} from "../shared/shared.module";
-
+import {RouterModule} from "@angular/router";
 
 
 @NgModule({
@@ -9,7 +9,8 @@ import {SharedModule} from "../shared/shared.module";
     HeaderTopComponent
   ],
   imports: [
-    SharedModule
+    SharedModule,
+    RouterModule
   ],
   exports: [
     HeaderTopComponent

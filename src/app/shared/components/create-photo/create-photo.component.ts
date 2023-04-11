@@ -37,7 +37,6 @@ export class CreatePhotoComponent implements OnInit {
 
   // tslint:disable-next-line:no-any
   uploadPhoto(event: any): void {
-    console.log('UPLOAD_FLIE__________', event.target.files[0]);
     const file: File = event.target.files[0];
 
     this.fileSubject.next(file);
