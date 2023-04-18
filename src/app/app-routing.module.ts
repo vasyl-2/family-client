@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {StartComponent} from "./componenta/start/start.component";
+import { StartComponent } from "./componenta/start/start.component";
 
 const routes: Routes = [
   {
@@ -17,7 +17,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

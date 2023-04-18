@@ -5,7 +5,13 @@ import {EntryComponent} from "./components/entry/entry.component";
 const routes: Routes = [
   {
     path: '',
-    component: EntryComponent
+    redirectTo: 'listphotos',
+    pathMatch: 'full'
+  },
+  {
+    path: 'listphotos',
+    component: EntryComponent,
+    data: { animation: 'heroes' }
   }
 ]
 @NgModule({
