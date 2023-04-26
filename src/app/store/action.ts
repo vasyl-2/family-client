@@ -1,6 +1,7 @@
 import {createAction, props} from '@ngrx/store';
 import {Chapter} from "../models/chapter";
 import {CreateChapter} from "../models/dto/create-chapter";
+import {Photo} from "../models/photo";
 
 export const CREATE_ACTION = '[Gallery] CREATE';
 export const CREATED_ACTION = '[Gallery] CREATED';
@@ -20,7 +21,7 @@ export const createdChapter = createAction(
 
 export const createPhoto = createAction(
   CREATE_PHOTO_ACTION,
-  props<{ payload: File }>()
+  props<{ payload: Photo }>()
 );
 
 export const createdPhoto = createAction(

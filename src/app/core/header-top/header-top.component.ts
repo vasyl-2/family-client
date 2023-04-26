@@ -8,6 +8,7 @@ import {CreatePhotoComponent} from "../../shared/components/create-photo/create-
 import {GalleryState} from "../../store/reducer";
 import {Chapter} from "../../models/chapter";
 import {createdChapter, createPhoto} from "../../store/action";
+import {Photo} from "../../models/photo";
 
 @Component({
   selector: 'app-header-top',
@@ -43,10 +44,10 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     this.sub.add(
       dialogRef.afterClosed()
         .pipe(
-          filter((photo) => !!photo),
-          tap((photo) => console.log('ADD_PHOTO__________', photo))
+          filter((photo: Photo) => !!photo),
+          // tap((photo) => console.log('ADD_PHOTO__________', photo))
         )
-        .subscribe((photo) => this.store.dispatch(createPhoto({ payload: photo.fileA })))
+        .subscribe((photo) => this.store.dispatch(createPhoto({ payload: photo })))
     )
   }
 

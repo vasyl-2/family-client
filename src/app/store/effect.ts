@@ -7,6 +7,7 @@ import {CREATE_ACTION, CREATE_PHOTO_ACTION, createdChapter, createdPhoto} from "
 import {Chapter} from "../models/chapter";
 import {CreateChapter} from "../models/dto/create-chapter";
 import {Action, Store} from "@ngrx/store";
+import {Photo} from "../models/photo";
 
 @Injectable()
 export class GalleryEffects {
@@ -20,7 +21,7 @@ export class GalleryEffects {
 
   createPhoto$ = createEffect(() => this.actions$.pipe(
     ofType(CREATE_PHOTO_ACTION),
-    exhaustMap((photo) => {
+    exhaustMap((photo: { payload: Photo }) => {
       console.log('PHOTO__EFFECT____________', photo);
       return this.uploadService.uploadPhoto(photo);
     }),

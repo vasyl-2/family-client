@@ -19,7 +19,7 @@
 
     <mat-form-field appearance="fill">
       <mat-label>раздел</mat-label>
-      <mat-select>
+      <mat-select formControlName="chapter">
         <ng-container *ngFor="let chapterA of photoChapters; index as i">
           <mat-option [value]="chapterA.id">
             {{ chapterA.title }}

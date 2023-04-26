@@ -1,39 +1,39 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable, of} from "rxjs";
-import {IUploadPhotoService} from "../models/services/upload-photo-service";
-import {Chapter} from "../models/chapter";
-import {CreateChapter} from "../models/dto/create-chapter";
-import {environment} from "../../environments/environment";
+import { HttpClient } from "@angular/common/http";
+import { Observable, of } from "rxjs";
+
+import { IUploadPhotoService } from "../models/services/upload-photo-service";
+import { CreateChapter } from "../models/dto/create-chapter";
+import { environment } from "../../environments/environment";
+import { Photo } from "../models/photo";
 
 @Injectable({ providedIn: 'root' })
 export class UploadPhotoService implements IUploadPhotoService {
-
-  // prefix = 'http://localhost:4200/upload-photo';
 
   constructor(
     private http: HttpClient
   ) { }
 
-  uploadPhoto(photo: any): Observable<any> {
-    const file = photo.payload;
-    const { name } = file;
-    console.log('PHOTO_____1', file);
-    console.log('PHOTO_____2', name);
+  uploadPhoto(photo: { payload: Photo }): Observable<any> {
+    const url = `${environment.apiUrl}/upload-photo/uploadfile`;
+    const file = photo.payload.photo;
+    let { name } = file;
 
-    let reader = new FileReader();
+    if (photo.payload.name) {
+      const extension = name.split('.').at(-1);
+      name = `${photo.payload.name}.${extension}`;
+    }
 
     const formData = new FormData();
     formData.append('photo', file, name);
 
-    const body = {
-      image: formData
-    };
 
-    console.log('BODY______________', formData);
+    if (photo.payload.chapter) {
+      const { chapter } = photo.payload;
+      formData.append('chapter', chapter);
+    }
 
-    return this.http.post(`${environment.apiUrl}/upload-photo/uploadfile`, formData, { responseType: 'text', reportProgress: true });
-    // return of({ hi: 'HI_____________' });
+    return this.http.post(url, formData, { responseType: 'text', reportProgress: true });
   }
 
   createChapter(chapter: CreateChapter): Observable<any> {
