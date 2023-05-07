@@ -10,6 +10,8 @@ import {Photo} from "../../../models/photo";
 import {GalleryState} from "../../../store/reducer";
 import {select, Store} from "@ngrx/store";
 import {chaptersSelector} from "../../../store/selectors";
+import {Chapter} from "../../../models/chapter";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-create-photo',
@@ -24,8 +26,8 @@ export class CreatePhotoComponent implements OnInit {
   private readonly fileSubject = new BehaviorSubject<File | undefined>(undefined);
 
   photoExtensions: string[] = extensions;
-  photoChapters: { title: string, id: string }[] = chapters;
-  photoChapters$!: Observable<any>;
+  // photoChapters: { title: string, id: string }[] = chapters;
+  photoChapters$!: Observable<Chapter[]>;
 
   constructor(
     private fromBuilder: FormBuilder,
@@ -38,13 +40,26 @@ export class CreatePhotoComponent implements OnInit {
   ngOnInit() {
     this.initForm();
 
-    this.photoChapters$ = this.store.pipe(select(chaptersSelector))
+    this.photoChapters$ = this.store.pipe(
+      select(chaptersSelector),
+      map((chaptersFromDB: Chapter[]) => chaptersFromDB.map((c: Chapter) => {
+        const readableName = chapters.find((ch: Chapter) => ch.id === c.readable_id);
+
+        if (readableName) {
+          const newC = { ...c, readableName: readableName.title }
+          return newC;
+        }
+
+        return c;
+
+      }))
+    )
     this.photoChapters$.subscribe(c => console.log('C______________________', c));
   }
 
   // tslint:disable-next-line:no-any
   uploadPhoto(event: any): void {
-    const file: File = event.target.files[0];
+    const file: File = event.target.feiles[0];
 
     this.fileSubject.next(file);
   }

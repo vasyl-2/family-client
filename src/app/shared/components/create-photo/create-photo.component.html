@@ -20,9 +20,9 @@
     <mat-form-field appearance="fill">
       <mat-label>раздел</mat-label>
       <mat-select formControlName="chapter">
-        <ng-container *ngFor="let chapterA of photoChapters; index as i">
-          <mat-option [value]="chapterA.id">
-            {{ chapterA.title }}
+        <ng-container *ngFor="let chapterA of photoChapters$ | async; index as i">
+          <mat-option [value]="chapterA._id">
+            {{ chapterA.readableName }}
           </mat-option>
         </ng-container>
       </mat-select>
