@@ -28,9 +28,15 @@ export class UploadPhotoService implements IUploadPhotoService {
     formData.append('photo', file, name);
 
 
+    console.log('PHOTO______________________', photo.payload);
     if (photo.payload.chapter) {
       const { chapter } = photo.payload;
       formData.append('chapter', chapter);
+    }
+
+    if (photo.payload.description) {
+      const { description } = photo.payload;
+      formData.append('description', description);
     }
 
     return this.http.post(url, formData, { responseType: 'text', reportProgress: true });
@@ -43,5 +49,9 @@ export class UploadPhotoService implements IUploadPhotoService {
 
   getAllPhotos(): Observable<any> {
     return this.http.get(`${environment.apiUrl}/photos`);
+  }
+
+  getChapters(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/upload-photo/chapters`);
   }
 }

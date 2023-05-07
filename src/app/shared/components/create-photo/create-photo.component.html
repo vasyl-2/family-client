@@ -35,7 +35,8 @@
 
     <mat-form-field class='description' appearance="fill">
       <mat-label>краткое описание</mat-label>
-      <textarea  matInput
+      <textarea  formControlName="description"
+                 matInput
                  cdkTextareaAutosize
                  #autosize="cdkTextareaAutosize"
                  cdkAutosizeMinRows="1"
@@ -48,9 +49,15 @@
       <label class="file">
         <mat-icon>attach_file</mat-icon>
         <span>выбери файл с диска</span>
-        <input class='file' id="upload-photo" type="file"  accept="image/*" (change)="uploadPhoto($event)">
+        <input #upload class='file' id="upload-photo" type="file"  accept="image/*" (change)="uploadPhoto($event)">
       </label>
 
+      <button mat-icon-button
+              [color]="'default'"
+              (click)="upload.click()">
+        <mat-icon [ngClass]="'material-icons-outlined'">file_upload</mat-icon>
+      </button>
+      <span>выбери файл</span>
     </div>
 
   </div>

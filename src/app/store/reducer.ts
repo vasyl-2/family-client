@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
-import {createChapter, createdPhoto, createPhoto} from "./action";
+import {createChapter, createdPhoto, createPhoto, receivedChapters} from "./action";
 import {Chapter} from "../models/chapter";
+
 
 export interface GalleryState {
   chapters: Chapter[];
@@ -21,5 +22,13 @@ export const mainReducer = createReducer(
   on(createdPhoto, (state: GalleryState, action) => {
     console.log('DONE____________________', JSON.parse(action.photo));
     return state;
+  }),
+
+  on(receivedChapters, (state: GalleryState, action) => {
+
+    const newState = { ...state, chapters: action.chapters };
+    console.log('CHAPTERS______RECEIVED_______', action);
+    return newState;
   })
 )
+

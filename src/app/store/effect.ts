@@ -1,13 +1,20 @@
 import {Injectable} from "@angular/core";
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {EMPTY, Observable, of} from 'rxjs';
-import { map, exhaustMap, catchError } from 'rxjs/operators';
+import {map, exhaustMap, catchError, tap} from 'rxjs/operators';
 import {UploadPhotoService} from "../services/upload-photo.service";
-import {CREATE_ACTION, CREATE_PHOTO_ACTION, createdChapter, createdPhoto} from "./action";
-import {Chapter} from "../models/chapter";
+import {
+  CREATE_ACTION,
+  CREATE_PHOTO_ACTION,
+  createdChapter,
+  createdPhoto,
+  RECEIVE_CHAPTERS,
+  receivedChapters
+} from "./action";
 import {CreateChapter} from "../models/dto/create-chapter";
-import {Action, Store} from "@ngrx/store";
+import {Store} from "@ngrx/store";
 import {Photo} from "../models/photo";
+
 
 @Injectable()
 export class GalleryEffects {
@@ -28,6 +35,16 @@ export class GalleryEffects {
     map((photo: any) => createdPhoto({ photo })),
     catchError(() => EMPTY)
   ));
+
+  receiveChapters$ = createEffect(() => this.actions$.pipe(
+    ofType(RECEIVE_CHAPTERS),
+    exhaustMap((chapters) => {
+
+      return this.uploadService.getChapters()
+    }),
+    tap((c) => console.log('___CHAPTERS___', c)),
+    map((chapters) => receivedChapters({ chapters }))
+  ))
 
   constructor(
     private actions$: Actions,

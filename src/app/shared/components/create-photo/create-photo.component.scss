@@ -21,6 +21,7 @@
   }
 
   .file {
+    display: none;
     cursor: pointer;
 
     #upload-photo {
@@ -39,4 +40,6 @@
 .description {
   padding-left: 8px;
   font-size: 14px;
+  display: flex;
+  align-items: center;
 }
