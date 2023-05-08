@@ -59,7 +59,8 @@ export class CreatePhotoComponent implements OnInit {
 
   // tslint:disable-next-line:no-any
   uploadPhoto(event: any): void {
-    const file: File = event.target.feiles[0];
+    console.log('EVENT_____________', event.target.files);
+    const file: File = event.target.files[0];
 
     this.fileSubject.next(file);
   }
@@ -67,12 +68,14 @@ export class CreatePhotoComponent implements OnInit {
   addPhoto(): void {
     const { name = undefined, chapter = undefined, description = undefined } = this.addPhotoForm.value;
 
-    if (! this.fileSubject.value) {
+    console.log('CHECK___________', this.fileSubject.value );
+    if (!this.fileSubject.value) {
       return;
     }
 
     const photo: Photo = { name, chapter, description, photo: this.fileSubject.value };
 
+    console.log('CHECK___________1', photo);
     this.dialogRef.close(photo);
   }
 

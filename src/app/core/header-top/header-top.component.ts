@@ -45,7 +45,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed()
         .pipe(
           filter((photo: Photo) => !!photo),
-          // tap((photo) => console.log('ADD_PHOTO__________', photo))
+          tap((photo) => console.log('ADD_PHOTO__________', photo))
         )
         .subscribe((photo) => this.store.dispatch(createPhoto({ payload: photo })))
     )
