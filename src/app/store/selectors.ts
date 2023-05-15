@@ -1,7 +1,10 @@
-import {createFeatureSelector, createSelector} from "@ngrx/store";
-import {Chapter} from "../models/chapter";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
 
+import { GalleryState } from "./reducer";
 
-export const gallerySelector = createFeatureSelector<{ chapters: Chapter[] }>('gallery');
+// StoreModule.forRoot({ gallery: mainReducer }),  - so the gallery name
+// In feature module i.e. - StoreModule.forFeature({ featureOne: smth }) it would be ('smth')
+export const gallerySelector = createFeatureSelector<GalleryState>('gallery');
 
-export const chaptersSelector = createSelector(gallerySelector, (state: { chapters: Chapter[] }) => state.chapters);
+export const chaptersSelector = createSelector(gallerySelector, (state: GalleryState) => state.chapters);
+export const photosSelector = createSelector(gallerySelector, (state: GalleryState) => state.photos);

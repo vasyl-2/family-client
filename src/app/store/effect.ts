@@ -7,9 +7,9 @@ import {
   CREATE_ACTION,
   CREATE_PHOTO_ACTION,
   createdChapter,
-  createdPhoto,
-  RECEIVE_CHAPTERS,
-  receivedChapters
+  createdPhoto, RECEIVE_ALL_PHOTOS,
+  RECEIVE_CHAPTERS, RECEIVED_ALL_PHOTOS,
+  receivedChapters, receivedPhotos
 } from "./action";
 import {CreateChapter} from "../models/dto/create-chapter";
 import {Store} from "@ngrx/store";
@@ -29,7 +29,6 @@ export class GalleryEffects {
   createPhoto$ = createEffect(() => this.actions$.pipe(
     ofType(CREATE_PHOTO_ACTION),
     exhaustMap((photo: { payload: Photo }) => {
-      console.log('PHOTO__EFFECT____________', photo);
       return this.uploadService.uploadPhoto(photo);
     }),
     map((photo: any) => createdPhoto({ photo })),
@@ -44,6 +43,13 @@ export class GalleryEffects {
     }),
     tap((c) => console.log('___CHAPTERS___', c)),
     map((chapters) => receivedChapters({ chapters }))
+  ));
+
+  getAllPhotos$ = createEffect(() => this.actions$.pipe(
+    ofType(RECEIVE_ALL_PHOTOS),
+    exhaustMap(() => this.uploadService.getAllPhotos()),
+    tap((c) => console.log('__PHOTOS___111____', c)),
+    map((photos) => receivedPhotos({ photos }))
   ))
 
   constructor(
