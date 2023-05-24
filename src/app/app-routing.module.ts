@@ -21,4 +21,6 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { enableTracing: false })],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+
+}
