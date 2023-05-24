@@ -1,17 +1,17 @@
-import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
-import {BehaviorSubject, Observable} from "rxjs";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { BehaviorSubject, Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { select, Store } from "@ngrx/store";
 
-import {extensions} from "../../../data/extensions";
-import {chapters} from "../../../data/chapters";
-import {Photo} from "../../../models/photo";
-import {GalleryState} from "../../../store/reducer";
-import {select, Store} from "@ngrx/store";
-import {chaptersSelector} from "../../../store/selectors";
-import {Chapter} from "../../../models/chapter";
-import {map} from "rxjs/operators";
+import { extensions } from "../../../data/extensions";
+import { chapters } from "../../../data/chapters";
+import { Photo } from "../../../models/photo";
+import { GalleryState } from "../../../store/reducer";
+import { chaptersSelector } from "../../../store/selectors";
+import { Chapter } from "../../../models/chapter";
 
 @Component({
   selector: 'app-create-photo',
@@ -26,7 +26,6 @@ export class CreatePhotoComponent implements OnInit {
   private readonly fileSubject = new BehaviorSubject<File | undefined>(undefined);
 
   photoExtensions: string[] = extensions;
-  // photoChapters: { title: string, id: string }[] = chapters;
   photoChapters$!: Observable<Chapter[]>;
 
   constructor(
@@ -51,15 +50,12 @@ export class CreatePhotoComponent implements OnInit {
         }
 
         return c;
-
       }))
     )
-    this.photoChapters$.subscribe(c => console.log('C______________________', c));
   }
 
   // tslint:disable-next-line:no-any
   uploadPhoto(event: any): void {
-    console.log('EVENT_____________', event.target.files);
     const file: File = event.target.files[0];
 
     this.fileSubject.next(file);
@@ -67,15 +63,10 @@ export class CreatePhotoComponent implements OnInit {
 
   addPhoto(): void {
     const { name = undefined, chapter = undefined, description = undefined } = this.addPhotoForm.value;
-
-    console.log('CHECK___________', this.fileSubject.value );
     if (!this.fileSubject.value) {
       return;
     }
-
     const photo: Photo = { name, chapter, description, photo: this.fileSubject.value };
-
-    console.log('CHECK___________1', photo);
     this.dialogRef.close(photo);
   }
 

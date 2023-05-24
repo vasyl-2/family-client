@@ -26,6 +26,7 @@ export class UploadPhotoService implements IUploadPhotoService {
 
     const formData = new FormData();
     formData.append('photo', file, name);
+    formData.append('name', name);
 
 
     console.log('PHOTO______________________', photo.payload);
