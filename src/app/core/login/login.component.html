@@ -1,0 +1,17 @@
+
+<form [formGroup]="loginForm" class="example-form">
+  <mat-form-field class="example-full-width">
+    <mat-label>Імя</mat-label>
+    <input matInput [formControl]="nameControl" placeholder="введи імя">
+    <mat-error *ngIf="nameControl.hasError('required')">
+      треба <strong>ввести імя</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Пароль</mat-label>
+    <input type="password" matInput [formControl]="pswdControl" placeholder="введи пароль">
+    <mat-error *ngIf="pswdControl.hasError('required')">
+      треба <strong>ввести пароль</strong>
+    </mat-error>
+  </mat-form-field>
+</form>

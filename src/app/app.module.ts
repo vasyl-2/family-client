@@ -13,9 +13,9 @@ import { SharedModule } from "./shared/shared.module";
 import { CoreModule } from "./core/core.module";
 import { StartComponent } from './componenta/start/start.component';
 
-import { mainReducer } from "./store/reducer";
-import { DIALOG_CONFIG } from "./data/dialog-config";
-import { GalleryEffects } from "./store/effect";
+import { mainReducer } from './store/reducer';
+import { DIALOG_CONFIG } from './data/dialog-config';
+import { GalleryEffects } from './store/effect';
 
 
 @NgModule({
@@ -28,8 +28,6 @@ import { GalleryEffects } from "./store/effect";
     AppRoutingModule,
     NoopAnimationsModule,
     SharedModule,
-    // ReactiveFormsModule,
-    // FormsModule,
     StoreModule.forRoot({ gallery: mainReducer }),
     EffectsModule.forRoot([GalleryEffects]),
     CoreModule,
