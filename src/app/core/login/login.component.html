@@ -9,9 +9,17 @@
   </mat-form-field>
   <mat-form-field class="example-full-width">
     <mat-label>Пароль</mat-label>
-    <input type="password" matInput [formControl]="pswdControl" placeholder="введи пароль">
+    <input  [type]="(hide$ | async) ? 'password' : 'text'"
+            matInput
+            [formControl]="pswdControl"
+            placeholder="введи пароль">
+    <button mat-icon-button matSuffix (click)="changeHide()">
+      <mat-icon>{{ (hide$ | async) ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
     <mat-error *ngIf="pswdControl.hasError('required')">
       треба <strong>ввести пароль</strong>
     </mat-error>
   </mat-form-field>
+
+  <button mat-button color="primary">Увійти</button>
 </form>

@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validator, Validators} from "@angular/forms";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -10,6 +11,9 @@ import {FormBuilder, FormControl, FormGroup, Validator, Validators} from "@angul
 export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
+
+  private readonly hideSubject = new BehaviorSubject(true);
+  hide$ = this.hideSubject.asObservable();
 
   constructor(private fB: FormBuilder) {
   }
@@ -31,5 +35,9 @@ export class LoginComponent implements OnInit {
       name: this.fB.control('', [Validators.required]),
       password: this.fB.control('', [Validators.required]),
     })
+  }
+
+  changeHide(): void {
+    this.hideSubject.next(!this.hideSubject.value);
   }
 }
