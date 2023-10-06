@@ -21,7 +21,7 @@ export class AuthorizationService {
     return this.http.post<{ access_token: string }>(`${environment.apiUrl}/auth/authenticate`, creds).pipe(
       filter((resp: { access_token: string }) => !!resp),
       tap((resp) => this.isLoggedInSubject.next(true)),
-      tap((resp) => localStorage.setItem('token', resp.access_token)),
+      tap((resp) => localStorage.setItem('auth', resp.access_token)),
       tap((resp) => this.store.dispatch(authenticateAlertHide())),
       tap((resp) => this.store.dispatch(authenticated( { token: resp.access_token }))),
     );

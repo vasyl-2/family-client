@@ -7,6 +7,7 @@
       <button mat-icon-button class="login" [routerLink]="['auth', 'login']">
         <mat-icon>login</mat-icon>
       </button>
+
     </div>
 
   </ng-container>
@@ -35,6 +36,13 @@
 
       <ng-container *ngIf="!(isAuthenticated$ | async)">
         <button mat-icon-button class="login" [routerLink]="['auth', 'login']">
+          <mat-icon>login</mat-icon>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="isAuthenticated$ | async">
+<!--        <button mat-icon-button class="login" [routerLink]="['auth', 'logout']">-->
+        <button mat-icon-button class="login" (click)="logout()">
           <mat-icon>login</mat-icon>
         </button>
       </ng-container>

@@ -8,7 +8,8 @@ import {
   receivedPhotos,
   authenticated,
   authenticateAlert,
-  authenticateAlertHide
+  authenticateAlertHide,
+  logout
 } from "./action";
 import { Chapter } from "../models/chapter";
 import { Photo } from "../models/photo";
@@ -70,6 +71,7 @@ export const mainReducer = createReducer(
 
   on(authenticateAlertHide, (state: GalleryState, action) => {
     const s = { ...state, auth: { ...state.auth, showAlert: false }};
+    console.log('SHOW_OR_NOT____', s.auth.showAlert)
     return s;
   }),
 
@@ -78,6 +80,10 @@ export const mainReducer = createReducer(
     return s;
   }),
 
-  //
+  on(logout, (state: GalleryState, action) => {
+    const s = { ...state, auth: { ...state.auth, authenticated: false }};
+    return s;
+  }),
+
 )
 

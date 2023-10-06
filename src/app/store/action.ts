@@ -16,6 +16,7 @@ export const RECEIVE_ALL_PHOTOS = '[PHOTOS] RECEIVE PHOTOS';
 export const RECEIVED_ALL_PHOTOS = '[PHOTOS] RECEIVED PHOTOS';
 
 export const AUTHENTICATE = '[AUTHENTICATE] AUTHENTICATE';
+export const LOGOUT = '[AUTHENTICATE] AUTHENTICATE LOGOUT';
 export const AUTHENTICATE_SUCCESS = '[AUTHENTICATE] AUTHENTICATE SUCCESS';
 export const AUTHENTICATE_ERROR = '[AUTHENTICATE] AUTHENTICATE ERROR';
 
@@ -63,6 +64,10 @@ export const receivedPhotos = createAction(
 export const authenticate = createAction(
   AUTHENTICATE,
   props<{ credentials: { email: string; password: string; } }>()
+);
+
+export const logout = createAction(
+  LOGOUT
 );
 
 export const authenticated = createAction(

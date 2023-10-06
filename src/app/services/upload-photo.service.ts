@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import { Observable, of } from "rxjs";
 import {catchError} from "rxjs/operators";
 import { Store } from "@ngrx/store";
@@ -57,12 +57,14 @@ export class UploadPhotoService implements IUploadPhotoService {
     return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photos`);
   }
 
+  // TODO ass type
   getChapters(): Observable<any> {
     return this.http.get(`${environment.apiUrl}/upload-photo/chapters`).pipe(
       catchError((error) => {
-        this.store.dispatch(authenticateAlert());
-        console.log('ERROR_________', error);
-        return of([])
+        if (error instanceof HttpErrorResponse) {
+          console.log('Hi, please do authorization, it\'s me, Vasya:)', error);
+        }
+        return of([]);
       })
     );
   }

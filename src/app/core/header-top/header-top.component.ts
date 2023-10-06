@@ -7,7 +7,7 @@ import {Observable, Subscription} from "rxjs";
 import {CreatePhotoComponent} from "../../shared/components/create-photo/create-photo.component";
 import {GalleryState} from "../../store/reducer";
 import {Chapter} from "../../models/chapter";
-import {createdChapter, createPhoto} from "../../store/action";
+import {authenticateAlert, authenticateAlertHide, authenticated, createdChapter, createPhoto, logout} from "../../store/action";
 import {Photo} from "../../models/photo";
 import {alertSelector, isAuthenticated} from "../../store/selectors";
 import {Router} from "@angular/router";
@@ -35,6 +35,13 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+
+    if (!!localStorage.getItem('auth')) {
+      console.log('ITEM___________________________', localStorage.getItem('auth'));
+      this.store.dispatch(authenticated({ token: localStorage.getItem('auth') as string}));
+      this.store.dispatch(authenticateAlertHide());
+    }
+
     this.showAlert$ = this.store.pipe(
       select(alertSelector)
     );
@@ -43,9 +50,11 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
       select(isAuthenticated)
     );
 
-    this.isAuthenticated$.pipe(filter(Boolean)).subscribe((_) => this.router.navigate(["/"]))
-
-    this.showAlert$.subscribe(x => console.log('ALERT___________', x))
+    this.showAlert$.subscribe(x => console.log('SHOW__________________________________', x))
+    this.isAuthenticated$.pipe(filter(Boolean)).subscribe((_) => {
+      console.log('AUTHENTICATED_SUCCESFUL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+      this.router.navigate(["/"]);
+    })
   }
 
   ngOnDestroy() {
@@ -80,5 +89,11 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
             chapter && this.store.dispatch(createdChapter({ chapter }))
           )
     )
+  }
+
+  logout(): void {
+    this.store.dispatch(authenticateAlert());
+    this.store.dispatch(logout());
+    this.router.navigate(['/auth', 'logout']);
   }
 }
