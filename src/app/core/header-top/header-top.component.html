@@ -1,30 +1,46 @@
 <p>
-  <mat-toolbar color="primary">
-    <button mat-icon-button class="mobile">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <span>: - )</span>
-    <span class="example-spacer"></span>
-    <button routerLink="/entry" mat-button class="add-photo">головна</button>
-    <span class="example-spacer"></span>
-    <button (click)="addPhoto()" mat-button class="add-photo">
-      додати фото в галерею
-    </button>
 
-    <span class="example-spacer"></span>
-    <button (click)="addChapter()" mat-button class="add-photo">
-      додати розділ в галерею
-    </button>
-    <span class="example-spacer"></span>
-    <button routerLink="/gallery" mat-button class="add-photo">
-      галерея рр
-    </button>
-<!--    <span class="example-spacer"></span>-->
-    <button mat-icon-button class="login" [routerLink]="['auth', 'login']">
-      <mat-icon>login</mat-icon>
-    </button>
-<!--    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">-->
-<!--      <mat-icon>share</mat-icon>-->
-<!--    </button>-->
-  </mat-toolbar>
+  <ng-container *ngIf="showAlert$ | async; else app">
+    <div class="show-alert">
+      <p>Нужно авторизироваться</p>
+
+      <button mat-icon-button class="login" [routerLink]="['auth', 'login']">
+        <mat-icon>login</mat-icon>
+      </button>
+    </div>
+
+  </ng-container>
+
+  <ng-template #app>
+    <mat-toolbar color="primary">
+      <button mat-icon-button class="mobile">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>: - )</span>
+      <span class="example-spacer"></span>
+      <button routerLink="/entry" mat-button class="add-photo">головна</button>
+      <span class="example-spacer"></span>
+      <button (click)="addPhoto()" mat-button class="add-photo">
+        додати фото в галерею
+      </button>
+
+      <span class="example-spacer"></span>
+      <button (click)="addChapter()" mat-button class="add-photo">
+        додати розділ в галерею
+      </button>
+      <span class="example-spacer"></span>
+      <button routerLink="/gallery" mat-button class="add-photo">
+        галерея рр
+      </button>
+
+      <ng-container *ngIf="!(isAuthenticated$ | async)">
+        <button mat-icon-button class="login" [routerLink]="['auth', 'login']">
+          <mat-icon>login</mat-icon>
+        </button>
+      </ng-container>
+
+
+    </mat-toolbar>
+  </ng-template>
 </p>
+

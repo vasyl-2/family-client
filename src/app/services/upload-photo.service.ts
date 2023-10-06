@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Observable, of } from "rxjs";
+import {catchError} from "rxjs/operators";
+import { Store } from "@ngrx/store";
 
 import { IUploadPhotoService } from "../models/services/upload-photo-service";
 import { CreateChapter } from "../models/dto/create-chapter";
 import { environment } from "../../environments/environment";
 import { Photo } from "../models/photo";
+import {GalleryState} from "../store/reducer";
+import {authenticateAlert} from "../store/action";
 
 @Injectable({ providedIn: 'root' })
 export class UploadPhotoService implements IUploadPhotoService {
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private store: Store<GalleryState>
   ) { }
 
   uploadPhoto(photo: { payload: Photo }): Observable<any> {
@@ -53,6 +58,12 @@ export class UploadPhotoService implements IUploadPhotoService {
   }
 
   getChapters(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/upload-photo/chapters`);
+    return this.http.get(`${environment.apiUrl}/upload-photo/chapters`).pipe(
+      catchError((error) => {
+        this.store.dispatch(authenticateAlert());
+        console.log('ERROR_________', error);
+        return of([])
+      })
+    );
   }
 }

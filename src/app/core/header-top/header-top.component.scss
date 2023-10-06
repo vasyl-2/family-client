@@ -11,3 +11,13 @@
 .login {
   margin-left: auto;
 }
+
+.show-alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: pink;
+  font-size: 24px;
+  color: azure;
+  height: 90px;
+}

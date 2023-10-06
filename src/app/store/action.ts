@@ -15,6 +15,13 @@ export const RECEIVED_CHAPTERS = '[CHAPTERS] RECEIVED CHAPTERS';
 export const RECEIVE_ALL_PHOTOS = '[PHOTOS] RECEIVE PHOTOS';
 export const RECEIVED_ALL_PHOTOS = '[PHOTOS] RECEIVED PHOTOS';
 
+export const AUTHENTICATE = '[AUTHENTICATE] AUTHENTICATE';
+export const AUTHENTICATE_SUCCESS = '[AUTHENTICATE] AUTHENTICATE SUCCESS';
+export const AUTHENTICATE_ERROR = '[AUTHENTICATE] AUTHENTICATE ERROR';
+
+export const SHOW_AUTHENTICATION_ALERT = '[AUTHENTICATE] SHOW ALERT';
+export const AUTHENTICATION_ALERT_HIDE = '[AUTHENTICATE] SHOW ALERT HIDE';
+
 export const createChapter = createAction(
   CREATE_ACTION,
   props<{ payload: CreateChapter }>()
@@ -53,4 +60,26 @@ export const receivedPhotos = createAction(
   props<{ photos: Photo[] }>()
 );
 
+export const authenticate = createAction(
+  AUTHENTICATE,
+  props<{ credentials: { email: string; password: string; } }>()
+);
+
+export const authenticated = createAction(
+  AUTHENTICATE_SUCCESS,
+  props<{ token: string }>()
+);
+
+export const authenticateError = createAction(
+  AUTHENTICATE_ERROR,
+  props<{ authenticated: false; }>()
+);
+
+export const authenticateAlert = createAction(
+  SHOW_AUTHENTICATION_ALERT,
+);
+
+export const authenticateAlertHide = createAction(
+  AUTHENTICATION_ALERT_HIDE,
+);
 

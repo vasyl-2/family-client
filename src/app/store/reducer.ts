@@ -1,6 +1,15 @@
 import { createReducer, on } from '@ngrx/store';
 
-import { createChapter, createdPhoto, createPhoto, receivedChapters, receivedPhotos } from "./action";
+import {
+  createChapter,
+  createdPhoto,
+  createPhoto,
+  receivedChapters,
+  receivedPhotos,
+  authenticated,
+  authenticateAlert,
+  authenticateAlertHide
+} from "./action";
 import { Chapter } from "../models/chapter";
 import { Photo } from "../models/photo";
 
@@ -8,11 +17,23 @@ import { Photo } from "../models/photo";
 export interface GalleryState {
   chapters: Chapter[];
   photos: Photo[];
+  auth: {
+    authenticated: boolean;
+    showAlert: boolean;
+    user?: {
+      name: string;
+      email: string;
+    }
+  }
 }
 
 export const GALLERY_INIT_STATE: GalleryState = {
-  chapters: [],
+  chapters: [] as Chapter[],
   photos: [] as Photo[],
+  auth: {
+    showAlert: false,
+    authenticated: false,
+  }
 }
 
 export const mainReducer = createReducer(
@@ -40,6 +61,23 @@ export const mainReducer = createReducer(
     const newState = { ...state, photos: action.photos };
     console.log('PHOTOS______RECEIVED_______', action);
     return newState;
-  })
+  }),
+
+  on(authenticateAlert, (state: GalleryState, action) => {
+    const s = { ...state, auth: { ...state.auth, showAlert: true }};
+    return s;
+  }),
+
+  on(authenticateAlertHide, (state: GalleryState, action) => {
+    const s = { ...state, auth: { ...state.auth, showAlert: false }};
+    return s;
+  }),
+
+  on(authenticated, (state: GalleryState, action) => {
+    const s = { ...state, auth: { ...state.auth, authenticated: true }};
+    return s;
+  }),
+
+  //
 )
 

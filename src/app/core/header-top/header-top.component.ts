@@ -1,14 +1,16 @@
 import {Component, OnInit, ChangeDetectionStrategy, OnDestroy} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
-import {Store} from "@ngrx/store";
+import {select, Store} from "@ngrx/store";
 import {filter, tap} from "rxjs/operators";
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 
 import {CreatePhotoComponent} from "../../shared/components/create-photo/create-photo.component";
 import {GalleryState} from "../../store/reducer";
 import {Chapter} from "../../models/chapter";
 import {createdChapter, createPhoto} from "../../store/action";
 import {Photo} from "../../models/photo";
+import {alertSelector, isAuthenticated} from "../../store/selectors";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header-top',
@@ -20,14 +22,30 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
   imageUrl!: string;
 
+  showAlert$!: Observable<boolean>;
+
+  isAuthenticated$!: Observable<boolean>;
+
   private sub = new Subscription();
 
   constructor(
     private dialog: MatDialog,
-    private store: Store<GalleryState>
+    private store: Store<GalleryState>,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.showAlert$ = this.store.pipe(
+      select(alertSelector)
+    );
+
+    this.isAuthenticated$ = this.store.pipe(
+      select(isAuthenticated)
+    );
+
+    this.isAuthenticated$.pipe(filter(Boolean)).subscribe((_) => this.router.navigate(["/"]))
+
+    this.showAlert$.subscribe(x => console.log('ALERT___________', x))
   }
 
   ngOnDestroy() {

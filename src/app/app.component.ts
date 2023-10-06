@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import {GalleryState} from "./store/reducer";
-import {Store} from "@ngrx/store";
+import {select, Store} from "@ngrx/store";
 import {receiveChapters} from "./store/action";
+import {alertSelector} from "./store/selectors";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -14,6 +16,6 @@ export class AppComponent {
   public description = '';
 
   constructor(private store: Store<GalleryState>) {
-    this.store.dispatch(receiveChapters())
+    this.store.dispatch(receiveChapters());
   }
 }

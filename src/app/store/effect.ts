@@ -4,6 +4,7 @@ import {EMPTY, Observable, of} from 'rxjs';
 import {map, exhaustMap, catchError, tap} from 'rxjs/operators';
 import {UploadPhotoService} from "../services/upload-photo.service";
 import {
+  AUTHENTICATE, authenticated,
   CREATE_ACTION,
   CREATE_PHOTO_ACTION,
   createdChapter,
@@ -14,6 +15,7 @@ import {
 import {CreateChapter} from "../models/dto/create-chapter";
 import {Store} from "@ngrx/store";
 import {Photo} from "../models/photo";
+import {AuthorizationService} from "../services/authorization/authorization.service";
 
 
 @Injectable()
@@ -52,9 +54,19 @@ export class GalleryEffects {
     map((photos) => receivedPhotos({ photos }))
   ))
 
+  authenticate$ = createEffect(() => this.actions$.pipe(
+    ofType(AUTHENTICATE),
+    exhaustMap((creds: { credentials: { email: string; password: string; }}) =>
+      this.authorizationService
+        .authenticate({ email: creds.credentials.email, password: creds.credentials.password })),
+    tap((c) => console.log('___CREDS______', c)),
+    map((token: string) => authenticated({ token }))
+  ))
+
   constructor(
     private actions$: Actions,
     private uploadService: UploadPhotoService,
+    private authorizationService: AuthorizationService,
     private store: Store<any>
   ) {
   }

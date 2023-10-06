@@ -8,3 +8,5 @@ export const gallerySelector = createFeatureSelector<GalleryState>('gallery');
 
 export const chaptersSelector = createSelector(gallerySelector, (state: GalleryState) => state.chapters);
 export const photosSelector = createSelector(gallerySelector, (state: GalleryState) => state.photos);
+export const alertSelector = createSelector(gallerySelector, (state: GalleryState) => state.auth.showAlert);
+export const isAuthenticated = createSelector(gallerySelector, (state: GalleryState) => state.auth.authenticated);

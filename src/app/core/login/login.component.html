@@ -2,7 +2,7 @@
 <form [formGroup]="loginForm" class="example-form">
   <mat-form-field class="example-full-width">
     <mat-label>Імя</mat-label>
-    <input matInput [formControl]="nameControl" placeholder="введи імя">
+    <input matInput [formControl]="nameControl" placeholder="введи імя" type="email">
     <mat-error *ngIf="nameControl.hasError('required')">
       треба <strong>ввести імя</strong>
     </mat-error>
@@ -21,5 +21,8 @@
     </mat-error>
   </mat-form-field>
 
-  <button mat-button color="primary">Увійти</button>
+  <button mat-button
+          color="primary"
+          [disabled]="!loginForm.valid"
+          (click)="login()">Увійти</button>
 </form>

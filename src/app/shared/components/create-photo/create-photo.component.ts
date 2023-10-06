@@ -70,6 +70,10 @@ export class CreatePhotoComponent implements OnInit {
     this.dialogRef.close(photo);
   }
 
+  cancel(): void {
+    this.dialogRef.close();
+  }
+
   private initForm(): void {
     this.addPhotoForm = this.fromBuilder.group({
       name: ['', Validators.required],
