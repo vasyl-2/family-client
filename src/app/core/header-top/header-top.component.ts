@@ -40,6 +40,8 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
       console.log('ITEM___________________________', localStorage.getItem('auth'));
       this.store.dispatch(authenticated({ token: localStorage.getItem('auth') as string}));
       this.store.dispatch(authenticateAlertHide());
+    } else {
+      console.log('NOT_AUTHORIZED')
     }
 
     this.showAlert$ = this.store.pipe(
@@ -92,6 +94,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
+    localStorage.removeItem('auth');
     this.store.dispatch(authenticateAlert());
     this.store.dispatch(logout());
     this.router.navigate(['/auth', 'logout']);

@@ -32,7 +32,7 @@ export const GALLERY_INIT_STATE: GalleryState = {
   chapters: [] as Chapter[],
   photos: [] as Photo[],
   auth: {
-    showAlert: false,
+    showAlert: true,
     authenticated: false,
   }
 }
