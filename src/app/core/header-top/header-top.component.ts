@@ -1,7 +1,7 @@
 import {Component, OnInit, ChangeDetectionStrategy, OnDestroy} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {select, Store} from "@ngrx/store";
-import {filter, tap} from "rxjs/operators";
+import {filter, map, switchMap, tap} from "rxjs/operators";
 import {Observable, Subscription} from "rxjs";
 
 import {CreatePhotoComponent} from "../../shared/components/create-photo/create-photo.component";
@@ -9,7 +9,7 @@ import {GalleryState} from "../../store/reducer";
 import {Chapter} from "../../models/chapter";
 import {authenticateAlert, authenticateAlertHide, authenticated, createdChapter, createPhoto, logout} from "../../store/action";
 import {Photo} from "../../models/photo";
-import {alertSelector, isAuthenticated} from "../../store/selectors";
+import {alertSelector, chaptersSelector, isAuthenticated} from "../../store/selectors";
 import {Router} from "@angular/router";
 
 @Component({
@@ -74,7 +74,15 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed()
         .pipe(
           filter((photo: Photo) => !!photo),
-          tap((photo) => console.log('ADD_PHOTO__________', photo))
+          tap((photo) => console.log('ADD_PHOTO__________', photo)),
+          switchMap((photo) => this.store.pipe(select(chaptersSelector)).pipe(
+            map((chapters: Chapter[]) => {
+              const currentChapter = chapters.find((c: Chapter) => c._id === photo.chapter);
+              photo.chapterName = currentChapter!!.title;
+              console.log('CURRENT__CHAPTER_________', photo);
+              return photo;
+            })
+          ))
         )
         .subscribe((photo) => this.store.dispatch(createPhoto({ payload: photo })))
     )

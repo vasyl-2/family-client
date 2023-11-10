@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpRequest} from "@angular/common/http";
 import { Observable, of } from "rxjs";
 import {catchError} from "rxjs/operators";
 import { Store } from "@ngrx/store";
+import { HttpHeaders } from '@angular/common/http';
 
 import { IUploadPhotoService } from "../models/services/upload-photo-service";
 import { CreateChapter } from "../models/dto/create-chapter";
@@ -22,6 +23,8 @@ export class UploadPhotoService implements IUploadPhotoService {
   uploadPhoto(photo: { payload: Photo }): Observable<any> {
     const url = `${environment.apiUrl}/upload-photo/uploadfile`;
     const file = photo.payload.photo;
+    const options = { responseType: 'text', reportProgress: true };
+
     let { name } = file;
 
     if (photo.payload.name) {
@@ -33,16 +36,19 @@ export class UploadPhotoService implements IUploadPhotoService {
     formData.append('photo', file, name);
     formData.append('name', name);
 
+    if (photo.payload.description) {
+      const { description } = photo.payload;
+      formData.append('description', description);
+    }
 
     console.log('PHOTO______________________', photo.payload);
     if (photo.payload.chapter) {
       const { chapter } = photo.payload;
       formData.append('chapter', chapter);
-    }
+      let headers = new HttpHeaders();
+      headers = headers.set('chapterName', photo.payload.chapterName!!);
 
-    if (photo.payload.description) {
-      const { description } = photo.payload;
-      formData.append('description', description);
+      return this.http.post(url, formData, { responseType: 'text', reportProgress: true, headers });
     }
 
     return this.http.post(url, formData, { responseType: 'text', reportProgress: true });
