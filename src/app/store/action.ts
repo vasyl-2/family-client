@@ -49,7 +49,7 @@ export const receiveChapters = createAction(
 
 export const receivedChapters = createAction(
   RECEIVED_CHAPTERS,
-  props<{ chapters: { title: string, _id: string, readable_id?: string }[] }>()
+  props<{ chapters: Chapter[] }>()
 );
 
 export const receivePhotos = createAction(

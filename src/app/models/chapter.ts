@@ -3,7 +3,9 @@ export interface Chapter {
   id?: string;
   readable_id?: string;
   readableName?: string;
-  title: string;
+  title?: string;
   parent?: string;
+  parentTitle?: string;
   children?: Chapter[];
+  nameForUI?: string;
 }

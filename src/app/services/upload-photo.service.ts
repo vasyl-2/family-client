@@ -1,29 +1,24 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpRequest} from "@angular/common/http";
-import { Observable, of } from "rxjs";
-import {catchError} from "rxjs/operators";
-import { Store } from "@ngrx/store";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
 
-import { IUploadPhotoService } from "../models/services/upload-photo-service";
-import { CreateChapter } from "../models/dto/create-chapter";
-import { environment } from "../../environments/environment";
-import { Photo } from "../models/photo";
-import {GalleryState} from "../store/reducer";
-import {authenticateAlert} from "../store/action";
+import { IUploadPhotoService } from '../models/services/upload-photo-service';
+import { CreateChapter } from '../models/dto/create-chapter';
+import { environment } from '../../environments/environment';
+import { Photo } from '../models/photo';
 
 @Injectable({ providedIn: 'root' })
 export class UploadPhotoService implements IUploadPhotoService {
 
   constructor(
     private http: HttpClient,
-    private store: Store<GalleryState>
   ) { }
 
   uploadPhoto(photo: { payload: Photo }): Observable<any> {
     const url = `${environment.apiUrl}/upload-photo/uploadfile`;
     const file = photo.payload.photo;
-    const options = { responseType: 'text', reportProgress: true };
 
     let { name } = file;
 
@@ -41,8 +36,8 @@ export class UploadPhotoService implements IUploadPhotoService {
       formData.append('description', description);
     }
 
-    console.log('PHOTO______________________', photo.payload);
     if (photo.payload.chapter) {
+
       const { chapter } = photo.payload;
       formData.append('chapter', chapter);
       let headers = new HttpHeaders();
@@ -54,9 +49,9 @@ export class UploadPhotoService implements IUploadPhotoService {
     return this.http.post(url, formData, { responseType: 'text', reportProgress: true });
   }
 
-  createChapter(chapter: CreateChapter): Observable<any> {
-
-    return of('');
+  createChapter(chapter: { payload: CreateChapter }): Observable<any> {
+    const url = `${environment.apiUrl}/upload-photo/createchapter`;
+    return this.http.post(url, chapter.payload);
   }
 
   getAllPhotos(): Observable<Photo[]> {

@@ -1,0 +1,34 @@
+:host {
+  display: block;
+  width: 100%;
+}
+.add-photo-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  flex-wrap: wrap;
+
+  mat-form-field {
+    cursor: pointer;
+    margin-top: 30px;
+  }
+
+  .description {
+    flex-basis: 100%;
+    width: 100%;
+  }
+}
+
+.actions {
+  margin-top: 30px;
+  margin-left: 30px;
+}
+
+.description {
+  padding-left: 8px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}

@@ -6,31 +6,26 @@
       <mat-error *ngIf="addPhotoForm?.get('name')?.hasError('required')">название обязательно указать</mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>расширение (jpeg, png, ...)</mat-label>
-      <mat-select>
-        <ng-container *ngFor="let ext of photoExtensions; index as i">
-          <mat-option [value]="ext">
-            {{ ext }}
-          </mat-option>
-        </ng-container>
-      </mat-select>
-    </mat-form-field>
+<!--    <mat-form-field appearance="fill">-->
+<!--      <mat-label>расширение (jpeg, png, ...)</mat-label>-->
+<!--      <mat-select>-->
+<!--        <ng-container *ngFor="let ext of photoExtensions; index as i">-->
+<!--          <mat-option [value]="ext">-->
+<!--            {{ ext }}-->
+<!--          </mat-option>-->
+<!--        </ng-container>-->
+<!--      </mat-select>-->
+<!--    </mat-form-field>-->
 
     <mat-form-field appearance="fill">
       <mat-label>раздел</mat-label>
       <mat-select formControlName="chapter">
         <ng-container *ngFor="let chapterA of photoChapters$ | async; index as i">
           <mat-option [value]="chapterA._id">
-            {{ chapterA.readableName }}
+            {{ chapterA.nameForUI }}
           </mat-option>
         </ng-container>
       </mat-select>
-    </mat-form-field>
-
-
-    <mat-form-field appearance="fill">
-      <input matInput>
     </mat-form-field>
 
     <mat-form-field class='description' appearance="fill">

@@ -16,6 +16,7 @@ import {CreateChapter} from "../models/dto/create-chapter";
 import {Store} from "@ngrx/store";
 import {Photo} from "../models/photo";
 import {AuthorizationService} from "../services/authorization/authorization.service";
+import {Chapter} from "../models/chapter";
 
 
 @Injectable()
@@ -23,13 +24,15 @@ export class GalleryEffects {
 
   createChapter$ = createEffect(() => this.actions$.pipe(
     ofType(CREATE_ACTION),
-    exhaustMap((chapter: CreateChapter) => this.uploadService.createChapter(chapter)),
-    map((chapter: any) => createdChapter({ chapter })),
+    tap(x => console.log('TEST__________________________________')),
+    exhaustMap((chapter: { payload: CreateChapter }) => this.uploadService.createChapter(chapter)),
+    map((chapters: Chapter[]) => receivedChapters({ chapters })),
     catchError(() => EMPTY)
   ));
 
   createPhoto$ = createEffect(() => this.actions$.pipe(
     ofType(CREATE_PHOTO_ACTION),
+    tap(x => console.log('CREATE__________________AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', x)),
     exhaustMap((photo: { payload: Photo }) => {
       return this.uploadService.uploadPhoto(photo);
     }),
@@ -44,7 +47,7 @@ export class GalleryEffects {
       return this.uploadService.getChapters()
     }),
     tap((c) => console.log('___CHAPTERS___', c)),
-    map((chapters) => receivedChapters({ chapters }))
+    map((chapters: Chapter[]) => receivedChapters({ chapters }))
   ));
 
   getAllPhotos$ = createEffect(() => this.actions$.pipe(

@@ -3,11 +3,9 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { BehaviorSubject, Observable } from "rxjs";
-import { map } from "rxjs/operators";
 import { select, Store } from "@ngrx/store";
 
 import { extensions } from "../../../data/extensions";
-import { chapters } from "../../../data/chapters";
 import { Photo } from "../../../models/photo";
 import { GalleryState } from "../../../store/reducer";
 import { chaptersSelector } from "../../../store/selectors";
@@ -41,16 +39,6 @@ export class CreatePhotoComponent implements OnInit {
 
     this.photoChapters$ = this.store.pipe(
       select(chaptersSelector),
-      map((chaptersFromDB: Chapter[]) => chaptersFromDB.map((c: Chapter) => {
-        const readableName = chapters.find((ch: Chapter) => ch.id === c.readable_id);
-
-        if (readableName) {
-          const newC = { ...c, readableName: readableName.title }
-          return newC;
-        }
-
-        return c;
-      }))
     )
   }
 
@@ -63,7 +51,9 @@ export class CreatePhotoComponent implements OnInit {
 
   addPhoto(): void {
     const { name = undefined, chapter = undefined, description = undefined } = this.addPhotoForm.value;
+    console.log('IMAGE_________________', this.addPhotoForm.value);
     if (!this.fileSubject.value) {
+      alert('__________________________________')
       return;
     }
     const photo: Photo = { name, chapter, description, photo: this.fileSubject.value };

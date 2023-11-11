@@ -1,0 +1,40 @@
+<ng-container [formGroup]="addChapterForm" >
+  <div class="add-photo-wrapper">
+    <mat-form-field appearance="fill">
+      <mat-label>название папки, только латинскими буквами, например, LETO1990  </mat-label>
+      <input formControlName="latinname" matInput>
+      <mat-error *ngIf="addChapterForm?.get('latinname')?.hasError('required')">название нового раздела обязательно указать</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>название </mat-label>
+      <input formControlName="name" matInput>
+      <mat-error *ngIf="addChapterForm?.get('name')?.hasError('required')">название нового раздела обязательно указать</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>главный раздел</mat-label>
+      <mat-select formControlName="parentChapter">
+        <ng-container *ngFor="let chapterA of photoChapters$ | async; index as i">
+        <!--          add gere accordion so hierarchy is in place-->
+          <mat-option [value]="chapterA._id">
+            {{ chapterA.nameForUI }}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+
+  <div class="actions">
+    <p class="description">Чтобы активизировать кнопку, вібери раздел *</p>
+    <button mat-button color="primary" (click)="addChapter()" [disabled]="addChapterForm.invalid">
+      Добавить раздел
+    </button>
+  </div>
+
+</ng-container>
+
+<button mat-button color="primary" (click)="cancel()">
+  Закрыть
+</button>

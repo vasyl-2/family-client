@@ -12,6 +12,7 @@ export class InterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     const token = localStorage.getItem('auth');
+    console.log('TOKEN___________', token);
 
     if (!!token) {
       const authReq = req.clone({
@@ -22,6 +23,7 @@ export class InterceptorService implements HttpInterceptor {
         ),
       });
 
+      console.log('runnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn', token);
       return next.handle(authReq)
     }
 

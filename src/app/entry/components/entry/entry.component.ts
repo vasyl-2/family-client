@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import {chapters} from "../../../data/chapters";
 
 @Component({
   selector: 'app-entry',
@@ -9,7 +8,6 @@ import {chapters} from "../../../data/chapters";
 })
 export class EntryComponent implements OnInit {
 
-  public chaptersA = chapters;
 
   constructor() { }
 

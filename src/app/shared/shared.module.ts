@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MaterialModule } from './material/material.module';
 import { CreatePhotoComponent } from './components/create-photo/create-photo.component';
 import { IsLoggedInDirective } from './directives/is-logged-in.directive';
+import { CreateChapterComponent } from './components/create-chapter/create-chapter.component';
 
 const components = [
   CreatePhotoComponent
@@ -15,7 +16,7 @@ const directives = [
 ]
 @NgModule({
   declarations: [
-    ...components, ...directives
+    ...components, ...directives, CreateChapterComponent
   ],
   imports: [
     CommonModule,

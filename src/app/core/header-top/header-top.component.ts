@@ -7,10 +7,20 @@ import {Observable, Subscription} from "rxjs";
 import {CreatePhotoComponent} from "../../shared/components/create-photo/create-photo.component";
 import {GalleryState} from "../../store/reducer";
 import {Chapter} from "../../models/chapter";
-import {authenticateAlert, authenticateAlertHide, authenticated, createdChapter, createPhoto, logout} from "../../store/action";
+import {
+  authenticateAlert,
+  authenticateAlertHide,
+  authenticated,
+  createChapter,
+  createdChapter,
+  createPhoto,
+  logout
+} from "../../store/action";
 import {Photo} from "../../models/photo";
 import {alertSelector, chaptersSelector, isAuthenticated} from "../../store/selectors";
 import {Router} from "@angular/router";
+import {CreateChapterComponent} from "../../shared/components/create-chapter/create-chapter.component";
+import {CreateChapter} from "../../models/dto/create-chapter";
 
 @Component({
   selector: 'app-header-top',
@@ -74,12 +84,11 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed()
         .pipe(
           filter((photo: Photo) => !!photo),
-          tap((photo) => console.log('ADD_PHOTO__________', photo)),
           switchMap((photo) => this.store.pipe(select(chaptersSelector)).pipe(
             map((chapters: Chapter[]) => {
               const currentChapter = chapters.find((c: Chapter) => c._id === photo.chapter);
               photo.chapterName = currentChapter!!.title;
-              console.log('CURRENT__CHAPTER_________', photo);
+              console.log('currentChapter____________________', currentChapter)
               return photo;
             })
           ))
@@ -90,13 +99,20 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
   addChapter(): void {
     this.sub.add(
-      this.dialog.open(CreatePhotoComponent).afterClosed()
+      this.dialog.open(CreateChapterComponent).afterClosed()
         .pipe(
-          filter((chapter: Chapter | undefined) => !!chapter),
-          tap((chapter: Chapter | undefined) => console.log('FILLED_CHAPTER___________', chapter))
+          filter((chapter: CreateChapter | undefined) => !!chapter),
+          switchMap((chapter: CreateChapter | undefined) => this.store.pipe(select(chaptersSelector))
+            .pipe(map((chapters: Chapter[]) => {
+              const newChapter = { ...chapter };
+              const currentChapter = chapters.find((c: Chapter) => c._id === chapter!.parent);
+              newChapter!.parentTitle = currentChapter!.title;
+              return newChapter;
+            }))),
+          tap((chapter: CreateChapter | undefined) => console.log('FILLED_CHAPTER___________', chapter))
         )
         .subscribe((chapter: Chapter | undefined) =>
-            chapter && this.store.dispatch(createdChapter({ chapter }))
+            chapter && this.store.dispatch(createChapter({ payload: chapter }))
           )
     )
   }
