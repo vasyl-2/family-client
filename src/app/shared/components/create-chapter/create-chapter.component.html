@@ -7,27 +7,35 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>название </mat-label>
+      <mat-label>название для отображения в браузере </mat-label>
       <input formControlName="name" matInput>
       <mat-error *ngIf="addChapterForm?.get('name')?.hasError('required')">название нового раздела обязательно указать</mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>главный раздел</mat-label>
-      <mat-select formControlName="parentChapter">
-        <ng-container *ngFor="let chapterA of photoChapters$ | async; index as i">
-        <!--          add gere accordion so hierarchy is in place-->
-          <mat-option [value]="chapterA._id">
-            {{ chapterA.nameForUI }}
-          </mat-option>
-        </ng-container>
-      </mat-select>
-    </mat-form-field>
+<!--    <mat-form-field appearance="fill">-->
+<!--      <mat-label>главный раздел</mat-label>-->
+<!--      <app-tree-chapters formControlName="parentChapter"></app-tree-chapters>-->
+<!--      <mat-select formControlName="parentChapter">-->
+<!--        <ng-container *ngFor="let chapterA of photoChapters$ | async; index as i">-->
+<!--          <mat-option [value]="chapterA._id">-->
+<!--            {{ chapterA.nameForUI }}-->
+<!--          </mat-option>-->
+<!--        </ng-container>-->
+<!--      </mat-select>-->
+<!--    </mat-form-field>-->
 
   </div>
 
+
+  <div class="center">Выбери каталог, если хочешь добавить подкаталог</div>
+  <div class="tree-chapters">
+    <app-tree-chapters
+      [chapters]="photoChapters$ | async"
+      formControlName="parentChapter"></app-tree-chapters>
+  </div>
+
   <div class="actions">
-    <p class="description">Чтобы активизировать кнопку, вібери раздел *</p>
+    <p class="description">Чтобы активизировать кнопку, введи название нового каталога *</p>
     <button mat-button color="primary" (click)="addChapter()" [disabled]="addChapterForm.invalid">
       Добавить раздел
     </button>

@@ -18,6 +18,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { TextFieldModule } from '@angular/cdk/text-field';
+import {MatTreeModule} from "@angular/material/tree";
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { TextFieldModule } from '@angular/cdk/text-field';
     MatIconModule,
     MatSelectModule,
     TextFieldModule,
+    MatTreeModule,
 
   ],
   exports: [
@@ -64,6 +66,7 @@ import { TextFieldModule } from '@angular/cdk/text-field';
     MatIconModule,
     MatSelectModule,
     TextFieldModule,
+    MatTreeModule,
   ]
 })
 export class MaterialModule { }

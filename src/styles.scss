@@ -24,3 +24,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; padding: 0 
   background: darkslateblue;
   border-radius: 10px;
 }
+
+.add-photo-wrapper {
+  .mat-mdc-form-field {
+    display: block;
+  }
+}
+
+.select-chapter {
+  cursor: pointer;
+}

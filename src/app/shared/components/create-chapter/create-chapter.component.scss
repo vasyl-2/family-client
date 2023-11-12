@@ -3,12 +3,12 @@
   width: 100%;
 }
 .add-photo-wrapper {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+  //display: flex;
+  //justify-content: center;
+  //gap: 10px;
   width: 100%;
   padding: 10px;
-  flex-wrap: wrap;
+  //flex-wrap: wrap;
 
   mat-form-field {
     cursor: pointer;
@@ -31,4 +31,14 @@
   font-size: 14px;
   display: flex;
   align-items: center;
+}
+
+.tree-chapters {
+  padding: 0 50px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+
 }

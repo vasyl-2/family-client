@@ -5,14 +5,14 @@ import {Chapter} from "../../../models/chapter";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {select, Store} from "@ngrx/store";
 import {GalleryState} from "../../../store/reducer";
-import {chaptersSelector} from "../../../store/selectors";
+import {chaptersHierarchySelector, chaptersSelector} from "../../../store/selectors";
 import {CreateChapter} from "../../../models/dto/create-chapter";
 
 @Component({
   selector: 'app-create-chapter',
   templateUrl: './create-chapter.component.html',
   styleUrls: ['./create-chapter.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateChapterComponent {
   addChapterForm!: FormGroup;
@@ -33,7 +33,7 @@ export class CreateChapterComponent {
     this.initForm();
 
     this.photoChapters$ = this.store.pipe(
-      select(chaptersSelector),
+      select(chaptersHierarchySelector),
     )
   }
 

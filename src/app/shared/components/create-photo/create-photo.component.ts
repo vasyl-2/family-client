@@ -1,14 +1,14 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { BehaviorSubject, Observable } from "rxjs";
+import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import { select, Store } from "@ngrx/store";
 
 import { extensions } from "../../../data/extensions";
 import { Photo } from "../../../models/photo";
 import { GalleryState } from "../../../store/reducer";
-import {chaptersHierarchySelector, chaptersSelector} from "../../../store/selectors";
+import {chaptersHierarchySelector} from "../../../store/selectors";
 import { Chapter } from "../../../models/chapter";
 
 @Component({
@@ -20,6 +20,7 @@ import { Chapter } from "../../../models/chapter";
 export class CreatePhotoComponent implements OnInit {
 
   addPhotoForm!: FormGroup;
+  private sub = new Subscription();
 
   private readonly fileSubject = new BehaviorSubject<File | undefined>(undefined);
 
@@ -40,10 +41,7 @@ export class CreatePhotoComponent implements OnInit {
     this.photoChapters$ = this.store.pipe(
       select(chaptersHierarchySelector),
     )
-
-    this.photoChapters$.subscribe(x => console.log('CHAPTERS_HIERARCHY__________', x))
   }
-
   // tslint:disable-next-line:no-any
   uploadPhoto(event: any): void {
     const file: File = event.target.files[0];
