@@ -7,26 +7,15 @@
     </mat-form-field>
 
 <!--    <mat-form-field appearance="fill">-->
-<!--      <mat-label>расширение (jpeg, png, ...)</mat-label>-->
-<!--      <mat-select>-->
-<!--        <ng-container *ngFor="let ext of photoExtensions; index as i">-->
-<!--          <mat-option [value]="ext">-->
-<!--            {{ ext }}-->
+<!--      <mat-label>раздел</mat-label>-->
+<!--      <mat-select formControlName="chapter">-->
+<!--        <ng-container *ngFor="let chapterA of photoChapters$ | async; index as i">-->
+<!--          <mat-option [value]="chapterA._id">-->
+<!--            {{ chapterA.nameForUI }}-->
 <!--          </mat-option>-->
 <!--        </ng-container>-->
 <!--      </mat-select>-->
 <!--    </mat-form-field>-->
-
-    <mat-form-field appearance="fill">
-      <mat-label>раздел</mat-label>
-      <mat-select formControlName="chapter">
-        <ng-container *ngFor="let chapterA of photoChapters$ | async; index as i">
-          <mat-option [value]="chapterA._id">
-            {{ chapterA.nameForUI }}
-          </mat-option>
-        </ng-container>
-      </mat-select>
-    </mat-form-field>
 
     <mat-form-field class='description' appearance="fill">
       <mat-label>краткое описание</mat-label>

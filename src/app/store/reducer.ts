@@ -8,13 +8,15 @@ import {
   authenticateAlert,
   authenticateAlertHide,
   logout
-} from "./action";
-import { Chapter } from "../models/chapter";
-import { Photo } from "../models/photo";
-
+} from './action';
+import { Chapter } from '../models/chapter';
+import { Photo } from '../models/photo';
+import { immerOn } from 'ngrx-immer/store';
+import { cloneDeep } from 'lodash';
 
 export interface GalleryState {
   chapters: Chapter[];
+  hierarchyChapters: Chapter[];
   photos: Photo[];
   auth: {
     authenticated: boolean;
@@ -28,6 +30,7 @@ export interface GalleryState {
 
 export const GALLERY_INIT_STATE: GalleryState = {
   chapters: [] as Chapter[],
+  hierarchyChapters: [] as Chapter[],
   photos: [] as Photo[],
   auth: {
     showAlert: true,
@@ -37,20 +40,17 @@ export const GALLERY_INIT_STATE: GalleryState = {
 
 export const mainReducer = createReducer(
   GALLERY_INIT_STATE,
-  // on(createChapter, (state: GalleryState, action) => {
-  //
-  //   console.log('CREATED_________', action);
-  //   return state;
-  // }),
 
   on(createdPhoto, (state: GalleryState, action) => {
     console.log('DONE____________________', JSON.parse(action.photo));
     return state;
   }),
 
-  on(receivedChapters, (state: GalleryState, action) => {
+  immerOn(receivedChapters, (state: GalleryState, action) => {
 
-    const newState = { ...state, chapters: action.chapters };
+    const newChapters = cloneDeep(action.chapters);
+    const hierarchy = buildHierarchyTree(newChapters, '');
+    const newState = { ...state, chapters: action.chapters, hierarchyChapters: hierarchy };
     return newState;
   }),
 
@@ -67,7 +67,6 @@ export const mainReducer = createReducer(
 
   on(authenticateAlertHide, (state: GalleryState, action) => {
     const s = { ...state, auth: { ...state.auth, showAlert: false }};
-    console.log('SHOW_OR_NOT____', s.auth.showAlert)
     return s;
   }),
 
@@ -83,3 +82,20 @@ export const mainReducer = createReducer(
 
 )
 
+function buildHierarchyTree(chapters: Chapter[], parentId: string | undefined) {
+  const tree: Chapter[] = [];
+
+  chapters.forEach((item: Chapter) => {
+    if (item.parent === parentId) {
+      const children = buildHierarchyTree(chapters, item._id);
+
+      if (children.length) {
+        item.children = children;
+      }
+
+      tree.push(item);
+    }
+  });
+
+  return tree;
+}

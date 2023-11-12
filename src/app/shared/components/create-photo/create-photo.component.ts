@@ -8,7 +8,7 @@ import { select, Store } from "@ngrx/store";
 import { extensions } from "../../../data/extensions";
 import { Photo } from "../../../models/photo";
 import { GalleryState } from "../../../store/reducer";
-import { chaptersSelector } from "../../../store/selectors";
+import {chaptersHierarchySelector, chaptersSelector} from "../../../store/selectors";
 import { Chapter } from "../../../models/chapter";
 
 @Component({
@@ -38,8 +38,10 @@ export class CreatePhotoComponent implements OnInit {
     this.initForm();
 
     this.photoChapters$ = this.store.pipe(
-      select(chaptersSelector),
+      select(chaptersHierarchySelector),
     )
+
+    this.photoChapters$.subscribe(x => console.log('CHAPTERS_HIERARCHY__________', x))
   }
 
   // tslint:disable-next-line:no-any
@@ -51,7 +53,6 @@ export class CreatePhotoComponent implements OnInit {
 
   addPhoto(): void {
     const { name = undefined, chapter = undefined, description = undefined } = this.addPhotoForm.value;
-    console.log('IMAGE_________________', this.addPhotoForm.value);
     if (!this.fileSubject.value) {
       alert('__________________________________')
       return;

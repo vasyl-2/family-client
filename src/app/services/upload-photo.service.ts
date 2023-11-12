@@ -8,6 +8,7 @@ import { IUploadPhotoService } from '../models/services/upload-photo-service';
 import { CreateChapter } from '../models/dto/create-chapter';
 import { environment } from '../../environments/environment';
 import { Photo } from '../models/photo';
+import {Chapter} from "../models/chapter";
 
 @Injectable({ providedIn: 'root' })
 export class UploadPhotoService implements IUploadPhotoService {
@@ -59,8 +60,8 @@ export class UploadPhotoService implements IUploadPhotoService {
   }
 
   // TODO ass type
-  getChapters(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/upload-photo/chapters`).pipe(
+  getChapters(): Observable<Chapter[]> {
+    return this.http.get<Chapter[]>(`${environment.apiUrl}/upload-photo/chapters`).pipe(
       catchError((error) => {
         if (error instanceof HttpErrorResponse) {
           console.log('Hi, please do authorization, it\'s me, Vasya:)', error);
