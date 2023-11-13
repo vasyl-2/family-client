@@ -7,6 +7,7 @@ import { CreatePhotoComponent } from './components/create-photo/create-photo.com
 import { IsLoggedInDirective } from './directives/is-logged-in.directive';
 import { CreateChapterComponent } from './components/create-chapter/create-chapter.component';
 import { TreeChaptersComponent } from './components/tree-chapters/tree-chapters.component';
+import { HighlightDirective } from './directives/highlight.directive';
 
 const components = [
   CreatePhotoComponent
@@ -17,7 +18,7 @@ const directives = [
 ]
 @NgModule({
   declarations: [
-    ...components, ...directives, CreateChapterComponent, TreeChaptersComponent
+    ...components, ...directives, CreateChapterComponent, TreeChaptersComponent, HighlightDirective
   ],
   imports: [
     CommonModule,

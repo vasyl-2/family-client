@@ -17,7 +17,7 @@ import {
   logout
 } from "../../store/action";
 import {Photo} from "../../models/photo";
-import {alertSelector, chaptersSelector, isAuthenticated} from "../../store/selectors";
+import {alertSelector, chaptersHierarchySelector, chaptersSelector, isAuthenticated} from "../../store/selectors";
 import {Router} from "@angular/router";
 import {CreateChapterComponent} from "../../shared/components/create-chapter/create-chapter.component";
 import {CreateChapter} from "../../models/dto/create-chapter";
@@ -102,19 +102,60 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
       this.dialog.open(CreateChapterComponent).afterClosed()
         .pipe(
           filter((chapter: CreateChapter | undefined) => !!chapter),
-          switchMap((chapter: CreateChapter | undefined) => this.store.pipe(select(chaptersSelector))
+          switchMap((chapter: CreateChapter | undefined) => this.store.pipe(select(chaptersHierarchySelector))
             .pipe(map((chapters: Chapter[]) => {
               const newChapter = { ...chapter };
-              const currentChapter = chapters.find((c: Chapter) => c._id === chapter!.parent);
-              newChapter!.parentTitle = currentChapter!.title;
+
+              if (newChapter.parent) {
+                const fullPath = this.buildFullPath(chapters, newChapter.parent);
+
+                console.log('FULLL____PATH____________________', fullPath);
+                newChapter.fullPath = fullPath;
+              }
+
               return newChapter;
             }))),
+          // switchMap((chapter: CreateChapter | undefined) => this.store.pipe(select(chaptersSelector))
+          //   .pipe(map((chapters: Chapter[]) => {
+          //     const newChapter = { ...chapter };
+          //     const currentChapter = chapters.find((c: Chapter) => c._id === chapter!.parent);
+          //     newChapter!.parentTitle = currentChapter!.title;
+          //     return newChapter;
+          //   }))),
           tap((chapter: CreateChapter | undefined) => console.log('FILLED_CHAPTER___________', chapter))
         )
         .subscribe((chapter: Chapter | undefined) =>
             chapter && this.store.dispatch(createChapter({ payload: chapter }))
           )
     )
+  }
+
+  buildFullPath(list: Chapter[], nearestParentId: string) {
+    function findPath(item: Chapter): string | null {
+      if (item._id === nearestParentId) {
+        return item.title!;
+      }
+
+      if (item.children && item.children.length) {
+        for (const child of item.children) {
+          const pathInChild = findPath(child);
+          if (pathInChild) {
+            return item.title + '/' + pathInChild;
+          }
+        }
+      }
+
+      return null;
+    }
+
+    for (const item of list) {
+      const path = findPath(item);
+      if (path) {
+        return path;
+      }
+    }
+
+    return null; // Return null if the item with the given id is not found
   }
 
   logout(): void {

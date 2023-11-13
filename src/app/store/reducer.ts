@@ -86,6 +86,7 @@ function buildHierarchyTree(chapters: Chapter[], parentId: string | undefined) {
   const tree: Chapter[] = [];
 
   chapters.forEach((item: Chapter) => {
+    item.highlighted = false;
     if (item.parent === parentId) {
       const children = buildHierarchyTree(chapters, item._id);
 

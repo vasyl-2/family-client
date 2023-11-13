@@ -8,4 +8,6 @@ export interface Chapter {
   parentTitle?: string;
   children?: Chapter[];
   nameForUI?: string;
+  fullPath?: string | null;
+  highlighted?: boolean;
 }

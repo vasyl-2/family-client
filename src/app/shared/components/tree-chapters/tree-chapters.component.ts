@@ -1,7 +1,16 @@
-import {ChangeDetectionStrategy, Component, forwardRef, Input, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component,
+  ElementRef,
+  forwardRef,
+  Input,
+  OnInit, QueryList, Renderer2,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
 import {NestedTreeControl} from "@angular/cdk/tree";
-import {MatTreeNestedDataSource} from "@angular/material/tree";
+import {MatTree, MatTreeNestedDataSource} from "@angular/material/tree";
 
 import {Chapter} from "../../../models/chapter";
 
@@ -28,6 +37,10 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
   private onChange!: (val: string) => void;
   private onTouched!: (val: string) => void;
 
+  constructor(
+    private render: Renderer2, private cdr: ChangeDetectorRef
+  ) {
+  }
   ngOnInit(): void {
     if (this.chapters) {
       this.dataSource.data = this.chapters;
@@ -50,8 +63,8 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
 
   hasChild = (_: number, node: Chapter) => !!node.children && node.children.length > 0;
 
-  selectChapter(chapter: string): void {
-    this.onChange(chapter);
+  selectChapter(chapter: Chapter): void {
+    this.onChange(chapter._id!);
   }
 
 }

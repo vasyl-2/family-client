@@ -8,7 +8,7 @@ import { select, Store } from "@ngrx/store";
 import { extensions } from "../../../data/extensions";
 import { Photo } from "../../../models/photo";
 import { GalleryState } from "../../../store/reducer";
-import {chaptersHierarchySelector} from "../../../store/selectors";
+import {chaptersHierarchySelector, chaptersSelector} from "../../../store/selectors";
 import { Chapter } from "../../../models/chapter";
 
 @Component({
