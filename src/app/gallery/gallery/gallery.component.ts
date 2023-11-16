@@ -17,6 +17,7 @@ import {Photo} from "../../models/photo";
 })
 export class GalleryComponent implements OnInit, OnDestroy {
 
+  image: any;
   private readonly photosSubject = new BehaviorSubject<Photo[] | undefined>(undefined);
   public readonly photos$ = this.photosSubject.asObservable();
 
@@ -37,7 +38,14 @@ export class GalleryComponent implements OnInit, OnDestroy {
     ).subscribe((p) => {
       console.log('PHOTOS___FROM__SERVER____', p);
 
-      this.photosSubject.next(p);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        this.image = reader.result; // The image data in base64 format
+      };
+      // reader.readAsDataURL(p);
+
+
+      // this.photosSubject.next(p);
     })
 
   }
@@ -48,6 +56,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   getAllPhotos(): void {
     console.log('GALLERY_TO__LOAD_____');
-    this.store.dispatch(receivePhotos());
+    this.store.dispatch(receivePhotos({ chapter: '6403643ce6ebaa85b246723f' }));
   }
 }

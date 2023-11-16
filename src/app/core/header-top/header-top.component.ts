@@ -65,7 +65,9 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     this.showAlert$.subscribe(x => console.log('SHOW__________________________________', x))
     this.isAuthenticated$.pipe(filter(Boolean)).subscribe((_) => {
       console.log('AUTHENTICATED_SUCCESFUL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-      this.router.navigate(["/"]);
+      this.router.navigate(["/"]).then(() => {
+        // location.reload();
+      });
     })
   }
 
