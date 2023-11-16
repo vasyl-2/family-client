@@ -55,6 +55,7 @@ export const receivedChapters = createAction(
 
 export const receivePhotos = createAction(
   RECEIVE_ALL_PHOTOS,
+  props<{ chapter: string }>()
 );
 
 export const receivedPhotos = createAction(
