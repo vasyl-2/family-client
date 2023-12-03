@@ -5,4 +5,5 @@ export interface Photo {
   chapterName?: string;
   description?: string;
   photo: File;
+  fullPath?: string;
 }

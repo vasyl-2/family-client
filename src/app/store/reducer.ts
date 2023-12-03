@@ -17,7 +17,7 @@ import { cloneDeep } from 'lodash';
 export interface GalleryState {
   chapters: Chapter[];
   hierarchyChapters: Chapter[];
-  photos: Photo[];
+  photos?: Photo[];
   auth: {
     authenticated: boolean;
     showAlert: boolean;
@@ -31,7 +31,7 @@ export interface GalleryState {
 export const GALLERY_INIT_STATE: GalleryState = {
   chapters: [] as Chapter[],
   hierarchyChapters: [] as Chapter[],
-  photos: [] as Photo[],
+  // photos: [] as Photo[],
   auth: {
     showAlert: true,
     authenticated: false,

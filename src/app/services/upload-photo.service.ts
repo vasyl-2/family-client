@@ -56,6 +56,11 @@ export class UploadPhotoService implements IUploadPhotoService {
   }
 
   getAllPhotos(chapter: string): Observable<Photo[]> {
+    // return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photos/${chapter}`);
+    return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photoslist/${chapter}`);
+  }
+
+  getAllPhotosList(chapter: string): Observable<Photo[]> {
     return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photos/${chapter}`);
   }
 

@@ -1,13 +1,12 @@
-<p>gallery works!</p>
 
-<ng-container *ngIf="photos$ | async as photoss">
-  <ng-container *ngFor="let photo of photoss">
-    <div class="photo">
-<!--      <h3>{{ photo.name }}</h3>-->
-      <p>
-        this is photo
-      </p>
-    </div>
-  </ng-container>
+<!--<div class="wrap">-->
+<!--  <ng-container *ngIf="photos$ | async as photoss">-->
+<!--    <ng-container *ngFor="let image of photoss">-->
+<!--      <div class="image">-->
+<!--        <img [src]="image.fullPath" alt="">-->
+<!--      </div>-->
+<!--    </ng-container>-->
+<!--  </ng-container>-->
 
-</ng-container>
+<!--</div>-->
+<img [src]="image" alt="">

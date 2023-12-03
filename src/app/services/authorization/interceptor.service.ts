@@ -23,7 +23,6 @@ export class InterceptorService implements HttpInterceptor {
         ),
       });
 
-      console.log('runnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn', token);
       return next.handle(authReq)
     }
 

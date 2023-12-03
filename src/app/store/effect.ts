@@ -52,7 +52,7 @@ export class GalleryEffects {
   getAllPhotos$ = createEffect(() => this.actions$.pipe(
     ofType(RECEIVE_ALL_PHOTOS),
     exhaustMap((chapter: { chapter: string }) => this.uploadService.getAllPhotos(chapter.chapter)),
-    tap((c) => console.log('__PHOTOS___111____', c)),
+    tap((c: Photo[]) => console.log('__PHOTOS___111____', c)),
     map((photos) => receivedPhotos({ photos }))
   ))
 
