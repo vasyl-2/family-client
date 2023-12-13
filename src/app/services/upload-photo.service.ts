@@ -37,6 +37,11 @@ export class UploadPhotoService implements IUploadPhotoService {
       formData.append('description', description);
     }
 
+    if (photo.payload.fullPath) {
+      const { fullPath } = photo.payload;
+      formData.append('fullPath', fullPath);
+    }
+
     if (photo.payload.chapter) {
 
       const { chapter } = photo.payload;
@@ -45,7 +50,7 @@ export class UploadPhotoService implements IUploadPhotoService {
       let { chapterName, fullPath = undefined } = photo.payload;
 
       if (fullPath) {
-        chapterName = `${fullPath}/${chapterName}`
+        chapterName = `${fullPath}`
       }
       headers = headers.set('chapterName', chapterName!!);
 

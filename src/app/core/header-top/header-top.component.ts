@@ -88,6 +88,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
           filter((photo: Photo) => !!photo),
           switchMap((photo) => this.store.pipe(select(chaptersSelector)).pipe(
             map((chapters: Chapter[]) => {
+              console.log('CHAPTER____!!1', photo);
               const currentChapter = chapters.find((c: Chapter) => c._id === photo.chapter);
               photo.chapterName = currentChapter!!.title;
               console.log('currentChapterData____________________', currentChapter)
@@ -108,12 +109,17 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
             .pipe(map((chapters: Chapter[]) => {
               const newChapter = { ...chapter };
 
+              let fullPath: string;
               if (newChapter.parent) {
-                const fullPath = this.buildFullPath(chapters, newChapter.parent);
-
+                const parentPath = this.buildFullPath(chapters, newChapter.parent);
+                fullPath = `${parentPath}/${newChapter.nameForUI}`
                 console.log('FULLL____PATH____________________', fullPath);
-                newChapter.fullPath = fullPath;
+
+              } else {
+                fullPath = newChapter.nameForUI!;
               }
+
+              newChapter.fullPath = fullPath;
 
               return newChapter;
             }))),

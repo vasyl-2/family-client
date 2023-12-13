@@ -42,7 +42,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(receivePhotos({ chapter: '6403643ce6ebaa85b246723f' }));
 
     this.sub.add(this.store.pipe(
       select(photosSelector)
@@ -50,20 +49,20 @@ export class GalleryComponent implements OnInit, OnDestroy {
       console.log('TEST!!!!_______________PHOTOS_______________', p);
     }));
 
-    this.http.get(`${environment.apiUrl}/upload-photo/photos/6403643ce6ebaa85b246723f`,
-      { responseType: 'arraybuffer' }).subscribe((data: ArrayBuffer) => {
-
-      const blob = new Blob([data], { type: 'image/png' });
-      const reader = new FileReader();
-      const _this = this;
-      reader.onload = function (e) {
-        if (e.target) {
-          _this.image = e.target.result;
-          _this.cdr.detectChanges()
-        }
-      };
-      reader.readAsDataURL(blob)
-    });
+    // this.http.get(`${environment.apiUrl}/upload-photo/photos/6403643ce6ebaa85b246723f`,
+    //   { responseType: 'arraybuffer' }).subscribe((data: ArrayBuffer) => {
+    //
+    //   const blob = new Blob([data], { type: 'image/png' });
+    //   const reader = new FileReader();
+    //   const _this = this;
+    //   reader.onload = function (e) {
+    //     if (e.target) {
+    //       _this.image = e.target.result;
+    //       _this.cdr.detectChanges()
+    //     }
+    //   };
+    //   reader.readAsDataURL(blob)
+    // });
 
     this.getAllPhotos();
 
@@ -75,6 +74,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+  }
+
+  getPhotosByChapter(chapter: string): void {
+    this.store.dispatch(receivePhotos({ chapter }));
   }
 
   getAllPhotos(): void {
