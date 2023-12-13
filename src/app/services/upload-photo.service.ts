@@ -42,7 +42,12 @@ export class UploadPhotoService implements IUploadPhotoService {
       const { chapter } = photo.payload;
       formData.append('chapter', chapter);
       let headers = new HttpHeaders();
-      headers = headers.set('chapterName', photo.payload.chapterName!!);
+      let { chapterName, fullPath = undefined } = photo.payload;
+
+      if (fullPath) {
+        chapterName = `${fullPath}/${chapterName}`
+      }
+      headers = headers.set('chapterName', chapterName!!);
 
       return this.http.post(url, formData, { responseType: 'text', reportProgress: true, headers });
     }

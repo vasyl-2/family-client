@@ -90,7 +90,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
             map((chapters: Chapter[]) => {
               const currentChapter = chapters.find((c: Chapter) => c._id === photo.chapter);
               photo.chapterName = currentChapter!!.title;
-              console.log('currentChapter____________________', currentChapter)
+              console.log('currentChapterData____________________', currentChapter)
               return photo;
             })
           ))
