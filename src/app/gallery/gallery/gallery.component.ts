@@ -10,6 +10,7 @@ import {photosSelector} from "../../store/selectors";
 import {Photo} from "../../models/photo";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 @Component({
@@ -38,6 +39,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
   }
 
@@ -77,7 +80,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   getPhotosByChapter(chapter: string): void {
+    console.log('CH_____', chapter)
     this.store.dispatch(receivePhotos({ chapter }));
+    // WITHOUT { relativeTo: this.route } broke
+    this.router.navigate([chapter], { relativeTo: this.route });
   }
 
   getAllPhotos(): void {

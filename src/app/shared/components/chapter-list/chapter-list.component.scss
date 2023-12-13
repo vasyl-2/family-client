@@ -1,0 +1,23 @@
+.chapters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .chapter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 29%;
+    padding: 15px;
+    font-size: 25px;
+    box-shadow: 2px 2px 4px 4px darkblue;
+    height: 10em;
+    color: cornflowerblue;
+    cursor: pointer;
+    margin-bottom: 20px;
+    &:not(:nth-child(3n)) {
+      margin-right: 10px;
+    }
+  }
+}

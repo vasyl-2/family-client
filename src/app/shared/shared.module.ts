@@ -8,17 +8,24 @@ import { IsLoggedInDirective } from './directives/is-logged-in.directive';
 import { CreateChapterComponent } from './components/create-chapter/create-chapter.component';
 import { TreeChaptersComponent } from './components/tree-chapters/tree-chapters.component';
 import { HighlightDirective } from './directives/highlight.directive';
+import { ChapterListComponent } from './components/chapter-list/chapter-list.component';
+import { PhotosListComponent } from './components/photos-list/photos-list.component';
 
 const components = [
-  CreatePhotoComponent
+  CreatePhotoComponent,
+  ChapterListComponent,
+  CreateChapterComponent,
+  TreeChaptersComponent,
+  PhotosListComponent
 ];
 
 const directives = [
-  IsLoggedInDirective
+  IsLoggedInDirective,
+  HighlightDirective
 ]
 @NgModule({
   declarations: [
-    ...components, ...directives, CreateChapterComponent, TreeChaptersComponent, HighlightDirective
+    ...components, ...directives
   ],
   imports: [
     CommonModule,
