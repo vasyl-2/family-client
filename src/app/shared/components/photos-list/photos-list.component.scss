@@ -1,0 +1,9 @@
+.list-photo {
+  display: flex;
+  justify-content: space-between;
+
+  .photo {
+    flex: 1;
+    max-width: 33%;
+  }
+}
