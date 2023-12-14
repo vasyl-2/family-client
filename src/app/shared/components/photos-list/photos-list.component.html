@@ -1,1 +1,10 @@
-<p>photos-list works!</p>
+
+<ng-container *ngIf="photos$ | async as photos">
+  <ng-container *ngFor="let photo of photos">
+
+    <div class="photo">
+      <app-photo [imageSrc]="getAsset(photo)"></app-photo>
+    </div>
+  </ng-container>
+</ng-container>
+

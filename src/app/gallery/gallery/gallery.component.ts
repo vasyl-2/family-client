@@ -67,8 +67,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
     //   reader.readAsDataURL(blob)
     // });
 
-    this.getAllPhotos();
-
     this.photos$ = this.store.pipe(
       select(photosSelector)
     )
@@ -80,13 +78,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   getPhotosByChapter(chapter: string): void {
-    console.log('CH_____', chapter)
-    this.store.dispatch(receivePhotos({ chapter }));
     // WITHOUT { relativeTo: this.route } broke
     this.router.navigate([chapter], { relativeTo: this.route });
   }
 
-  getAllPhotos(): void {
-    // this.store.dispatch(receivePhotos({ chapter: '6403643ce6ebaa85b246723f' }));
-  }
 }
