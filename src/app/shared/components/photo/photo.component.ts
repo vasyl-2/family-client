@@ -1,6 +1,10 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
 
 import {Photo} from "../../../models/photo";
+import {environment} from "../../../../environments/environment";
+import {BehaviorSubject, Subscription} from "rxjs";
+import {MatDialog} from "@angular/material/dialog";
+import {EditDescriptionComponent} from "../edit-description/edit-description.component";
 
 @Component({
   selector: 'app-photo',
@@ -8,19 +12,53 @@ import {Photo} from "../../../models/photo";
   styleUrls: ['./photo.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PhotoComponent implements OnInit {
+export class PhotoComponent implements OnDestroy {
+
 
   image!: string;
+  photo!: Photo;
 
-  @Input() set imageSrc(photo: string) {
-    this.image = photo;
+  private sub = new Subscription();
+
+  private readonly photoSubject = new BehaviorSubject<Photo | undefined>(undefined);
+  readonly photo$ = this.photoSubject.asObservable();
+
+  @Input() set imageSrc(photo: Photo) {
+    this.photo = photo;
+    this.photoSubject.next(photo);
+    this.image = this.getAsset(photo);
   };
 
-  get imageSrc(): string {
-    return this.image;
+  constructor(
+    private dialog: MatDialog,
+  ) {
   }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
+
+  edit(): void {
+    const dialogRef = this.dialog.open(EditDescriptionComponent, {
+      data: this.photoSubject.value?.description,
+      height: '300px'
+    });
+
+    this.sub.add(
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log(`Dialog result: ${result}`);
+      })
+    );
+
+  }
+
+  private getAsset(photo: Photo): string {
+    const { fullPath, name } = photo;
+    let path =  fullPath ? `${fullPath}/${name}` : name;
+    path = `${environment.apiUrl}/${path}`;
+
+    return path;
+  }
+
 
 }

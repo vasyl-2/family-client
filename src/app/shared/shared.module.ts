@@ -11,6 +11,7 @@ import { HighlightDirective } from './directives/highlight.directive';
 import { ChapterListComponent } from './components/chapter-list/chapter-list.component';
 import { PhotosListComponent } from './components/photos-list/photos-list.component';
 import { PhotoComponent } from './components/photo/photo.component';
+import { EditDescriptionComponent } from './components/edit-description/edit-description.component';
 
 const components = [
   CreatePhotoComponent,
@@ -18,7 +19,8 @@ const components = [
   CreateChapterComponent,
   TreeChaptersComponent,
   PhotosListComponent,
-  PhotoComponent
+  PhotoComponent,
+  EditDescriptionComponent
 ];
 
 const directives = [

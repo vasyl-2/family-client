@@ -1,0 +1,15 @@
+<mat-form-field>
+  <mat-label>Змінити або додати  опис</mat-label>
+  <textarea matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            [formControl]="descriptionControl">
+
+  </textarea>
+</mat-form-field>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">Закрити</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Зберегти</button>
+</div>
+
