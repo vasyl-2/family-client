@@ -1,4 +1,4 @@
-export interface Photo {
+export interface Video {
   id?: string;
   id_?: string;
   name: string;

@@ -7,16 +7,17 @@ import {UploadPhotoService} from "../services/upload-photo.service";
 import {
   AUTHENTICATE, authenticated,
   CREATE_ACTION,
-  CREATE_PHOTO_ACTION,
-  createdPhoto, RECEIVE_ALL_PHOTOS,
+  CREATE_PHOTO_ACTION, CREATE_VIDEO_ACTION,
+  createdPhoto, createdVideo, RECEIVE_ALL_PHOTOS, RECEIVE_ALL_VIDEOS,
   RECEIVE_CHAPTERS,
-  receivedChapters, receivedPhotos
+  receivedChapters, receivedPhotos, receivedVideos
 } from './action';
 import {CreateChapter} from "../models/dto/create-chapter";
 import {Store} from "@ngrx/store";
 import {Photo} from "../models/photo";
 import {AuthorizationService} from "../services/authorization/authorization.service";
 import {Chapter} from "../models/chapter";
+import {Video} from "../models/video";
 
 
 @Injectable()
@@ -32,11 +33,21 @@ export class GalleryEffects {
 
   createPhoto$ = createEffect(() => this.actions$.pipe(
     ofType(CREATE_PHOTO_ACTION),
-    tap(x => console.log('CREATE__________________AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', x)),
+    tap(x => console.log('CREATE__________________PHOTO', x)),
     exhaustMap((photo: { payload: Photo }) => {
       return this.uploadService.uploadPhoto(photo);
     }),
     map((photo: any) => createdPhoto({ photo })),
+    catchError(() => EMPTY)
+  ));
+
+  createVideo$ = createEffect(() => this.actions$.pipe(
+    ofType(CREATE_VIDEO_ACTION),
+    tap((video) => console.log('CREATE__________________VIDEO', video)),
+    exhaustMap((video: { payload: Video }) => {
+      return this.uploadService.uploadVideo(video);
+    }),
+    map((video: any) => createdVideo({ video })), // TODO change from any!!!
     catchError(() => EMPTY)
   ));
 
@@ -54,7 +65,15 @@ export class GalleryEffects {
     exhaustMap((chapter: { chapter: string }) => this.uploadService.getAllPhotos(chapter.chapter)),
     tap((c: Photo[]) => console.log('__PHOTOS___111____', c)),
     map((photos) => receivedPhotos({ photos }))
-  ))
+  ));
+
+  getAllVideos$ = createEffect(() => this.actions$.pipe(
+    ofType(RECEIVE_ALL_VIDEOS),
+    exhaustMap((chapter: { chapter: string }) => this.uploadService.getAllVideos(chapter.chapter)),
+    tap((c: Video[]) => console.log('__VIDEOS___111____', c)),
+    map((videos) => receivedVideos({ videos }))
+  ));
+
 
   authenticate$ = createEffect(() => this.actions$.pipe(
     ofType(AUTHENTICATE),
@@ -63,7 +82,7 @@ export class GalleryEffects {
         .authenticate({ email: creds.credentials.email, password: creds.credentials.password })),
     tap((c) => console.log('___CREDS______', c)),
     map((token: string) => authenticated({ token }))
-  ))
+  ));
 
   constructor(
     private actions$: Actions,

@@ -1,4 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
+import { immerOn } from 'ngrx-immer/store';
+import { cloneDeep } from 'lodash';
 
 import {
   createdPhoto,
@@ -7,17 +9,19 @@ import {
   authenticated,
   authenticateAlert,
   authenticateAlertHide,
-  logout
+  logout,
+  createdVideo,
+  receivedVideos
 } from './action';
 import { Chapter } from '../models/chapter';
 import { Photo } from '../models/photo';
-import { immerOn } from 'ngrx-immer/store';
-import { cloneDeep } from 'lodash';
+import { Video } from "../models/video";
 
 export interface GalleryState {
   chapters: Chapter[];
   hierarchyChapters: Chapter[];
   photos?: Photo[];
+  videos?: Video[];
   auth: {
     authenticated: boolean;
     showAlert: boolean;
@@ -42,7 +46,12 @@ export const mainReducer = createReducer(
   GALLERY_INIT_STATE,
 
   on(createdPhoto, (state: GalleryState, action) => {
-    console.log('DONE____________________', JSON.parse(action.photo));
+    console.log('DONE________PHOTO____________', JSON.parse(action.photo));
+    return state;
+  }),
+
+  on(createdVideo, (state: GalleryState, action) => {
+    console.log('DONE________VIDEO____________', JSON.parse(action.video));
     return state;
   }),
 
@@ -59,6 +68,13 @@ export const mainReducer = createReducer(
     const newState = { ...state, photos: action.photos };
     return newState;
   }),
+
+  on(receivedVideos, (state: GalleryState, action) => {
+
+    const newState = { ...state, photos: action.videos };
+    return newState;
+  }),
+
 
   on(authenticateAlert, (state: GalleryState, action) => {
     const s = { ...state, auth: { ...state.auth, showAlert: true }};

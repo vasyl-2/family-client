@@ -4,13 +4,12 @@ import { MatDialogRef } from "@angular/material/dialog";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import { select, Store } from "@ngrx/store";
+import {withLatestFrom} from "rxjs/operators";
 
-import { extensions } from "../../../data/extensions";
 import { Photo } from "../../../models/photo";
 import { GalleryState } from "../../../store/reducer";
 import {chaptersHierarchySelector, chaptersSelector} from "../../../store/selectors";
 import { Chapter } from "../../../models/chapter";
-import {withLatestFrom} from "rxjs/operators";
 
 @Component({
   selector: 'app-create-photo',
@@ -18,21 +17,17 @@ import {withLatestFrom} from "rxjs/operators";
   styleUrls: ['./create-photo.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreatePhotoComponent implements OnInit {
+export class CreatePhotoComponent implements OnInit, OnDestroy {
 
   addPhotoForm!: FormGroup;
+  photoChapters$!: Observable<Chapter[]>;
+
+  private sub = new Subscription();
+  private readonly fileSubject = new BehaviorSubject<File | undefined>(undefined);
 
   get chapterControl(): FormControl {
     return this.addPhotoForm!.get('chapter') as FormControl;
   }
-
-  private sub = new Subscription();
-
-
-  private readonly fileSubject = new BehaviorSubject<File | undefined>(undefined);
-
-  photoExtensions: string[] = extensions;
-  photoChapters$!: Observable<Chapter[]>;
 
   constructor(
     private fromBuilder: FormBuilder,
@@ -40,6 +35,10 @@ export class CreatePhotoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private store: Store<{ gallery: GalleryState}>
   ) {
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
   ngOnInit() {

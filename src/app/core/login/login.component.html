@@ -1,5 +1,5 @@
 
-<form [formGroup]="loginForm" class="example-form">
+<form [formGroup]="loginForm" class="example-form" (submit)="login()">
   <mat-form-field class="example-full-width">
     <mat-label>Імя</mat-label>
     <input matInput [formControl]="nameControl" placeholder="введи імя" type="email">

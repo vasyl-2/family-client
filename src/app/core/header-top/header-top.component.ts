@@ -13,7 +13,7 @@ import {
   authenticated,
   createChapter,
   createdChapter,
-  createPhoto,
+  createPhoto, createVideo,
   logout
 } from "../../store/action";
 import {Photo} from "../../models/photo";
@@ -21,6 +21,8 @@ import {alertSelector, chaptersHierarchySelector, chaptersSelector, isAuthentica
 import {Router} from "@angular/router";
 import {CreateChapterComponent} from "../../shared/components/create-chapter/create-chapter.component";
 import {CreateChapter} from "../../models/dto/create-chapter";
+import {CreateVideoComponent} from "../../shared/components/create-video/create-video.component";
+import {Video} from "../../models/video";
 
 @Component({
   selector: 'app-header-top',
@@ -91,12 +93,38 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
               console.log('CHAPTER____!!1', photo);
               const currentChapter = chapters.find((c: Chapter) => c._id === photo.chapter);
               photo.chapterName = currentChapter!!.title;
-              console.log('currentChapterData____________________', currentChapter)
               return photo;
             })
           ))
         )
         .subscribe((photo) => this.store.dispatch(createPhoto({ payload: photo })))
+    )
+  }
+
+  addVideo(): void {
+    const dialogRef = this.dialog.open(CreateVideoComponent, {
+      panelClass: 'dialog-property',
+      // position: { top: '80px' },
+      data: {},
+    });
+
+    this.sub.add(
+      dialogRef.afterClosed()
+        .pipe(
+          filter((video: Video) => !!video),
+          switchMap((video) => this.store.pipe(select(chaptersSelector)).pipe(
+            map((chapters: Chapter[]) => {
+              const currentChapter = chapters.find((c: Chapter) => c._id === video.chapter);
+              video.chapterName = currentChapter!!.title;
+              console.log('currentChapterData____________________', currentChapter)
+              return video;
+            })
+          ))
+        )
+        .subscribe((video: Video) => {
+          console.log('VID_____SEND______', video);
+          this.store.dispatch(createVideo({ payload: video }));
+        })
     )
   }
 

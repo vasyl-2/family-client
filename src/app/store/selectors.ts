@@ -10,5 +10,6 @@ export const chaptersSelector = createSelector(gallerySelector, (state: GalleryS
 export const chaptersHierarchySelector =
   createSelector(gallerySelector, (state: GalleryState) => state.hierarchyChapters);
 export const photosSelector = createSelector(gallerySelector, (state: GalleryState) => state.photos);
+export const videosSelector = createSelector(gallerySelector, (state: GalleryState) => state.videos);
 export const alertSelector = createSelector(gallerySelector, (state: GalleryState) => state.auth.showAlert);
 export const isAuthenticated = createSelector(gallerySelector, (state: GalleryState) => state.auth.authenticated);

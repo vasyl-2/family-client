@@ -12,6 +12,7 @@ import { ChapterListComponent } from './components/chapter-list/chapter-list.com
 import { PhotosListComponent } from './components/photos-list/photos-list.component';
 import { PhotoComponent } from './components/photo/photo.component';
 import { EditDescriptionComponent } from './components/edit-description/edit-description.component';
+import { CreateVideoComponent } from './components/create-video/create-video.component';
 
 const components = [
   CreatePhotoComponent,
@@ -20,7 +21,8 @@ const components = [
   TreeChaptersComponent,
   PhotosListComponent,
   PhotoComponent,
-  EditDescriptionComponent
+  EditDescriptionComponent,
+  CreateVideoComponent
 ];
 
 const directives = [
