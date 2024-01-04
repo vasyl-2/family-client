@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
+import {BehaviorSubject, Subscription} from "rxjs";
+import {MatDialog} from "@angular/material/dialog";
 
 import {Photo} from "../../../models/photo";
 import {environment} from "../../../../environments/environment";
-import {BehaviorSubject, Subscription} from "rxjs";
-import {MatDialog} from "@angular/material/dialog";
 import {EditDescriptionComponent} from "../edit-description/edit-description.component";
 
 @Component({
@@ -13,7 +13,6 @@ import {EditDescriptionComponent} from "../edit-description/edit-description.com
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PhotoComponent implements OnDestroy {
-
 
   image!: string;
   photo!: Photo;
@@ -40,13 +39,17 @@ export class PhotoComponent implements OnDestroy {
 
   edit(): void {
     const dialogRef = this.dialog.open(EditDescriptionComponent, {
-      data: this.photoSubject.value?.description,
+      data: { description: this.photoSubject.value?.description, nameOfPhoto: this.photoSubject.value?.name },
       height: '300px'
     });
 
     this.sub.add(
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log(`Dialog result: ${result}`);
+      dialogRef.afterClosed().subscribe((result: { description: string | undefined; nameOfPhoto: string | undefined} | undefined) => {
+        if (result) {
+          console.log(`Dialog result1: ${result.description}`);
+          console.log(`Dialog result2: ${result.nameOfPhoto}`);
+        }
+
       })
     );
 

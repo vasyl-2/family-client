@@ -48,10 +48,27 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    if (!!localStorage.getItem('auth')) {
-      console.log('ITEM___________________________', localStorage.getItem('auth'));
-      this.store.dispatch(authenticated({ token: localStorage.getItem('auth') as string}));
-      this.store.dispatch(authenticateAlertHide());
+    const token = localStorage.getItem('auth');
+
+    if (!!token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+
+      console.log('PAYLOAD_____', payload);
+
+      const isNotExp = Date.now() / 1000 < payload.exp;
+
+      console.log('IS___EXP_____________', isNotExp)
+
+      if (isNotExp) {
+
+        console.log('ITEM IN PLACE, BUT EXPIRED TOKEN!!!!!!!!!!')
+        console.log('ITEM___________________________', localStorage.getItem('auth'));
+        this.store.dispatch(authenticated({ token: localStorage.getItem('auth') as string}));
+        this.store.dispatch(authenticateAlertHide());
+      } else {
+        console.log('NOT_AUTHORIZED');
+        localStorage.removeItem('auth');
+      }
     } else {
       console.log('NOT_AUTHORIZED')
     }

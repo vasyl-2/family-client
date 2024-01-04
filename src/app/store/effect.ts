@@ -2,8 +2,8 @@ import {Injectable} from "@angular/core";
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {EMPTY} from 'rxjs';
 import {map, exhaustMap, catchError, tap} from 'rxjs/operators';
+import {Store} from "@ngrx/store";
 
-import {UploadPhotoService} from "../services/upload-photo.service";
 import {
   AUTHENTICATE, authenticated,
   CREATE_ACTION,
@@ -12,13 +12,14 @@ import {
   RECEIVE_CHAPTERS,
   receivedChapters, receivedPhotos, receivedVideos
 } from './action';
+
 import {CreateChapter} from "../models/dto/create-chapter";
-import {Store} from "@ngrx/store";
 import {Photo} from "../models/photo";
-import {AuthorizationService} from "../services/authorization/authorization.service";
 import {Chapter} from "../models/chapter";
 import {Video} from "../models/video";
 
+import {AuthorizationService} from "../services/authorization/authorization.service";
+import {UploadPhotoService} from "../services/upload-photo.service";
 
 @Injectable()
 export class GalleryEffects {

@@ -44,6 +44,8 @@ export class PhotosListComponent implements OnInit, OnDestroy{
   }
 
   private subscribeToRoute(): void {
+    // route is autoSubscribed
+    // TODO remove manually handling sub
     this.sub.add(
       this.route.paramMap.subscribe((p: ParamMap) => {
         this.store.dispatch(receivePhotos({ chapter: p.get('chapter')! }));

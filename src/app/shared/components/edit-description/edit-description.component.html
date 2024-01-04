@@ -1,15 +1,24 @@
-<mat-form-field>
-  <mat-label>Змінити або додати  опис</mat-label>
-  <textarea matInput
-            cdkTextareaAutosize
-            #autosize="cdkTextareaAutosize"
-            [formControl]="descriptionControl">
+<ng-container [formGroup]="photoForm" >
+    <mat-form-field appearance="fill">
+      <mat-label>Змінити або додати  опис</mat-label>
+      <textarea matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                formControlName="description">
 
-  </textarea>
-</mat-form-field>
+      </textarea>
+    </mat-form-field>
 
-<div mat-dialog-actions>
-  <button mat-button (click)="close()">Закрити</button>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Зберегти</button>
-</div>
+    <mat-form-field appearance="fill">
+      <mat-label>Змінити назву фотографії</mat-label>
+      <input matInput formControlName="nameOfPhoto" />
+    </mat-form-field>
+
+  <div mat-dialog-actions>
+    <button mat-button (click)="close()">Закрити</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Зберегти</button>
+  </div>
+</ng-container>
+
+
 
