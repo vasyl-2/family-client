@@ -1,10 +1,12 @@
 .list-photo {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
 
   .photo {
-    flex: 1;
-    max-width: 33%;
+    //flex: 1;
+    flex: 0 0 calc(33.33% - 16px);
+    //max-width: 33%;
   }
 }
 
