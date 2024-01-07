@@ -1,7 +1,7 @@
-<!--<h1 class="root-chapter">{{ chapter$ | async }}</h1>-->
 
 <ng-container *ngIf="subChapter$ | async as subChapter">
-  <h2>Подразделы {{ subChapter.nameForUI }}</h2>
+  <h2>{{ subChapter.nameForUI }}</h2>
+  <h3>Подразделы</h3>
   <div class="sub-chapters">
     <ng-container *ngFor="let sC of subChapter.children">
     <span class="sub-chapter" (click)="selectSubChapter(sC._id!)">
