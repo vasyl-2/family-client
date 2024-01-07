@@ -7,3 +7,32 @@
     max-width: 33%;
   }
 }
+
+.sub-chapters {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+
+  .sub-chapter {
+    cursor: pointer;
+    font-size: 20px;
+    border: 1px solid blue;
+    padding: 10px 20px;
+    margin-right: 25px;
+    border-radius: 5px;
+    color: blue;
+  }
+}
+
+h2 {
+  display: flex;
+  justify-content: center;
+}
+
+.root-chapter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: darkblue;
+}

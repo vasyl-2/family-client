@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, Component, Input, OnDestroy} from '@angular/core';
-import {BehaviorSubject, Subscription} from "rxjs";
-import {MatDialog} from "@angular/material/dialog";
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { BehaviorSubject, Subscription } from "rxjs";
+import { MatDialog } from "@angular/material/dialog";
 
-import {Photo} from "../../../models/photo";
-import {environment} from "../../../../environments/environment";
-import {EditDescriptionComponent} from "../edit-description/edit-description.component";
+import { Photo } from "../../../models/photo";
+import { environment } from "../../../../environments/environment";
+import { EditDescriptionComponent } from "../edit-description/edit-description.component";
 
 @Component({
   selector: 'app-photo',
@@ -28,6 +28,8 @@ export class PhotoComponent implements OnDestroy {
     this.image = this.getAsset(photo);
   };
 
+  @Output() updatedPhoto = new EventEmitter<Partial<Photo>>();
+
   constructor(
     private dialog: MatDialog,
   ) {
@@ -46,8 +48,38 @@ export class PhotoComponent implements OnDestroy {
     this.sub.add(
       dialogRef.afterClosed().subscribe((result: { description: string | undefined; nameOfPhoto: string | undefined} | undefined) => {
         if (result) {
+          let shouldBeUpdated = false;
           console.log(`Dialog result1: ${result.description}`);
           console.log(`Dialog result2: ${result.nameOfPhoto}`);
+          if (result.description) {
+            if (this.photoSubject.value?.description) {
+              if (result.description !== this.photoSubject.value?.description) {
+               this.photoSubject.value.description = result.description;
+                shouldBeUpdated = true;
+              }
+            } else {
+              this.photoSubject.value!.description = result.description;
+              shouldBeUpdated = true;
+            }
+          }
+
+          if (result.nameOfPhoto) {
+            if (this.photoSubject.value?.name) {
+              if (result.nameOfPhoto !== this.photoSubject.value?.name) {
+
+                this.photoSubject.value.name = result.nameOfPhoto;
+                shouldBeUpdated = true;
+              }
+            } else {
+              this.photoSubject.value!.name = result.nameOfPhoto;
+              shouldBeUpdated = true;
+            }
+          }
+
+          if (shouldBeUpdated) {
+            this.updatedPhoto.emit(this.photoSubject.value);
+          }
+
         }
 
       })

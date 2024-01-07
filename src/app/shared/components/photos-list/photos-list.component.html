@@ -1,3 +1,17 @@
+<!--<h1 class="root-chapter">{{ chapter$ | async }}</h1>-->
+
+<ng-container *ngIf="subChapter$ | async as subChapter">
+  <h2>Подразделы {{ subChapter.nameForUI }}</h2>
+  <div class="sub-chapters">
+    <ng-container *ngFor="let sC of subChapter.children">
+    <span class="sub-chapter" (click)="selectSubChapter(sC._id!)">
+      {{ sC.nameForUI }}
+    </span>
+    </ng-container>
+  </div>
+</ng-container>
+
+
 <div class="list-photo">
   <ng-container *ngIf="photos$ | async as photos">
     <ng-container *ngFor="let photo of photos">

@@ -108,6 +108,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
           switchMap((photo) => this.store.pipe(select(chaptersSelector)).pipe(
             map((chapters: Chapter[]) => {
               console.log('CHAPTER____!!1', photo);
+              console.log('CHAPTER____!!2', chapters);
               const currentChapter = chapters.find((c: Chapter) => c._id === photo.chapter);
               photo.chapterName = currentChapter!!.title;
               return photo;
