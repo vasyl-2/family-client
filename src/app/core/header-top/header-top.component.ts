@@ -3,6 +3,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {select, Store} from "@ngrx/store";
 import {filter, map, switchMap, tap} from "rxjs/operators";
 import {Observable, Subscription} from "rxjs";
+import {Router} from "@angular/router";
 
 import {CreatePhotoComponent} from "../../shared/components/create-photo/create-photo.component";
 import {GalleryState} from "../../store/reducer";
@@ -18,7 +19,6 @@ import {
 } from "../../store/action";
 import {Photo} from "../../models/photo";
 import {alertSelector, chaptersHierarchySelector, chaptersSelector, isAuthenticated} from "../../store/selectors";
-import {Router} from "@angular/router";
 import {CreateChapterComponent} from "../../shared/components/create-chapter/create-chapter.component";
 import {CreateChapter} from "../../models/dto/create-chapter";
 import {CreateVideoComponent} from "../../shared/components/create-video/create-video.component";
@@ -53,24 +53,18 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     if (!!token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
 
-      console.log('PAYLOAD_____', payload);
 
       const isNotExp = Date.now() / 1000 < payload.exp;
 
-      console.log('IS___EXP_____________', isNotExp)
 
       if (isNotExp) {
 
-        console.log('ITEM IN PLACE, BUT EXPIRED TOKEN!!!!!!!!!!')
-        console.log('ITEM___________________________', localStorage.getItem('auth'));
         this.store.dispatch(authenticated({ token: localStorage.getItem('auth') as string}));
         this.store.dispatch(authenticateAlertHide());
       } else {
-        console.log('NOT_AUTHORIZED');
         localStorage.removeItem('auth');
       }
     } else {
-      console.log('NOT_AUTHORIZED')
     }
 
     this.showAlert$ = this.store.pipe(

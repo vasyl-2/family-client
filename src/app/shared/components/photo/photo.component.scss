@@ -1,8 +1,13 @@
+:host {
+
+}
+
 .image {
   max-width: 90%;
 
   img {
     width: 100%;
     display: block;
+    height: auto;
   }
 }

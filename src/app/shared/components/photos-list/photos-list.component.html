@@ -18,7 +18,6 @@
 <div class="list-photo">
   <ng-container *ngIf="photos$ | async as photos">
     <ng-container *ngFor="let photo of photos">
-
       <div class="photo">
         <app-photo [imageSrc]="photo"></app-photo>
       </div>

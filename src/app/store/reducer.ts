@@ -1,6 +1,7 @@
-import { createReducer, on } from '@ngrx/store';
+import {ActionReducerMap, createReducer, on} from '@ngrx/store';
 import { immerOn } from 'ngrx-immer/store';
 import { cloneDeep } from 'lodash';
+import * as fromRouter from '@ngrx/router-store';
 
 import {
   createdPhoto,
@@ -16,6 +17,7 @@ import {
 import { Chapter } from '../models/chapter';
 import { Photo } from '../models/photo';
 import { Video } from "../models/video";
+import {RouterStateUrl} from "../models/router-utils";
 
 export interface GalleryState {
   chapters: Chapter[];
@@ -29,7 +31,7 @@ export interface GalleryState {
       name: string;
       email: string;
     }
-  }
+  },
 }
 
 export const GALLERY_INIT_STATE: GalleryState = {
@@ -45,17 +47,17 @@ export const GALLERY_INIT_STATE: GalleryState = {
 export const mainReducer = createReducer(
   GALLERY_INIT_STATE,
 
-  on(createdPhoto, (state: GalleryState, action) => {
+  on(createdPhoto, (state: GalleryState, action): GalleryState => {
     console.log('DONE________PHOTO____________', JSON.parse(action.photo));
     return state;
   }),
 
-  on(createdVideo, (state: GalleryState, action) => {
+  on(createdVideo, (state: GalleryState, action): GalleryState => {
     console.log('DONE________VIDEO____________', JSON.parse(action.video));
     return state;
   }),
 
-  immerOn(receivedChapters, (state: GalleryState, action) => {
+  immerOn(receivedChapters, (state: GalleryState, action): GalleryState => {
 
     const newChapters = cloneDeep(action.chapters);
     const hierarchy = buildHierarchyTree(newChapters, '');
@@ -63,35 +65,35 @@ export const mainReducer = createReducer(
     return newState;
   }),
 
-  on(receivedPhotos, (state: GalleryState, action) => {
+  on(receivedPhotos, (state: GalleryState, action): GalleryState => {
 
     const newState = { ...state, photos: action.photos };
     return newState;
   }),
 
-  on(receivedVideos, (state: GalleryState, action) => {
+  on(receivedVideos, (state: GalleryState, action): GalleryState => {
 
     const newState = { ...state, photos: action.videos };
     return newState;
   }),
 
 
-  on(authenticateAlert, (state: GalleryState, action) => {
+  on(authenticateAlert, (state: GalleryState, action): GalleryState => {
     const s = { ...state, auth: { ...state.auth, showAlert: true }};
     return s;
   }),
 
-  on(authenticateAlertHide, (state: GalleryState, action) => {
+  on(authenticateAlertHide, (state: GalleryState, action): GalleryState => {
     const s = { ...state, auth: { ...state.auth, showAlert: false }};
     return s;
   }),
 
-  on(authenticated, (state: GalleryState, action) => {
+  on(authenticated, (state: GalleryState, action): GalleryState => {
     const s = { ...state, auth: { ...state.auth, authenticated: true }};
     return s;
   }),
 
-  on(logout, (state: GalleryState, action) => {
+  on(logout, (state: GalleryState, action): GalleryState => {
     const s = { ...state, auth: { ...state.auth, authenticated: false }};
     return s;
   }),
@@ -115,4 +117,15 @@ function buildHierarchyTree(chapters: Chapter[], parentId: string | undefined) {
   });
 
   return tree;
+}
+
+// interface to be passed to the Generic type ActionReducerMap
+export interface State {
+  gallery: GalleryState;
+  router: fromRouter.RouterReducerState<RouterStateUrl>,
+}
+
+export const actionReducers: ActionReducerMap<State> = {
+  gallery: mainReducer,
+  router: fromRouter.routerReducer
 }

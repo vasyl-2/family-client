@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {select, Store} from "@ngrx/store";
@@ -10,6 +18,7 @@ import {chaptersHierarchySelector, photosSelector} from "../../../store/selector
 import {Photo} from "../../../models/photo";
 import {environment} from "../../../../environments/environment";
 import {Chapter} from "../../../models/chapter";
+import {PhotoComponent} from "../photo/photo.component";
 
 @Component({
   selector: 'app-photos-list',
@@ -17,11 +26,13 @@ import {Chapter} from "../../../models/chapter";
   styleUrls: ['./photos-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PhotosListComponent implements OnInit, OnDestroy{
+export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   photos$!: Observable<Photo[] | undefined>;
 
   subChapter$!: Observable<Chapter>;
+
+  @ViewChildren(PhotoComponent) photosElements!: QueryList<PhotoComponent>
 
   private readonly selectedIdSubject = new BehaviorSubject<string | undefined>('');
   private readonly selectedId$ = this.selectedIdSubject.asObservable().pipe(shareReplay(1));
@@ -32,6 +43,10 @@ export class PhotosListComponent implements OnInit, OnDestroy{
     private route: ActivatedRoute,
     private store: Store<GalleryState>,
   ) {
+  }
+
+  ngAfterViewInit(): void {
+    console.log('PHOTOS___ELEMENTS______', this.photosElements)
   }
 
   ngOnInit(): void {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { StoreModule } from "@ngrx/store";
+import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from "@angular/material/dialog";
@@ -13,11 +14,12 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { StartComponent } from './componenta/start/start.component';
 
-import { mainReducer } from './store/reducer';
+import {actionReducers, mainReducer} from './store/reducer';
 import { DIALOG_CONFIG } from './data/dialog-config';
 import { GalleryEffects } from './store/effect';
 import { InterceptorService } from './services/authorization/interceptor.service';
-
+import { RouterCustomSerializer } from "./services/router-custom-serializer";
+import * as fromRouter from '@ngrx/router-store';
 
 @NgModule({
   declarations: [
@@ -27,9 +29,14 @@ import { InterceptorService } from './services/authorization/interceptor.service
   imports: [
     BrowserModule,
     AppRoutingModule,
+    StoreRouterConnectingModule.forRoot(),
     NoopAnimationsModule,
     SharedModule,
-    StoreModule.forRoot({ gallery: mainReducer }),
+    StoreModule.forRoot(actionReducers),
+    // StoreModule.forRoot({
+    //   gallery: mainReducer,
+    //   router: fromRouter.routerReducer
+    // }),
     EffectsModule.forRoot([GalleryEffects]),
     CoreModule,
     HttpClientModule,
@@ -37,7 +44,8 @@ import { InterceptorService } from './services/authorization/interceptor.service
   ],
   providers: [
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: DIALOG_CONFIG },
-    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+    { provide: RouterStateSerializer, useClass: RouterCustomSerializer },
   ],
   bootstrap: [AppComponent]
 })
