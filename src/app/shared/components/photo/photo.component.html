@@ -1,16 +1,13 @@
-<!--  <div class="content">-->
-<!--    <img [src]="image" alt="image"/>-->
-<!--    <div class="description" *ngIf="photo$ | async as ph">-->
-<!--      <span>-->
-<!--        {{ ph.description }}-->
-<!--      </span>-->
-<!--    </div>-->
-<!--    <div class="edit">-->
-<!--      <button (click)="edit()" mat-button color="primary">-->
-<!--        Редагуввати-->
-<!--      </button>-->
-<!--    </div>-->
-<!--  </div>-->
 <div class="content">
   <img class="img" (load)="onLoad()" [src]="image" alt="image"/>
+      <div class="description" *ngIf="photo$ | async as ph">
+        <span>
+          {{ ph.description }}
+        </span>
+      </div>
+      <div class="edit">
+        <button (click)="edit()" mat-button color="primary">
+          Редагуввати
+        </button>
+      </div>
 </div>
