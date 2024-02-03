@@ -1,10 +1,10 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component, ElementRef,
   OnDestroy,
   OnInit,
-  QueryList,
+  QueryList, ViewChild,
   ViewChildren
 } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
@@ -28,11 +28,17 @@ import {PhotoComponent} from "../photo/photo.component";
 })
 export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  @ViewChild('gallery', { static: false, read: ElementRef }) gallery!: ElementRef;
   photos$!: Observable<Photo[] | undefined>;
+
+  private readonly loadedImagesCountSubject = new BehaviorSubject(0);
 
   subChapter$!: Observable<Chapter>;
 
-  @ViewChildren(PhotoComponent) photosElements!: QueryList<PhotoComponent>
+  private readonly computeGridStyleSubject = new BehaviorSubject<{ rowHeight: number; rowGap: number } | undefined>(undefined);
+  computeGridStyle$ = this.computeGridStyleSubject.asObservable();
+
+  // @ViewChildren(PhotoComponent) photosElements!: QueryList<PhotoComponent>
 
   private readonly selectedIdSubject = new BehaviorSubject<string | undefined>('');
   private readonly selectedId$ = this.selectedIdSubject.asObservable().pipe(shareReplay(1));
@@ -46,7 +52,31 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log('PHOTOS___ELEMENTS______', this.photosElements)
+    // this.setGalleryProps();
+    this.loadedImagesCountSubject.pipe(withLatestFrom(this.photos$))
+      .subscribe(([count, photos]: [number, Photo[] | undefined]) => {
+        console.log('COUNT!!!!!!!!!!!!!!', { ITEM___LOADED_____: count, LENGTH___OF_____PHOTOS_____: photos })
+        if (photos && (count === photos?.length)) {
+          console.log('COUNT___________', count)
+          this.setGalleryProps();
+        }
+    })
+  }
+
+  setGalleryProps(): void {
+    const computedStyles = window.getComputedStyle(this.gallery.nativeElement);
+    const rowHeight = parseInt(computedStyles.getPropertyValue('grid-auto-rows'));
+    const rowGap = parseInt(computedStyles.getPropertyValue('grid-row-gap'));
+
+    console.log('GALLERY_GRIP___PROPERTIES______', { GAP__________: rowGap, ROW_HEIGHT______: rowHeight })
+
+    this.computeGridStyleSubject.next({ rowGap, rowHeight });
+  }
+
+  onImageLoad() {
+    const loadedCount = this.loadedImagesCountSubject.value + 1;
+
+    this.loadedImagesCountSubject.next(loadedCount);
   }
 
   ngOnInit(): void {

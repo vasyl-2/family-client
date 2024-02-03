@@ -2,7 +2,7 @@ import { createFeatureSelector, createSelector } from "@ngrx/store";
 import * as fromRouter from '@ngrx/router-store';
 
 import { GalleryState } from "./reducer";
-import {RouterStateUrl} from "../models/router-utils";
+import { RouterStateUrl } from "../models/router-utils";
 
 // { gallery: mainReducer },  - so the gallery name on top level
 // In feature module i.e. - StoreModule.forFeature({ featureOne: smth }) it would be ('smth')

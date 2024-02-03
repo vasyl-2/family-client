@@ -13,6 +13,7 @@ import { PhotosListComponent } from './components/photos-list/photos-list.compon
 import { PhotoComponent } from './components/photo/photo.component';
 import { EditDescriptionComponent } from './components/edit-description/edit-description.component';
 import { CreateVideoComponent } from './components/create-video/create-video.component';
+import { SetHeightDirective } from './directives/set-height.directive';
 
 const components = [
   CreatePhotoComponent,
@@ -31,7 +32,7 @@ const directives = [
 ]
 @NgModule({
   declarations: [
-    ...components, ...directives
+    ...components, ...directives, SetHeightDirective
   ],
   imports: [
     CommonModule,

@@ -29,6 +29,7 @@ export class PhotoComponent implements OnDestroy {
   };
 
   @Output() updatedPhoto = new EventEmitter<Partial<Photo>>();
+  @Output() imageLoaded = new EventEmitter<void>();
 
   constructor(
     private dialog: MatDialog,
@@ -37,6 +38,10 @@ export class PhotoComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+  }
+
+  onLoad(): void {
+    this.imageLoaded.emit();
   }
 
   edit(): void {
@@ -49,8 +54,6 @@ export class PhotoComponent implements OnDestroy {
       dialogRef.afterClosed().subscribe((result: { description: string | undefined; nameOfPhoto: string | undefined} | undefined) => {
         if (result) {
           let shouldBeUpdated = false;
-          console.log(`Dialog result1: ${result.description}`);
-          console.log(`Dialog result2: ${result.nameOfPhoto}`);
           if (result.description) {
             if (this.photoSubject.value?.description) {
               if (result.description !== this.photoSubject.value?.description) {

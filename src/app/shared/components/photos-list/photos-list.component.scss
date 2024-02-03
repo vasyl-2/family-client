@@ -1,14 +1,21 @@
-.list-photo {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 16px;
-
-  .photo {
-    //flex: 1;
-    flex: 0 0 calc(33.33% - 16px);
-    //max-width: 33%;
-  }
+:host {
+  display: block;
+  max-width: 100%;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-auto-rows: 10px;
+  /*grid-template-rows: masonry;*/
+  gap: 10px;
+  //display: flex;
+  //flex-wrap: wrap;
+  //justify-content: space-between;
+  //gap: 16px;
+  //
+  //.photo {
+  //  flex: 0 0 calc(33.33% - 16px);
+  //}
 }
 
 .sub-chapters {
