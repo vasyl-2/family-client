@@ -14,6 +14,7 @@ import { PhotoComponent } from './components/photo/photo.component';
 import { EditDescriptionComponent } from './components/edit-description/edit-description.component';
 import { CreateVideoComponent } from './components/create-video/create-video.component';
 import { SetHeightDirective } from './directives/set-height.directive';
+import { EnlargeDirective } from './directives/enlarge/enlarge.directive';
 
 const components = [
   CreatePhotoComponent,
@@ -28,11 +29,13 @@ const components = [
 
 const directives = [
   IsLoggedInDirective,
-  HighlightDirective
+  HighlightDirective,
+  SetHeightDirective,
+  EnlargeDirective
 ]
 @NgModule({
   declarations: [
-    ...components, ...directives, SetHeightDirective
+    ...components, ...directives
   ],
   imports: [
     CommonModule,

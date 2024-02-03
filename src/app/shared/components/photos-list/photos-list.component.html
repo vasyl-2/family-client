@@ -18,7 +18,11 @@
 <div #gallery class="gallery">
   <ng-container *ngIf="photos$ | async as photos">
     <ng-container *ngFor="let photo of photos">
-      <app-photo (imageLoaded)="onImageLoad()" [appSetHeight]="computeGridStyle$ | async" [imageSrc]="photo"></app-photo>
+      <app-photo #appPhoto
+        appEnlarge
+        (imageLoaded)="onImageLoad()"
+        [appSetHeight]="computeGridStyle$ | async"
+        [imageSrc]="photo"></app-photo>
     </ng-container>
   </ng-container>
 </div>

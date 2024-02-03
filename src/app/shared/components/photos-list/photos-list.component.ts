@@ -52,12 +52,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // this.setGalleryProps();
     this.loadedImagesCountSubject.pipe(withLatestFrom(this.photos$))
       .subscribe(([count, photos]: [number, Photo[] | undefined]) => {
-        console.log('COUNT!!!!!!!!!!!!!!', { ITEM___LOADED_____: count, LENGTH___OF_____PHOTOS_____: photos })
         if (photos && (count === photos?.length)) {
-          console.log('COUNT___________', count)
           this.setGalleryProps();
         }
     })
@@ -67,9 +64,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     const computedStyles = window.getComputedStyle(this.gallery.nativeElement);
     const rowHeight = parseInt(computedStyles.getPropertyValue('grid-auto-rows'));
     const rowGap = parseInt(computedStyles.getPropertyValue('grid-row-gap'));
-
-    console.log('GALLERY_GRIP___PROPERTIES______', { GAP__________: rowGap, ROW_HEIGHT______: rowHeight })
-
     this.computeGridStyleSubject.next({ rowGap, rowHeight });
   }
 
@@ -90,7 +84,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           // const chapter = chapters.find((c: Chapter) => c.children?.find((c: Chapter) => c._id === id))!
           const chapter = this.findChapterByIdInArray(chapters, id);
 
-          console.log('FOUND___________', chapter);
 
           if (chapter) {
             console.log('YES___________________________', chapter)

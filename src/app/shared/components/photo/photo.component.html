@@ -1,5 +1,5 @@
 <div class="content">
-  <img class="img" (load)="onLoad()" [src]="image" alt="image"/>
+  <img class="img"  (load)="onLoad()" [src]="image" alt="image"/>
       <div class="description" *ngIf="photo$ | async as ph">
         <span>
           {{ ph.description }}
@@ -7,7 +7,7 @@
       </div>
       <div class="edit">
         <button (click)="edit()" mat-button color="primary">
-          Редагуввати
+          Редагувати
         </button>
       </div>
 </div>
