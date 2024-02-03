@@ -10,7 +10,6 @@ export class EnlargeDirective {
 
   @HostListener('click', ['$event.target'])
   onClick(element: HTMLElement) {
-    console.log('THIS___EL________', this.el.nativeElement)
     this.renderer.setStyle(this.el.nativeElement, 'transform', 'scale(1.7)');
     this.renderer.setStyle(this.el.nativeElement, 'transition', 'transform 0.25s ease');
     this.renderer.setStyle(this.el.nativeElement, 'z-index', '20');
@@ -18,7 +17,6 @@ export class EnlargeDirective {
 
   @HostListener('mouseleave')
   onHover() {
-    console.log('THIS___EL________', this.el.nativeElement)
     this.renderer.setStyle(this.el.nativeElement, 'transform', 'scale(1)');
     this.renderer.setStyle(this.el.nativeElement, 'transition', 'transform 0.25s ease');
     this.renderer.setStyle(this.el.nativeElement, 'z-index', 'unset');

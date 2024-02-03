@@ -66,6 +66,7 @@ export class EditDescriptionComponent implements OnInit {
     this.sub = this.descriptionControl.valueChanges.pipe(
       // distinctUntilChanged(),
     ).subscribe((val: string) => {
+      console.log('DESCR___________', val);
       this.data.description = val;
     })
   }
@@ -74,6 +75,7 @@ export class EditDescriptionComponent implements OnInit {
     this.sub = this.nameOfPhotoControl.valueChanges.pipe(
       // distinctUntilChanged(),
     ).subscribe((val: string) => {
+      console.log('NAME___OF____PHOTO________________', val);
       this.data.nameOfPhoto = val;
     })
   }

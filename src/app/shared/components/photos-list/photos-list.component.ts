@@ -84,7 +84,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           // const chapter = chapters.find((c: Chapter) => c.children?.find((c: Chapter) => c._id === id))!
           const chapter = this.findChapterByIdInArray(chapters, id);
 
-
           if (chapter) {
             console.log('YES___________________________', chapter)
             return chapter;

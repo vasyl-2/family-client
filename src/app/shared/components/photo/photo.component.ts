@@ -45,8 +45,11 @@ export class PhotoComponent implements OnDestroy {
   }
 
   edit(): void {
+    const description = this.photoSubject.value?.description;
+    const nameOfPhoto = this.photoSubject.value?.name;
+
     const dialogRef = this.dialog.open(EditDescriptionComponent, {
-      data: { description: this.photoSubject.value?.description, nameOfPhoto: this.photoSubject.value?.name },
+      data: { description, nameOfPhoto },
       height: '300px'
     });
 
@@ -57,11 +60,15 @@ export class PhotoComponent implements OnDestroy {
           if (result.description) {
             if (this.photoSubject.value?.description) {
               if (result.description !== this.photoSubject.value?.description) {
-               this.photoSubject.value.description = result.description;
+                const currentValue = { ...this.photoSubject.value };
+                currentValue.description = result.description;
+                this.photoSubject.next(currentValue);
                 shouldBeUpdated = true;
               }
             } else {
-              this.photoSubject.value!.description = result.description;
+              const currentValue = {...this.photoSubject.value! };
+              currentValue.description = result.description;
+              this.photoSubject.next(currentValue);
               shouldBeUpdated = true;
             }
           }
@@ -70,16 +77,24 @@ export class PhotoComponent implements OnDestroy {
             if (this.photoSubject.value?.name) {
               if (result.nameOfPhoto !== this.photoSubject.value?.name) {
 
-                this.photoSubject.value.name = result.nameOfPhoto;
+                const currentValue = {...this.photoSubject.value!};
+                currentValue.name = result.nameOfPhoto;
+                this.photoSubject.next(currentValue);
+
+                // this.photoSubject.value.name = result.nameOfPhoto;
                 shouldBeUpdated = true;
               }
             } else {
-              this.photoSubject.value!.name = result.nameOfPhoto;
+              const currentValue = { ...this.photoSubject.value! };
+              currentValue.name = result.nameOfPhoto;
+              this.photoSubject.next(currentValue);
+              // this.photoSubject.value!.name = result.nameOfPhoto;
               shouldBeUpdated = true;
             }
           }
 
           if (shouldBeUpdated) {
+            console.log('TO___UPDATE_____________', this.photoSubject.value)
             this.updatedPhoto.emit(this.photoSubject.value);
           }
 
