@@ -1,7 +1,7 @@
 
 <ng-container *ngIf="subChapter$ | async as subChapter">
   <h2>{{ subChapter.nameForUI }}</h2>
-  <h3>Подразделы</h3>
+  <h3>{{ subLevels }}</h3>
   <div class="sub-chapters">
     <ng-container *ngIf="subChapter.children">
       <ng-container *ngFor="let sC of subChapter.children">

@@ -30,6 +30,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('gallery', { static: false, read: ElementRef }) gallery!: ElementRef;
   photos$!: Observable<Photo[] | undefined>;
+  subLevels = 'Подразделы';
 
   private readonly loadedImagesCountSubject = new BehaviorSubject(0);
 
