@@ -1,6 +1,6 @@
 export interface Photo {
   id?: string;
-  id_?: string;
+  _id?: string;
   name: string;
   chapter?: string;
   chapterName?: string;

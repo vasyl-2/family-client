@@ -20,6 +20,7 @@
     <ng-container *ngFor="let photo of photos">
       <app-photo #appPhoto
         appEnlarge
+        (updatedPhoto)="onPhotoUpdate($event)"
         (imageLoaded)="onImageLoad()"
         [appSetHeight]="computeGridStyle$ | async"
         [imageSrc]="photo"></app-photo>

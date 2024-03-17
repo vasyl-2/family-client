@@ -62,6 +62,11 @@ export class UploadPhotoService implements IUploadPhotoService {
     return this.http.post(url, formData, { responseType: 'text', reportProgress: true });
   }
 
+  updatePhoto(photo: Partial<Photo>) {
+    const url = `${environment.apiUrl}/upload-photo/updatephoto/${photo._id}`;
+    return this.http.patch(url, { photo });
+  }
+
   // TODO change from any !!!!
   uploadVideo(video: { payload: Video }): Observable<any> {
     const url = `${environment.apiUrl}/upload-photo/uploadvideo`;

@@ -11,6 +11,9 @@ export const CREATED_ACTION = '[Gallery] CREATED';
 export const CREATE_PHOTO_ACTION = '[Gallery] CREATE PHOTO';
 export const CREATED_PHOTO_ACTION = '[Gallery] CREATED PHOTO';
 
+export const EDIT_PHOTO_ACTION = '[Gallery] EDIT PHOTO';
+export const EDITED_PHOTO_ACTION = '[Gallery] EDITED PHOTO';
+
 export const CREATE_VIDEO_ACTION = '[Gallery] CREATE VIDEO';
 export const CREATED_VIDEO_ACTION = '[Gallery] CREATED VIDEO';
 
@@ -52,6 +55,19 @@ export const createdPhoto = createAction(
   props<{ photo: any }>() // TODO change from any
 );
 // ==============END PHOTO ================================
+
+//=============== *** EDIT PHOTO *** ===============================
+export const editPhoto = createAction(
+  EDIT_PHOTO_ACTION,
+  props<{ photo: Partial<Photo> }>()
+);
+
+export const editedPhoto = createAction(
+  EDITED_PHOTO_ACTION,
+  props<{ photo: any }>() // TODO change from any
+);
+
+//================= END EDIT PHOTO========================================
 
 // =============== *** VIDEO *** ==========================
 export const createVideo = createAction(

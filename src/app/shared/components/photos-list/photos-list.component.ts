@@ -13,7 +13,7 @@ import {select, Store} from "@ngrx/store";
 import {map, shareReplay, withLatestFrom} from "rxjs/operators";
 
 import {GalleryState} from "../../../store/reducer";
-import {receivePhotos} from "../../../store/action";
+import {editPhoto, receivePhotos} from "../../../store/action";
 import {chaptersHierarchySelector, photosSelector} from "../../../store/selectors";
 import {Photo} from "../../../models/photo";
 import {environment} from "../../../../environments/environment";
@@ -111,6 +111,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+  }
+
+  onPhotoUpdate(photo: Partial<Photo>): void {
+    console.log('PHOTO___TO_____UPDATE__________', photo);
+    this.store.dispatch(editPhoto({ photo }));
   }
 
   getAsset(photo: Photo): string {

@@ -8,7 +8,7 @@ import {
   AUTHENTICATE, authenticated,
   CREATE_ACTION,
   CREATE_PHOTO_ACTION, CREATE_VIDEO_ACTION,
-  createdPhoto, createdVideo, RECEIVE_ALL_PHOTOS, RECEIVE_ALL_VIDEOS,
+  createdPhoto, createdVideo, EDIT_PHOTO_ACTION, editedPhoto, RECEIVE_ALL_PHOTOS, RECEIVE_ALL_VIDEOS,
   RECEIVE_CHAPTERS,
   receivedChapters, receivedPhotos, receivedVideos
 } from './action';
@@ -39,6 +39,17 @@ export class GalleryEffects {
       return this.uploadService.uploadPhoto(photo);
     }),
     map((photo: any) => createdPhoto({ photo })),
+    catchError(() => EMPTY)
+  ));
+
+  updatePhoto$ = createEffect(() => this.actions$.pipe(
+    ofType(EDIT_PHOTO_ACTION),
+    tap(x => console.log('UPDATE_________________PHOTO', x)),
+    exhaustMap((photo: { photo: Partial<Photo> }) => {
+      return this.uploadService.updatePhoto(photo.photo);
+    }),
+    tap((p) => console.log('EDITED___PHOTO_________', p)),
+    map((photo: any) => editedPhoto({ photo })),
     catchError(() => EMPTY)
   ));
 
