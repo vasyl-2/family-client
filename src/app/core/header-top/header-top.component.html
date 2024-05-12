@@ -1,14 +1,14 @@
 <p>
 
   <ng-container *ngIf="showAlert$ | async; else app">
-    <div class="show-alert">
-      <p>Нужно авторизироваться</p>
+      <div class="show-alert">
+        <p>Нужно авторизироваться</p>
 
-      <button mat-icon-button class="login" [routerLink]="['auth', 'login']">
-        <mat-icon>login</mat-icon>
-      </button>
+        <button mat-icon-button class="login" [routerLink]="['auth', 'login']">
+          <mat-icon>login</mat-icon>
+        </button>
 
-    </div>
+      </div>
 
   </ng-container>
 
@@ -37,6 +37,10 @@
       <span class="example-spacer"></span>
       <button routerLink="/gallery" mat-button class="add-photo">
         галерея рр
+      </button>
+      <span class="example-spacer"></span>
+      <button routerLink="/video" mat-button class="add-photo">
+        галерея відео
       </button>
 
       <ng-container *ngIf="!(isAuthenticated$ | async)">

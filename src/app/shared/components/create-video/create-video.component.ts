@@ -86,8 +86,9 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
       alert('__________________________________')
       return;
     }
-    const photo: Video = { name, chapter, description, photo: this.fileSubject.value, fullPath };
-    this.dialogRef.close(photo);
+    const video: Video = { name, chapter, description, photo: this.fileSubject.value, fullPath };
+    console.log('VIDEO________________', video);
+    this.dialogRef.close(video);
   }
 
   cancel(): void {

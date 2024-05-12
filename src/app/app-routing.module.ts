@@ -16,6 +16,9 @@ const routes: Routes = [
     path: 'gallery', loadChildren: () => import('./gallery/gallery.module').then(m => m.GalleryModule)
   },
   {
+    path: 'video', loadChildren: () => import('./video/video.module').then(m => m.VideoModule)
+  },
+  {
     path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   }
 ];

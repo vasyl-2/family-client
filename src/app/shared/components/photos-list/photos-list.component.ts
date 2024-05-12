@@ -19,6 +19,8 @@ import {Photo} from "../../../models/photo";
 import {environment} from "../../../../environments/environment";
 import {Chapter} from "../../../models/chapter";
 import {PhotoComponent} from "../photo/photo.component";
+import {MatDialog} from "@angular/material/dialog";
+import {FullSizePhotoComponent} from "../full-size-photo/full-size-photo.component";
 
 @Component({
   selector: 'app-photos-list',
@@ -49,6 +51,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private route: ActivatedRoute,
     private store: Store<GalleryState>,
+    private dialog: MatDialog,
   ) {
   }
 
@@ -77,6 +80,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.subscribeToRoute();
     this.photos$ = this.store.pipe(select(photosSelector));
+
+    this.photos$.subscribe(x => {
+      console.log('PHOTOS____________ALL__________!!!!', x)
+
+    })
 
     this.subChapter$ = this.selectedId$.pipe(
       withLatestFrom(this.store.pipe(select(chaptersHierarchySelector))),
@@ -112,6 +120,16 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+  }
+
+  openFullSize(event: MouseEvent, photo: Photo): void {
+    event.stopPropagation();
+
+   this.dialog.open(FullSizePhotoComponent, {
+        data: photo,
+        panelClass: 'full-size-photo'
+      }
+    )
   }
 
   onPhotoUpdate(photo: Partial<Photo>): void {

@@ -73,7 +73,7 @@ export const mainReducer = createReducer(
 
   on(receivedVideos, (state: GalleryState, action): GalleryState => {
 
-    const newState = { ...state, photos: action.videos };
+    const newState = { ...state, videos: action.videos };
     return newState;
   }),
 

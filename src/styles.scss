@@ -34,3 +34,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; padding: 0 
 .select-chapter {
   cursor: pointer;
 }
+
+.full-size-photo {
+  width: 99vw !important;
+  height: 99vh;
+
+  .mat-mdc-dialog-surface  {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+}

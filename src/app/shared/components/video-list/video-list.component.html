@@ -16,18 +16,16 @@
 
 
 <div #gallery class="gallery">
-  <ng-container *ngIf="photos$ | async as photos">
-    <ng-container *ngFor="let photo of photos">
-<!--      appEnlarge  to app-photo -->
+  <ng-container *ngIf="videos$ | async as videos">
+    <ng-container *ngFor="let video of videos">
+      <!--      appEnlarge  to app-photo -->
 
-      <app-photo #appPhoto
-        (click)="openFullSize($event, photo!)"
-        (updatedPhoto)="onPhotoUpdate($event)"
-        (imageLoaded)="onImageLoad()"
-        [appSetHeight]="computeGridStyle$ | async"
-        [imageSrc]="photo"></app-photo>
+      <app-video-element #appPhoto
+                 [appSetHeight]="computeGridStyle$ | async"
+                 [imageSrc]="video"></app-video-element>
     </ng-container>
   </ng-container>
 </div>
+
 
 
