@@ -1,11 +1,12 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {BehaviorSubject, Observable} from "rxjs";
-import {Chapter} from "../../../models/chapter";
+import {Observable} from "rxjs";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {select, Store} from "@ngrx/store";
+
+import {Chapter} from "../../../models/chapter";
 import {GalleryState} from "../../../store/reducer";
-import {chaptersHierarchySelector, chaptersSelector} from "../../../store/selectors";
+import {chaptersHierarchySelector, videoChaptersHierarchySelector} from "../../../store/selectors";
 import {CreateChapter} from "../../../models/dto/create-chapter";
 
 @Component({
@@ -17,14 +18,12 @@ import {CreateChapter} from "../../../models/dto/create-chapter";
 export class CreateChapterComponent {
   addChapterForm!: FormGroup;
 
-  private readonly fileSubject = new BehaviorSubject<File | undefined>(undefined);
-
   photoChapters$!: Observable<Chapter[]>;
 
   constructor(
     private fromBuilder: FormBuilder,
     private dialogRef: MatDialogRef<any>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: 'photo' | 'video',
     private store: Store<{ gallery: GalleryState}>
   ) {
   }
@@ -32,16 +31,15 @@ export class CreateChapterComponent {
   ngOnInit() {
     this.initForm();
 
+    const selector = this.data === 'photo' ? chaptersHierarchySelector : videoChaptersHierarchySelector
     this.photoChapters$ = this.store.pipe(
-      select(chaptersHierarchySelector),
+      select(selector),
     )
   }
 
   addChapter(): void {
     const { name = undefined, parentChapter = undefined, latinname = undefined } = this.addChapterForm.value;
     const chapter: CreateChapter = { title: latinname, nameForUI: name, parent: parentChapter };
-
-    console.log('RES_____', chapter);
     this.dialogRef.close(chapter);
   }
 

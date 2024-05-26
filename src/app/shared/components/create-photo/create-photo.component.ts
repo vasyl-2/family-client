@@ -52,7 +52,6 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
       this.chapterControl.valueChanges
         .pipe(withLatestFrom(this.photoChapters$))
         .subscribe(([chapter, allChapters]: [string, Chapter[]]) => {
-        console.log('CHAPTER___SSSS__________', allChapters);
         const currentChapter = this.findChapterById(allChapters, chapter);
         let fullPath: string;
 

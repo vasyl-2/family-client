@@ -14,11 +14,17 @@ import {
   authenticated,
   createChapter,
   createdChapter,
-  createPhoto, createVideo,
+  createPhoto, createVideo, createVideoChapter,
   logout
 } from "../../store/action";
 import {Photo} from "../../models/photo";
-import {alertSelector, chaptersHierarchySelector, chaptersSelector, isAuthenticated} from "../../store/selectors";
+import {
+  alertSelector,
+  chaptersHierarchySelector,
+  chaptersSelector,
+  isAuthenticated,
+  videoChaptersHierarchySelector, videoChaptersSelector
+} from "../../store/selectors";
 import {CreateChapterComponent} from "../../shared/components/create-chapter/create-chapter.component";
 import {CreateChapter} from "../../models/dto/create-chapter";
 import {CreateVideoComponent} from "../../shared/components/create-video/create-video.component";
@@ -124,7 +130,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed()
         .pipe(
           filter((video: Video) => !!video),
-          switchMap((video) => this.store.pipe(select(chaptersSelector)).pipe(
+          switchMap((video) => this.store.pipe(select(videoChaptersSelector)).pipe(
             map((chapters: Chapter[]) => {
               const currentChapter = chapters.find((c: Chapter) => c._id === video.chapter);
               video.chapterName = currentChapter!!.title;
@@ -140,12 +146,15 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     )
   }
 
-  addChapter(): void {
+  addChapter(type: 'photo' | 'video' = 'photo'): void {
+    const selector = type === 'photo' ?  chaptersHierarchySelector : videoChaptersHierarchySelector;
     this.sub.add(
-      this.dialog.open(CreateChapterComponent).afterClosed()
+      this.dialog.open(CreateChapterComponent, {
+        data: type
+      }).afterClosed()
         .pipe(
           filter((chapter: CreateChapter | undefined) => !!chapter),
-          switchMap((chapter: CreateChapter | undefined) => this.store.pipe(select(chaptersHierarchySelector))
+          switchMap((chapter: CreateChapter | undefined) => this.store.pipe(select(selector))
             .pipe(map((chapters: Chapter[]) => {
               const newChapter = { ...chapter };
 
@@ -172,9 +181,10 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
           //   }))),
           tap((chapter: CreateChapter | undefined) => console.log('FILLED_CHAPTER___________', chapter))
         )
-        .subscribe((chapter: Chapter | undefined) =>
-            chapter && this.store.dispatch(createChapter({ payload: chapter }))
-          )
+        .subscribe((chapter: Chapter | undefined) => {
+          const action = type === 'photo' ?  createChapter : createVideoChapter;
+          chapter && this.store.dispatch(action({ payload: chapter }));
+        })
     )
   }
 

@@ -21,7 +21,7 @@ export class VideoElementComponent implements OnDestroy{
   private readonly videoSubject = new BehaviorSubject<Photo | undefined>(undefined);
   readonly video$ = this.videoSubject.asObservable();
 
-  @Input() set imageSrc(video: Video) {
+  @Input() set videoSrc(video: Video) {
     this.videoObject = video;
     this.videoSubject.next(video);
     this.video = this.getAsset(video);
@@ -29,8 +29,10 @@ export class VideoElementComponent implements OnDestroy{
 
   private getAsset(video: Video): string {
     const { fullPath, name } = video;
+    console.log('VIDEO_____PATH___', video)
+
     let path =  fullPath ? `${fullPath}/${name}` : name;
-    path = `${environment.apiVideoUrl}/${path}`;
+    path = `${environment.apiUrl}/${path}`;
     console.log('PATH___TOO___VIDEO_____', path)
 
     return path;

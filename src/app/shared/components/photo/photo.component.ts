@@ -106,9 +106,12 @@ export class PhotoComponent implements OnDestroy {
   }
 
   private getAsset(photo: Photo): string {
+    console.log('PHOTO_PATH___', photo)
     const { fullPath, name } = photo;
     let path =  fullPath ? `${fullPath}/${name}` : name;
     path = `${environment.apiUrl}/${path}`;
+
+    console.log('PATH_TO_PHOTO________', path)
 
     return path;
   }

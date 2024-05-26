@@ -116,6 +116,11 @@ export class UploadPhotoService implements IUploadPhotoService {
     return this.http.post(url, chapter.payload);
   }
 
+  createVideoChapter(chapter: { payload: CreateChapter }): Observable<any> {
+    const url = `${environment.apiUrl}/upload-photo/createvideochapter`;
+    return this.http.post(url, chapter.payload);
+  }
+
   getAllPhotos(chapter: string): Observable<Photo[]> {
     // return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photos/${chapter}`);
     return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photoslist/${chapter}`);
@@ -130,12 +135,23 @@ export class UploadPhotoService implements IUploadPhotoService {
     return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photos/${chapter}`);
   }
 
-  // TODO ass type
+  // TODO add type
   getChapters(): Observable<Chapter[]> {
     return this.http.get<Chapter[]>(`${environment.apiUrl}/upload-photo/chapters`).pipe(
       catchError((error) => {
         if (error instanceof HttpErrorResponse) {
-          console.log('Hi, please do authorization, it\'s me, Vasya:)', error);
+          console.log('Hi, please do authorization)', error);
+        }
+        return of([]);
+      })
+    );
+  }
+
+  getVideoChapters(): Observable<Chapter[]> {
+    return this.http.get<Chapter[]>(`${environment.apiUrl}/upload-photo/video-chapters`).pipe(
+      catchError((error) => {
+        if (error instanceof HttpErrorResponse) {
+          console.log('Hi, please do authorization)', error);
         }
         return of([]);
       })

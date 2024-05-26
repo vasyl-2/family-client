@@ -17,7 +17,12 @@ import {GalleryState} from "../../../store/reducer";
 import {MatDialog} from "@angular/material/dialog";
 import {Photo} from "../../../models/photo";
 import {receivePhotos, receiveVideos} from "../../../store/action";
-import {chaptersHierarchySelector, photosSelector, videosSelector} from "../../../store/selectors";
+import {
+  chaptersHierarchySelector,
+  photosSelector,
+  videoChaptersHierarchySelector,
+  videosSelector
+} from "../../../store/selectors";
 
 @Component({
   selector: 'app-video-list',
@@ -71,7 +76,7 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.subChapter$ = this.selectedId$.pipe(
-      withLatestFrom(this.store.pipe(select(chaptersHierarchySelector))),
+      withLatestFrom(this.store.pipe(select(videoChaptersHierarchySelector))),
       map(([id, chapters]: [string | undefined, Chapter[]]) => {
         if (!!id) {
           // const chapter = chapters.find((c: Chapter) => c.children?.find((c: Chapter) => c._id === id))!

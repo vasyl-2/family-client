@@ -7,7 +7,7 @@ import {select, Store} from "@ngrx/store";
 import {GalleryState} from "../../../store/reducer";
 import {extensions} from "../../../data/extensions";
 import {Chapter} from "../../../models/chapter";
-import {chaptersHierarchySelector} from "../../../store/selectors";
+import {chaptersHierarchySelector, videoChaptersHierarchySelector} from "../../../store/selectors";
 import {withLatestFrom} from "rxjs/operators";
 import {Photo} from "../../../models/photo";
 import {Video} from "../../../models/video";
@@ -46,7 +46,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
     this.initForm();
 
     this.photoChapters$ = this.store.pipe(
-      select(chaptersHierarchySelector),
+      select(videoChaptersHierarchySelector),
     );
 
     this.sub.add(

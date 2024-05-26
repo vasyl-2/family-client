@@ -57,6 +57,7 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
   hasChild = (_: number, node: Chapter) => !!node.children && node.children.length > 0;
 
   selectChapter(chapter: Chapter): void {
+    console.log('SELECT$D____CHAPTER___________', chapter)
     this.onChange(chapter._id!);
   }
 

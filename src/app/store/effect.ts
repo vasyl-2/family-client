@@ -7,10 +7,10 @@ import {Store} from "@ngrx/store";
 import {
   AUTHENTICATE, authenticated,
   CREATE_ACTION,
-  CREATE_PHOTO_ACTION, CREATE_VIDEO_ACTION,
+  CREATE_PHOTO_ACTION, CREATE_VIDEO_ACTION, CREATE_VIDEO_CHAPTER_ACTION,
   createdPhoto, createdVideo, EDIT_PHOTO_ACTION, editedPhoto, RECEIVE_ALL_PHOTOS, RECEIVE_ALL_VIDEOS,
-  RECEIVE_CHAPTERS,
-  receivedChapters, receivedPhotos, receivedVideos
+  RECEIVE_CHAPTERS, RECEIVE_VIDEO_CHAPTERS,
+  receivedChapters, receivedPhotos, receivedVideoChapters, receivedVideos
 } from './action';
 
 import {CreateChapter} from "../models/dto/create-chapter";
@@ -26,9 +26,15 @@ export class GalleryEffects {
 
   createChapter$ = createEffect(() => this.actions$.pipe(
     ofType(CREATE_ACTION),
-    tap(x => console.log('TEST__________________________________')),
     exhaustMap((chapter: { payload: CreateChapter }) => this.uploadService.createChapter(chapter)),
     map((chapters: Chapter[]) => receivedChapters({ chapters })),
+    catchError(() => EMPTY)
+  ));
+
+  createVideoChapter$ = createEffect(() => this.actions$.pipe(
+    ofType(CREATE_VIDEO_CHAPTER_ACTION),
+    exhaustMap((chapter: { payload: CreateChapter }) => this.uploadService.createVideoChapter(chapter)),
+    map((chapters: Chapter[]) => receivedVideoChapters({ chapters })),
     catchError(() => EMPTY)
   ));
 
@@ -65,11 +71,14 @@ export class GalleryEffects {
 
   receiveChapters$ = createEffect(() => this.actions$.pipe(
     ofType(RECEIVE_CHAPTERS),
-    exhaustMap((chapters) => {
-
-      return this.uploadService.getChapters()
-    }),
+    exhaustMap((chapters) => this.uploadService.getChapters()),
     map((chapters: Chapter[]) => receivedChapters({ chapters }))
+  ));
+
+  receiveVideoChapters$ = createEffect(() => this.actions$.pipe(
+    ofType(RECEIVE_VIDEO_CHAPTERS),
+    exhaustMap((chapters) => this.uploadService.getVideoChapters()),
+    map((chapters: Chapter[]) => receivedVideoChapters({ chapters }))
   ));
 
   getAllPhotos$ = createEffect(() => this.actions$.pipe(

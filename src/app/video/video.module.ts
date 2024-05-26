@@ -7,6 +7,6 @@ import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
   declarations: [VideoComponent],
-  imports: [CommonModule, VideoRoutingModule, SharedModule]
+  imports: [CommonModule, VideoRoutingModule, SharedModule],
 })
 export class VideoModule { }

@@ -8,6 +8,10 @@ import {Video} from "../models/video";
 export const CREATE_ACTION = '[Gallery] CREATE';
 export const CREATED_ACTION = '[Gallery] CREATED';
 
+export const CREATE_VIDEO_CHAPTER_ACTION = '[Gallery] CREATE VIDEO CHAPTER';
+export const CREATED_VIDEO_CHAPTER_ACTION = '[Gallery] CREATED VIDEO CHAPTER';
+
+
 export const CREATE_PHOTO_ACTION = '[Gallery] CREATE PHOTO';
 export const CREATED_PHOTO_ACTION = '[Gallery] CREATED PHOTO';
 
@@ -19,6 +23,9 @@ export const CREATED_VIDEO_ACTION = '[Gallery] CREATED VIDEO';
 
 export const RECEIVE_CHAPTERS = '[CHAPTERS] RECEIVE CHAPTERS';
 export const RECEIVED_CHAPTERS = '[CHAPTERS] RECEIVED CHAPTERS';
+
+export const RECEIVE_VIDEO_CHAPTERS = '[CHAPTERS] RECEIVE VIDEO CHAPTERS';
+export const RECEIVED_VIDEO_CHAPTERS = '[CHAPTERS] RECEIVED VIDEO CHAPTERS';
 
 export const RECEIVE_ALL_PHOTOS = '[PHOTOS] RECEIVE PHOTOS';
 export const RECEIVED_ALL_PHOTOS = '[PHOTOS] RECEIVED PHOTOS';
@@ -39,8 +46,18 @@ export const createChapter = createAction(
   props<{ payload: CreateChapter }>()
 );
 
+export const createVideoChapter = createAction(
+  CREATE_VIDEO_CHAPTER_ACTION,
+  props<{ payload: CreateChapter }>()
+);
+
 export const createdChapter = createAction(
   CREATED_ACTION,
+  props<{ chapter: Chapter }>()
+);
+
+export const createdVideoChapter = createAction(
+  CREATED_VIDEO_CHAPTER_ACTION,
   props<{ chapter: Chapter }>()
 );
 
@@ -85,8 +102,17 @@ export const receiveChapters = createAction(
   RECEIVE_CHAPTERS,
 );
 
+export const receiveVideoChapters = createAction(
+  RECEIVE_VIDEO_CHAPTERS,
+);
+
 export const receivedChapters = createAction(
   RECEIVED_CHAPTERS,
+  props<{ chapters: Chapter[] }>()
+);
+
+export const receivedVideoChapters = createAction(
+  RECEIVED_VIDEO_CHAPTERS,
   props<{ chapters: Chapter[] }>()
 );
 

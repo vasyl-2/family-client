@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {Observable} from "rxjs";
 import {Chapter} from "../../../models/chapter";
 import { select, Store } from "@ngrx/store";
 
 import { GalleryState } from "../../../store/reducer";
-import { chaptersSelector } from "../../../store/selectors";
+import {chaptersSelector, videoChaptersSelector} from "../../../store/selectors";
 
 @Component({
   selector: 'app-chapter-list',
@@ -14,6 +14,8 @@ import { chaptersSelector } from "../../../store/selectors";
 })
 export class ChapterListComponent implements OnInit {
 
+
+  @Input() type: 'photo' | 'video' = 'photo';
 
   @Output() chapterSelected = new EventEmitter<string>();
 
@@ -25,9 +27,11 @@ export class ChapterListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const selector = this.type === 'photo' ? chaptersSelector : videoChaptersSelector
     this.photoChapters$ = this.store.pipe(
-      select(chaptersSelector),
+      select(selector),
     );
+    this.photoChapters$.subscribe(x => console.log('CHAPTERSSSSS______________', x))
   }
 
   selectChapter(chapter: string): void {
