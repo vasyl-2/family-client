@@ -31,7 +31,7 @@ export class CreateChapterComponent {
   ngOnInit() {
     this.initForm();
 
-    const selector = this.data === 'photo' ? chaptersHierarchySelector : videoChaptersHierarchySelector
+    const selector = this.data === 'photo' ? chaptersHierarchySelector : videoChaptersHierarchySelector;
     this.photoChapters$ = this.store.pipe(
       select(selector),
     )

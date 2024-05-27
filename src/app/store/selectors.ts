@@ -10,7 +10,7 @@ export const gallerySelector = createFeatureSelector<GalleryState>('gallery');
 
 export const chaptersSelector = createSelector(gallerySelector, (state: GalleryState) => state.chapters);
 export const chaptersHierarchySelector =
-  createSelector(gallerySelector, (state: GalleryState) => state.chapters);
+  createSelector(gallerySelector, (state: GalleryState) => state.hierarchyChapters);
 
 
 export const videoChaptersSelector = createSelector(gallerySelector, (state: GalleryState) => state.videoChapters);
