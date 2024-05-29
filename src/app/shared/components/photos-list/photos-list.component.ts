@@ -32,6 +32,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   photos$!: Observable<Photo[] | undefined>;
   subLevels = 'Подразделы';
 
+  private stateOfChapters: Chapter | undefined;
+
   previousId: string | undefined;
 
   private readonly loadedImagesCountSubject = new BehaviorSubject(0);
@@ -41,7 +43,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly computeGridStyleSubject = new BehaviorSubject<{ rowHeight: number; rowGap: number } | undefined>(undefined);
   computeGridStyle$ = this.computeGridStyleSubject.asObservable();
 
-  private readonly selectedIdSubject = new BehaviorSubject<string | undefined>('');
+  private readonly selectedIdSubject = new BehaviorSubject<string>('');
   private readonly selectedId$ = this.selectedIdSubject.asObservable().pipe(shareReplay(1));
 
   private readonly previousIdSubject = new BehaviorSubject<string | undefined>('');
@@ -84,37 +86,19 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.subChapter$ = this.selectedId$.pipe(
       withLatestFrom(this.store.pipe(select(chaptersHierarchySelector))),
-      map(([id, chapters]: [string | undefined, Chapter[]]) => {
-        let chapter;
-        if (!!id) {
-          // const chapter = chapters.find((c: Chapter) => c.children?.find((c: Chapter) => c._id === id))!
-          chapter = this.findChapterByIdInArray(chapters, id);
+      map(([id, chapters]: [string, Chapter[]]) => {
+        const chapter = this.findChapterByIdInArray(chapters, id);
 
-          if (chapter) {
-            return chapter;
-          } else {
-            chapter = chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!
-          }
-
-
-          // if (chapter && chapter.children) {
-          //   return chapter.children.find((c: Chapter) => c._id === id)!;
-          // } else {
-          //   this.store.dispatch(receivePhotos({ chapter: this.route.snapshot.params['chapter'] }));
-          //   return chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!
-          // }
+        if (chapter) {
+          return chapter;
         } else {
-          console.log('EMPTY_START___________________');
-          // this.previousIdSubject.next()
-          chapter = chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!;
+          return chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!;
         }
-        return chapter;
+
       }),
     );
 
-    this.previousId$ = this.selectedId$.pipe(
-
-    )
+    this.subChapter$.subscribe(cH => this.stateOfChapters = cH);
   }
 
   ngOnDestroy(): void {
@@ -149,13 +133,32 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(receivePhotos({ chapter: subChapterId }));
   }
 
-  goBack() {
-    const chapterToGoBack: string | undefined = this.previousIdSubject.value;
+  goBackOld() {
+    let chapterToGoBack: string | undefined;
+
+    if (this.previousIdSubject.value) {
+      chapterToGoBack = this.previousIdSubject.value;
+      if (this.stateOfChapters) {
+        const parentOfChapterToGo = this.findChapterById(this.stateOfChapters, chapterToGoBack)?.parent;
+        console.log('PARENT___CHAPTER________________________________', parentOfChapterToGo);
+
+        if (parentOfChapterToGo) {
+          this.previousIdSubject.next(parentOfChapterToGo);
+        }
+      }
+    } else {
+      chapterToGoBack = this.route.snapshot.params['chapter'];
+    }
 
     if (chapterToGoBack) {
-      this.selectSubChapter(chapterToGoBack);
-    } else {
-      this.selectSubChapter(this.route.snapshot.params['chapter']);
+      this.selectedIdSubject.next(chapterToGoBack);
+      this.store.dispatch(receivePhotos({ chapter: chapterToGoBack }));
+    }
+  }
+
+  goBack(id: string | null | undefined) {
+    if (id) {
+      this.selectSubChapter(id);
     }
   }
 
@@ -193,7 +196,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   private subscribeToRoute(): void {
-    console.log('ROUTE__PARAM____________', this.route.snapshot.params['chapter']);
+    this.selectedIdSubject.next(this.route.snapshot.params['chapter']);
     this.store.dispatch(receivePhotos({ chapter: this.route.snapshot.params['chapter'] }));
 
 

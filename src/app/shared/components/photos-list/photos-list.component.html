@@ -1,6 +1,6 @@
 
 <ng-container *ngIf="subChapter$ | async as subChapter">
-  <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack()" mat-button color="primary">назад</button></div>
+  <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack(subChapter.parent)" mat-button color="primary">назад</button></div>
   <h3>{{ subLevels }}</h3>
   <div class="sub-chapters">
     <ng-container *ngIf="subChapter.children">

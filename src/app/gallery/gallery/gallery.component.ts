@@ -45,13 +45,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-    this.sub.add(this.store.pipe(
-      select(photosSelector)
-    ).subscribe((p: Photo[] | undefined) => {
-      console.log('TEST!!!!_______________PHOTOS_______________', p);
-    }));
-
     // this.http.get(`${environment.apiUrl}/upload-photo/photos/6403643ce6ebaa85b246723f`,
     //   { responseType: 'arraybuffer' }).subscribe((data: ArrayBuffer) => {
     //

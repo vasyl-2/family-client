@@ -31,11 +31,9 @@ export class ChapterListComponent implements OnInit {
     this.photoChapters$ = this.store.pipe(
       select(selector),
     );
-    this.photoChapters$.subscribe(x => console.log('CHAPTERSSSSS______________', x))
   }
 
   selectChapter(chapter: string): void {
-    console.log('SELECTED_CHAPTER____', chapter);
     this.chapterSelected.emit(chapter);
   }
 

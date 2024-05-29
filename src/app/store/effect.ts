@@ -84,14 +84,12 @@ export class GalleryEffects {
   getAllPhotos$ = createEffect(() => this.actions$.pipe(
     ofType(RECEIVE_ALL_PHOTOS),
     exhaustMap((chapter: { chapter: string }) => this.uploadService.getAllPhotos(chapter.chapter)),
-    tap((c: Photo[]) => console.log('__PHOTOS___111____', c)),
     map((photos) => receivedPhotos({ photos }))
   ));
 
   getAllVideos$ = createEffect(() => this.actions$.pipe(
     ofType(RECEIVE_ALL_VIDEOS),
     exhaustMap((chapter: { chapter: string }) => this.uploadService.getAllVideos(chapter.chapter)),
-    tap((c: Video[]) => console.log('__VIDEOS___111____', c)),
     map((videos) => receivedVideos({ videos }))
   ));
 
@@ -101,7 +99,6 @@ export class GalleryEffects {
     exhaustMap((creds: { credentials: { email: string; password: string; }}) =>
       this.authorizationService
         .authenticate({ email: creds.credentials.email, password: creds.credentials.password })),
-    tap((c) => console.log('___CREDS______', c)),
     map((token: string) => authenticated({ token }))
   ));
 
