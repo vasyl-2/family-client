@@ -1,11 +1,10 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component, ElementRef,
   OnDestroy,
   OnInit,
-  QueryList, ViewChild,
-  ViewChildren
+  ViewChild
 } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
@@ -18,7 +17,6 @@ import {chaptersHierarchySelector, photosSelector} from "../../../store/selector
 import {Photo} from "../../../models/photo";
 import {environment} from "../../../../environments/environment";
 import {Chapter} from "../../../models/chapter";
-import {PhotoComponent} from "../photo/photo.component";
 import {MatDialog} from "@angular/material/dialog";
 import {FullSizePhotoComponent} from "../full-size-photo/full-size-photo.component";
 
@@ -34,6 +32,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   photos$!: Observable<Photo[] | undefined>;
   subLevels = 'Подразделы';
 
+  previousId: string | undefined;
+
   private readonly loadedImagesCountSubject = new BehaviorSubject(0);
 
   subChapter$!: Observable<Chapter>;
@@ -41,10 +41,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly computeGridStyleSubject = new BehaviorSubject<{ rowHeight: number; rowGap: number } | undefined>(undefined);
   computeGridStyle$ = this.computeGridStyleSubject.asObservable();
 
-  // @ViewChildren(PhotoComponent) photosElements!: QueryList<PhotoComponent>
-
   private readonly selectedIdSubject = new BehaviorSubject<string | undefined>('');
   private readonly selectedId$ = this.selectedIdSubject.asObservable().pipe(shareReplay(1));
+
+  private readonly previousIdSubject = new BehaviorSubject<string | undefined>('');
+  private previousId$ = this.previousIdSubject.asObservable();
 
   private sub = new Subscription();
 
@@ -81,23 +82,18 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscribeToRoute();
     this.photos$ = this.store.pipe(select(photosSelector));
 
-    this.photos$.subscribe(x => {
-      console.log('PHOTOS____________ALL__________!!!!', x)
-
-    })
-
     this.subChapter$ = this.selectedId$.pipe(
       withLatestFrom(this.store.pipe(select(chaptersHierarchySelector))),
       map(([id, chapters]: [string | undefined, Chapter[]]) => {
+        let chapter;
         if (!!id) {
           // const chapter = chapters.find((c: Chapter) => c.children?.find((c: Chapter) => c._id === id))!
-          const chapter = this.findChapterByIdInArray(chapters, id);
+          chapter = this.findChapterByIdInArray(chapters, id);
 
           if (chapter) {
-            console.log('YES___________________________', chapter)
             return chapter;
           } else {
-            return chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!
+            chapter = chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!
           }
 
 
@@ -108,14 +104,17 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           //   return chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!
           // }
         } else {
-          return chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!
+          console.log('EMPTY_START___________________');
+          // this.previousIdSubject.next()
+          chapter = chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!;
         }
+        return chapter;
       }),
     );
 
-    this.subChapter$.subscribe((c) => {
-      console.log('SUB___CHAPTERS____________', c);
-    })
+    this.previousId$ = this.selectedId$.pipe(
+
+    )
   }
 
   ngOnDestroy(): void {
@@ -133,7 +132,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onPhotoUpdate(photo: Partial<Photo>): void {
-    console.log('PHOTO___TO_____UPDATE__________', photo);
     this.store.dispatch(editPhoto({ photo }));
   }
 
@@ -146,8 +144,19 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   selectSubChapter(subChapterId: string): void {
+    this.previousIdSubject.next(this.selectedIdSubject.value);
     this.selectedIdSubject.next(subChapterId);
     this.store.dispatch(receivePhotos({ chapter: subChapterId }));
+  }
+
+  goBack() {
+    const chapterToGoBack: string | undefined = this.previousIdSubject.value;
+
+    if (chapterToGoBack) {
+      this.selectSubChapter(chapterToGoBack);
+    } else {
+      this.selectSubChapter(this.route.snapshot.params['chapter']);
+    }
   }
 
   private findChapterById(rootChapter: Chapter, targetChapterId: string): Chapter | null {

@@ -1,13 +1,13 @@
 
 <ng-container *ngIf="subChapter$ | async as subChapter">
-  <h2>{{ subChapter.nameForUI }}</h2>
+  <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack()" mat-button color="primary">назад</button></div>
   <h3>{{ subLevels }}</h3>
   <div class="sub-chapters">
     <ng-container *ngIf="subChapter.children">
       <ng-container *ngFor="let sC of subChapter.children">
-      <span class="sub-chapter" (click)="selectSubChapter(sC._id!)">
+      <button  mat-button color="primary" (click)="selectSubChapter(sC._id!)">
         {{ sC.nameForUI }}
-      </span>
+      </button>
       </ng-container>
     </ng-container>
 
@@ -18,10 +18,7 @@
 <div #gallery class="gallery">
   <ng-container *ngIf="photos$ | async as photos">
     <ng-container *ngFor="let photo of photos">
-<!--      appEnlarge  to app-photo -->
-
-      <app-photo #appPhoto
-        (click)="openFullSize($event, photo!)"
+      <app-photo (click)="openFullSize($event, photo!)"
         (updatedPhoto)="onPhotoUpdate($event)"
         (imageLoaded)="onImageLoad()"
         [appSetHeight]="computeGridStyle$ | async"
