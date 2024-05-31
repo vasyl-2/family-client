@@ -22,21 +22,21 @@
       <button routerLink="/entry" mat-button class="add-photo">панель управления</button>
       <span class="example-spacer"></span>
       <button (click)="addPhoto()" mat-button class="add-photo">
-        добавить фото в галлерею
+        добавить фото в галерею
       </button>
 
       <span class="example-spacer"></span>
       <button (click)="addVideo()" mat-button class="add-photo">
-        добавить видео в галлерею
+        добавить видео в галерею
       </button>
 
       <span class="example-spacer"></span>
       <button (click)="addChapter()" mat-button class="add-photo">
-        добавить раздел в фото-галлерею
+        добавить раздел в фото-галерею
       </button>
       <span class="example-spacer"></span>
       <button (click)="addChapter('video')" mat-button class="add-photo">
-        добавить раздел в видео-галлерею
+        добавить раздел в видео-галерею
       </button>
       <span class="example-spacer"></span>
 
@@ -45,7 +45,7 @@
       </button>
       <span class="example-spacer"></span>
       <button routerLink="/video" mat-button class="add-photo">
-        видео галлерея
+        видео галерея
       </button>
 
       <ng-container *ngIf="!(isAuthenticated$ | async)">
