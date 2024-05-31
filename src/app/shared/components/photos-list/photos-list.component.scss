@@ -7,16 +7,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-auto-rows: 10px;
-  /*grid-template-rows: masonry;*/
+  //grid-template-rows: masonry;
   gap: 10px;
-  //display: flex;
-  //flex-wrap: wrap;
-  //justify-content: space-between;
-  //gap: 16px;
-  //
-  //.photo {
-  //  flex: 0 0 calc(33.33% - 16px);
-  //}
+
 }
 
 .sub-chapters {

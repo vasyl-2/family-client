@@ -70,6 +70,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   setGalleryProps(): void {
     const computedStyles = window.getComputedStyle(this.gallery.nativeElement);
     const rowHeight = parseInt(computedStyles.getPropertyValue('grid-auto-rows'));
+    console.log('ROW___HEIGHT_____', rowHeight)
     const rowGap = parseInt(computedStyles.getPropertyValue('grid-row-gap'));
     this.computeGridStyleSubject.next({ rowGap, rowHeight });
   }
@@ -131,6 +132,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.previousIdSubject.next(this.selectedIdSubject.value);
     this.selectedIdSubject.next(subChapterId);
     this.store.dispatch(receivePhotos({ chapter: subChapterId }));
+    setTimeout(() => this.setGalleryProps.bind(this), 5000);
   }
 
   goBackOld() {
@@ -154,6 +156,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.selectedIdSubject.next(chapterToGoBack);
       this.store.dispatch(receivePhotos({ chapter: chapterToGoBack }));
     }
+
+    setTimeout(() => this.setGalleryProps.bind(this), 5000);
   }
 
   goBack(id: string | null | undefined) {
