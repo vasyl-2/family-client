@@ -73,9 +73,20 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
         const item: { token: string; isAdmin?: boolean } = { token: localStorage.getItem('auth') as string };
 
-        if (payload.email && payload.email !== 'dom') {
-          item.isAdmin = true;
+        console.log('ITEM____________1', item)
+        console.log('ITEM____________2', payload.email)
+
+        if (payload.email) {
+          if (payload.email !== 'dom') {
+            console.log('payload_email1', payload.email && payload.email !== 'dom')
+            item.isAdmin = true;
+          } else {
+            item.isAdmin = false;
+          }
+
         } else {
+          console.log('payload_email2', payload.email && payload.email !== 'dom')
+
           item.isAdmin = false;
         }
 

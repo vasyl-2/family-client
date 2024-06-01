@@ -21,21 +21,21 @@
       <span class="example-spacer"></span>
       <button routerLink="/entry" mat-button class="add-photo">панель управления</button>
       <span class="example-spacer"></span>
-      <button [disabled]="isAdmin$ | async" (click)="addPhoto()" mat-button class="add-photo">
+      <button [disabled]="!(isAdmin$ | async)" (click)="addPhoto()" mat-button class="add-photo">
         добавить фото в галерею
       </button>
 
       <span class="example-spacer"></span>
-      <button [disabled]="isAdmin$ | async" (click)="addVideo()" mat-button class="add-photo">
+      <button [disabled]="!(isAdmin$ | async)" (click)="addVideo()" mat-button class="add-photo">
         добавить видео в галерею
       </button>
 
       <span class="example-spacer"></span>
-      <button [disabled]="isAdmin$ | async" (click)="addChapter()" mat-button class="add-photo">
+      <button [disabled]="!(isAdmin$ | async)" (click)="addChapter()" mat-button class="add-photo">
         добавить раздел в фото-галерею
       </button>
       <span class="example-spacer"></span>
-      <button [disabled]="isAdmin$ | async" (click)="addChapter('video')" mat-button class="add-photo">
+      <button [disabled]="!(isAdmin$ | async)" (click)="addChapter('video')" mat-button class="add-photo">
         добавить раздел в видео-галерею
       </button>
       <span class="example-spacer"></span>
