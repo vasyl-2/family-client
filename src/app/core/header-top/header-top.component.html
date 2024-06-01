@@ -55,7 +55,7 @@
       </ng-container>
 
       <ng-container *ngIf="isAuthenticated$ | async">
-        <button [disabled]="!(isAdmin$ | async)" mat-icon-button class="login" (click)="logout()">
+        <button mat-icon-button class="login" (click)="logout()">
           <mat-icon>logout!</mat-icon>
         </button>
       </ng-container>
