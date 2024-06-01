@@ -20,6 +20,7 @@ import {Chapter} from "../../../models/chapter";
 import {MatDialog} from "@angular/material/dialog";
 import {FullSizePhotoComponent} from "../full-size-photo/full-size-photo.component";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {HighlightChapterService} from "../../../services/highlight-chapter.service";
 
 @Component({
   selector: 'app-photos-list',
@@ -61,6 +62,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     private store: Store<GalleryState>,
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
+    private highlightChapterService: HighlightChapterService
   ) {
   }
 
@@ -240,6 +242,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log('CHAPTER___FORM_________________', form.chapter);
           this.selectedIdSubject.next(form.chapter);
           this.store.dispatch(receivePhotos({ chapter: form.chapter }));
+          this.highlightChapterService.chapterIdSubject.next(form.chapter);
         }
       })
   }

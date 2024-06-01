@@ -14,7 +14,7 @@
           {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
         </mat-icon>
       </button>
-      <span class="select-chapter" (click)="selectChapter(node)">{{node.nameForUI}}</span>
+      <span class="select-chapter" [id]=node._id (click)="selectChapter(node)">{{node.nameForUI}}</span>
     </div>
     <!-- There is inline padding applied to this div using styles.
         This padding value depends on the mat-icon-button width.  -->
