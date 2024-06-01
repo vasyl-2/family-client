@@ -1,0 +1,21 @@
+h2, h3 {
+  display: flex;
+  justify-content: center;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  display: grid;
+  height: 100%;
+  grid-template-columns: minmax(0, 300px) 1fr;
+  gap: 20px;
+  padding: 20px;
+
+  .side-bar {
+    //background-color: gray;
+  }
+}

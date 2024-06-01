@@ -21,6 +21,7 @@ import { FullSizePhotoComponent } from './components/full-size-photo/full-size-p
 import { VideoListComponent } from './components/video-list/video-list.component';
 import { VideoElementComponent } from './components/video-element/video-element.component';
 import { SearchComponent } from './components/search/search.component';
+import { RangeSizeComponent } from './components/range-size/range-size.component';
 
 const components = [
   CreatePhotoComponent,
@@ -34,7 +35,8 @@ const components = [
   FullSizePhotoComponent,
   VideoListComponent,
   VideoElementComponent,
-  SearchComponent
+  SearchComponent,
+  RangeSizeComponent
 ];
 
 const directives = [

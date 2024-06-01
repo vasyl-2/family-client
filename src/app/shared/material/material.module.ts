@@ -19,6 +19,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import {MatTreeModule} from "@angular/material/tree";
+import {MatSliderModule} from '@angular/material/slider';
+
 
 
 @NgModule({
@@ -44,6 +46,7 @@ import {MatTreeModule} from "@angular/material/tree";
     MatSelectModule,
     TextFieldModule,
     MatTreeModule,
+    MatSliderModule,
 
   ],
   exports: [
@@ -67,6 +70,7 @@ import {MatTreeModule} from "@angular/material/tree";
     MatSelectModule,
     TextFieldModule,
     MatTreeModule,
+    MatSliderModule,
   ]
 })
 export class MaterialModule { }

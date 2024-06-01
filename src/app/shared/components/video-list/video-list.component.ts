@@ -10,7 +10,7 @@ import {
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {Video} from "../../../models/video";
 import {Chapter} from "../../../models/chapter";
-import {map, shareReplay, withLatestFrom} from "rxjs/operators";
+import {distinctUntilChanged, map, shareReplay, withLatestFrom} from "rxjs/operators";
 import {ActivatedRoute} from "@angular/router";
 import {select, Store} from "@ngrx/store";
 import {GalleryState} from "../../../store/reducer";
@@ -23,6 +23,8 @@ import {
   videoChaptersHierarchySelector,
   videosSelector
 } from "../../../store/selectors";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {HighlightChapterService} from "../../../services/highlight-chapter.service";
 
 @Component({
   selector: 'app-video-list',
@@ -35,6 +37,14 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
   videos$!: Observable<Video[] | undefined> ;
   subLevels = 'Подразделы';
 
+  private stateOfChapters: Chapter | undefined;
+
+  selectChapter!: FormGroup;
+  search: FormControl = new FormControl<string>('');
+  size: FormControl = new FormControl<number>(1);
+
+  allChapters$!: Observable<Chapter[]>;
+
   private readonly loadedVideosCountSubject = new BehaviorSubject(0);
 
   subChapter$!: Observable<Chapter>;
@@ -42,7 +52,7 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly computeGridStyleSubject = new BehaviorSubject<{ rowHeight: number; rowGap: number } | undefined>(undefined);
   computeGridStyle$ = this.computeGridStyleSubject.asObservable();
 
-  private readonly selectedIdSubject = new BehaviorSubject<string | undefined>('');
+  private readonly selectedIdSubject = new BehaviorSubject<string>('');
   private readonly selectedId$ = this.selectedIdSubject.asObservable().pipe(shareReplay(1));
 
   private sub = new Subscription();
@@ -51,6 +61,8 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
     private route: ActivatedRoute,
     private store: Store<GalleryState>,
     private dialog: MatDialog,
+    private formBuilder: FormBuilder,
+    private highlightChapterService: HighlightChapterService
   ) {
   }
 
@@ -68,37 +80,25 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.allChapters$ = this.store.pipe(select(videoChaptersHierarchySelector)).pipe(shareReplay(1));
+    this.initForm();
+    this.subscribeToChapterChanges();
     this.subscribeToRoute();
     this.videos$ = this.store.pipe(select(videosSelector));
+    // withLatestFrom(this.store.pipe(select(videoChaptersHierarchySelector)))
 
-    this.videos$.subscribe(x => {
-      console.log('VIDEOS________ALL__________!!!!', x)
-    });
 
     this.subChapter$ = this.selectedId$.pipe(
-      withLatestFrom(this.store.pipe(select(videoChaptersHierarchySelector))),
-      map(([id, chapters]: [string | undefined, Chapter[]]) => {
-        if (!!id) {
-          // const chapter = chapters.find((c: Chapter) => c.children?.find((c: Chapter) => c._id === id))!
-          const chapter = this.findChapterByIdInArray(chapters, id);
+      withLatestFrom(this.allChapters$),
+      map(([id, chapters]: [string, Chapter[]]) => {
+        const chapter = this.findChapterByIdInArray(chapters, id);
 
-          if (chapter) {
-            console.log('YES___________________________', chapter)
-            return chapter;
-          } else {
-            return chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!
-          }
-
-
-          // if (chapter && chapter.children) {
-          //   return chapter.children.find((c: Chapter) => c._id === id)!;
-          // } else {
-          //   this.store.dispatch(receivePhotos({ chapter: this.route.snapshot.params['chapter'] }));
-          //   return chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!
-          // }
+        if (chapter) {
+          return chapter;
         } else {
-          return chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!
+          return chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!;
         }
+
       }),
     );
 
@@ -166,7 +166,25 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   selectSubChapter(subChapterId: string): void {
     this.selectedIdSubject.next(subChapterId);
-    this.store.dispatch(receivePhotos({ chapter: subChapterId }));
+    this.store.dispatch(receiveVideos({ chapter: subChapterId }));
+  }
+
+  private initForm(): void {
+    this.selectChapter = this.formBuilder.group({
+      chapter: ['']
+    });
+  }
+
+  private subscribeToChapterChanges(): void {
+    this.selectChapter.valueChanges.pipe(distinctUntilChanged())
+      .subscribe((form) => {
+        if (form.chapter) {
+          console.log('CHAPTER___FORM_________________', form.chapter);
+          this.selectedIdSubject.next(form.chapter);
+          this.store.dispatch(receiveVideos({ chapter: form.chapter }));
+          this.highlightChapterService.chapterIdSubject.next(form.chapter);
+        }
+      })
   }
 
 }

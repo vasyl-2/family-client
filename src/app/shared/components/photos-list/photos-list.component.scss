@@ -12,7 +12,7 @@
   padding: 20px;
 
   .side-bar {
-    background-color: gray;
+    //background-color: gray;
   }
 }
 .gallery {
@@ -45,15 +45,16 @@ h2, h3 {
   justify-content: center;
 }
 
-.root-chapter {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 30px;
-  color: darkblue;
-}
+//.root-chapter {
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  font-size: 30px;
+//  color: darkblue;
+//}
 
 .header {
   display: flex;
   justify-content: center;
 }
+

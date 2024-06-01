@@ -12,7 +12,8 @@
       <app-search [formControl]="search"></app-search>
     </div>
     <ng-container *ngIf="subChapter$ | async as subChapter">
-      <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack(subChapter.parent)" mat-button color="primary">назад</button></div>
+<!--      <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack(subChapter.parent)" mat-button color="primary">назад</button></div>-->
+      <div class="header"><h2>{{ subChapter.nameForUI }}</h2></div>
       <h3>{{ subLevels }}</h3>
       <div class="sub-chapters">
         <ng-container *ngIf="subChapter.children">
@@ -38,9 +39,10 @@
         </ng-container>
       </ng-container>
     </div>
+
+    <div class="change-size">
+      <app-range-size [formControl]="size"></app-range-size>
+    </div>
   </div>
-
-
-
 
 </div>

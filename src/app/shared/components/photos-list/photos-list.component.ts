@@ -36,6 +36,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   selectChapter!: FormGroup;
   search: FormControl = new FormControl<string>('');
+  size: FormControl = new FormControl<number>(1);
 
   private stateOfChapters: Chapter | undefined;
 
@@ -98,7 +99,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.photos$ = this.store.pipe(select(photosSelector));
 
     this.subChapter$ = this.selectedId$.pipe(
-      // withLatestFrom(this.store.pipe(select(chaptersHierarchySelector))),
       withLatestFrom(this.allChapters$),
       map(([id, chapters]: [string, Chapter[]]) => {
         const chapter = this.findChapterByIdInArray(chapters, id);
