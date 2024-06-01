@@ -154,7 +154,7 @@ export const logout = createAction(
 
 export const authenticated = createAction(
   AUTHENTICATE_SUCCESS,
-  props<{ token: string }>()
+  props<{ token: string; isAdmin?: boolean }>()
 );
 
 export const authenticateError = createAction(

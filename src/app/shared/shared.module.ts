@@ -33,7 +33,8 @@ const components = [
   CreateVideoComponent,
   FullSizePhotoComponent,
   VideoListComponent,
-  VideoElementComponent
+  VideoElementComponent,
+  SearchComponent
 ];
 
 const directives = [
@@ -44,7 +45,7 @@ const directives = [
 ]
 @NgModule({
   declarations: [
-    ...components, ...directives, SearchComponent
+    ...components, ...directives
   ],
   imports: [
     CommonModule,
@@ -57,7 +58,8 @@ const directives = [
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
-    ...components
+    ...components,
+    ...directives
   ]
 })
 export class SharedModule { }

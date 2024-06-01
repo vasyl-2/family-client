@@ -19,7 +19,7 @@ import {environment} from "../../../../environments/environment";
 import {Chapter} from "../../../models/chapter";
 import {MatDialog} from "@angular/material/dialog";
 import {FullSizePhotoComponent} from "../full-size-photo/full-size-photo.component";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {HighlightChapterService} from "../../../services/highlight-chapter.service";
 
 @Component({
@@ -35,6 +35,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   subLevels = 'Подразделы';
 
   selectChapter!: FormGroup;
+  search: FormControl = new FormControl<string>('');
 
   private stateOfChapters: Chapter | undefined;
 

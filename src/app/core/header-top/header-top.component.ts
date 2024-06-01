@@ -2,7 +2,7 @@ import {Component, OnInit, ChangeDetectionStrategy, OnDestroy} from '@angular/co
 import {MatDialog} from "@angular/material/dialog";
 import {select, Store} from "@ngrx/store";
 import {filter, map, switchMap, tap} from "rxjs/operators";
-import {Observable, Subscription} from "rxjs";
+import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 
 import {CreatePhotoComponent} from "../../shared/components/create-photo/create-photo.component";
@@ -40,6 +40,9 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
   imageUrl!: string;
 
+  private readonly isAdminSubject = new BehaviorSubject(false);
+  readonly isAdmin$ = this.isAdminSubject.asObservable();
+
   showAlert$!: Observable<boolean>;
 
   isAuthenticated$!: Observable<boolean>;
@@ -54,10 +57,13 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
+    this.isAdmin$.subscribe(x => console.log('IS_ADMIN____', x))
+
     const token = localStorage.getItem('auth');
 
     if (!!token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('EMAIL_____', payload.email);
 
 
       const isNotExp = Date.now() / 1000 < payload.exp;
@@ -65,7 +71,17 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
       if (isNotExp) {
 
-        this.store.dispatch(authenticated({ token: localStorage.getItem('auth') as string}));
+        const item: { token: string; isAdmin?: boolean } = { token: localStorage.getItem('auth') as string };
+
+        if (payload.email && payload.email !== 'dom') {
+          item.isAdmin = true;
+        } else {
+          item.isAdmin = false;
+        }
+
+        this.isAdminSubject.next(item.isAdmin);
+
+        this.store.dispatch(authenticated(item));
         this.store.dispatch(authenticateAlertHide());
       } else {
         localStorage.removeItem('auth');
@@ -93,6 +109,9 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
   }
 
   addPhoto(): void {
+    if (!this.isAdminSubject.value) {
+      return;
+    }
     const dialogRef = this.dialog.open(CreatePhotoComponent, {
       panelClass: 'dialog-property',
       // position: { top: '80px' },
@@ -105,8 +124,6 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
           filter((photo: Photo) => !!photo),
           switchMap((photo) => this.store.pipe(select(chaptersSelector)).pipe(
             map((chapters: Chapter[]) => {
-              console.log('CHAPTER____!!1', photo);
-              console.log('CHAPTER____!!2', chapters);
               const currentChapter = chapters.find((c: Chapter) => c._id === photo.chapter);
               photo.chapterName = currentChapter!!.title;
               return photo;
@@ -118,6 +135,9 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
   }
 
   addVideo(): void {
+    if (!this.isAdminSubject.value) {
+      return;
+    }
     const dialogRef = this.dialog.open(CreateVideoComponent, {
       panelClass: 'dialog-property',
       // position: { top: '80px' },
@@ -132,19 +152,20 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
             map((chapters: Chapter[]) => {
               const currentChapter = chapters.find((c: Chapter) => c._id === video.chapter);
               video.chapterName = currentChapter!!.title;
-              console.log('currentChapterData____________________', currentChapter)
               return video;
             })
           ))
         )
         .subscribe((video: Video) => {
-          console.log('VID_____SEND______', video);
           this.store.dispatch(createVideo({ payload: video }));
         })
     )
   }
 
   addChapter(type: 'photo' | 'video' = 'photo'): void {
+    if (!this.isAdminSubject.value) {
+      return;
+    }
     const selector = type === 'photo' ?  chaptersHierarchySelector : videoChaptersHierarchySelector;
     this.sub.add(
       this.dialog.open(CreateChapterComponent, {
@@ -160,8 +181,6 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
               if (newChapter.parent) {
                 const parentPath = this.buildFullPath(chapters, newChapter.parent);
                 fullPath = `${parentPath}/${newChapter.nameForUI}`
-                console.log('FULLL____PATH____________________', fullPath);
-
               } else {
                 fullPath = newChapter.nameForUI!;
               }
