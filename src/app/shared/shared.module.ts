@@ -20,6 +20,7 @@ import { CreateVideoComponent } from './components/create-video/create-video.com
 import { FullSizePhotoComponent } from './components/full-size-photo/full-size-photo.component';
 import { VideoListComponent } from './components/video-list/video-list.component';
 import { VideoElementComponent } from './components/video-element/video-element.component';
+import { SearchComponent } from './components/search/search.component';
 
 const components = [
   CreatePhotoComponent,
@@ -43,7 +44,7 @@ const directives = [
 ]
 @NgModule({
   declarations: [
-    ...components, ...directives
+    ...components, ...directives, SearchComponent
   ],
   imports: [
     CommonModule,

@@ -9,7 +9,7 @@ import {
 import {ActivatedRoute} from "@angular/router";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {select, Store} from "@ngrx/store";
-import {map, shareReplay, withLatestFrom} from "rxjs/operators";
+import {distinctUntilChanged, map, shareReplay, withLatestFrom} from "rxjs/operators";
 
 import {GalleryState} from "../../../store/reducer";
 import {editPhoto, receivePhotos} from "../../../store/action";
@@ -19,6 +19,7 @@ import {environment} from "../../../../environments/environment";
 import {Chapter} from "../../../models/chapter";
 import {MatDialog} from "@angular/material/dialog";
 import {FullSizePhotoComponent} from "../full-size-photo/full-size-photo.component";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-photos-list',
@@ -32,6 +33,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   photos$!: Observable<Photo[] | undefined>;
   subLevels = 'Подразделы';
 
+  selectChapter!: FormGroup;
+
   private stateOfChapters: Chapter | undefined;
 
   previousId: string | undefined;
@@ -39,6 +42,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly loadedImagesCountSubject = new BehaviorSubject(0);
 
   subChapter$!: Observable<Chapter>;
+
+  allChapters$!: Observable<Chapter[]>;
 
   private readonly computeGridStyleSubject = new BehaviorSubject<{ rowHeight: number; rowGap: number } | undefined>(undefined);
   computeGridStyle$ = this.computeGridStyleSubject.asObservable();
@@ -55,6 +60,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     private route: ActivatedRoute,
     private store: Store<GalleryState>,
     private dialog: MatDialog,
+    private formBuilder: FormBuilder,
   ) {
   }
 
@@ -82,11 +88,15 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.allChapters$ = this.store.pipe(select(chaptersHierarchySelector)).pipe(shareReplay(1));
+    this.initForm();
+    this.subscribeToChapterChanges();
     this.subscribeToRoute();
     this.photos$ = this.store.pipe(select(photosSelector));
 
     this.subChapter$ = this.selectedId$.pipe(
-      withLatestFrom(this.store.pipe(select(chaptersHierarchySelector))),
+      // withLatestFrom(this.store.pipe(select(chaptersHierarchySelector))),
+      withLatestFrom(this.allChapters$),
       map(([id, chapters]: [string, Chapter[]]) => {
         const chapter = this.findChapterByIdInArray(chapters, id);
 
@@ -164,6 +174,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     if (id) {
       this.selectSubChapter(id);
     }
+    console.log('CONTROL_____1', this.selectChapter.get('chapter')?.value)
+    this.selectChapter.get('chapter')?.setValue(id);
+    console.log('CONTROL_____2', this.selectChapter.get('chapter')?.value)
   }
 
   private findChapterById(rootChapter: Chapter, targetChapterId: string): Chapter | null {
@@ -214,4 +227,20 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     // )
   }
 
+  private initForm(): void {
+    this.selectChapter = this.formBuilder.group({
+      chapter: ['']
+    });
+  }
+
+  private subscribeToChapterChanges(): void {
+    this.selectChapter.valueChanges.pipe(distinctUntilChanged())
+      .subscribe((form) => {
+        if (form.chapter) {
+          console.log('CHAPTER___FORM_________________', form.chapter);
+          this.selectedIdSubject.next(form.chapter);
+          this.store.dispatch(receivePhotos({ chapter: form.chapter }));
+        }
+      })
+  }
 }

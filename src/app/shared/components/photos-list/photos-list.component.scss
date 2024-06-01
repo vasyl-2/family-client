@@ -2,6 +2,18 @@
   display: block;
   max-width: 100%;
   padding: 0 30px;
+  height: 100%;
+}
+.container {
+  display: grid;
+  height: 100%;
+  grid-template-columns: minmax(0, 300px) 1fr;
+  gap: 20px;
+  padding: 20px;
+
+  .side-bar {
+    background-color: gray;
+  }
 }
 .gallery {
   display: grid;

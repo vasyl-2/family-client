@@ -51,7 +51,16 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
   setDisabledState(isDisabled: boolean): void {
   }
 
-  writeValue(obj: any): void {
+
+  writeValue(id: string): void {
+    // if (this.chapters) {
+    //   const chapter = this.findChapterByIdInArray(this.chapters, id);
+    //   if (chapter) {
+    //     console.log('NEW__CHAPTER_SELECTED___', chapter);
+    //     this.treeControl.toggle(chapter)
+    //
+    //   }
+    // }
   }
 
   hasChild = (_: number, node: Chapter) => !!node.children && node.children.length > 0;
@@ -60,5 +69,38 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
     console.log('SELECT$D____CHAPTER___________', chapter)
     this.onChange(chapter._id!);
   }
+
+  private findChapterById(rootChapter: Chapter, targetChapterId: string): Chapter | null {
+    // Check if the current chapter is the one we are looking for
+    if (rootChapter._id === targetChapterId) {
+      return rootChapter;
+    }
+
+    // Recursively search through the children
+    if (rootChapter.children && rootChapter.children.length > 0) {
+      for (const child of rootChapter.children) {
+        const foundChapter = this.findChapterById(child, targetChapterId);
+        if (foundChapter) {
+          return foundChapter; // Return the first match found in the recursion
+        }
+      }
+    }
+
+    // If the target chapter is not found in the current branch, return null
+    return null;
+  }
+
+  private findChapterByIdInArray(chapters: Chapter[], targetChapterId: string): Chapter | null {
+    for (const rootChapter of chapters) {
+      const foundChapter = this.findChapterById(rootChapter, targetChapterId);
+      if (foundChapter) {
+        return foundChapter; // Return the first match found in the array
+      }
+    }
+
+    // If the target chapter is not found in any branch, return null
+    return null;
+  }
+
 
 }
