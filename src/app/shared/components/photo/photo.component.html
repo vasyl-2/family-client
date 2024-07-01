@@ -1,7 +1,7 @@
 <div class="content">
   <img class="img" (load)="onLoad()" [src]="image" alt="image"/>
       <div class="description" *ngIf="photo$ | async as ph">
-        <span>
+        <span class="desc">
           {{ ph.description }}
         </span>
       </div>

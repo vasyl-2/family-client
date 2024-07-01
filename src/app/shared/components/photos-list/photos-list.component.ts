@@ -1,9 +1,9 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component, ElementRef,
   OnDestroy,
-  OnInit,
+  OnInit, Renderer2,
   ViewChild
 } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
@@ -26,7 +26,7 @@ import {HighlightChapterService} from "../../../services/highlight-chapter.servi
   selector: 'app-photos-list',
   templateUrl: './photos-list.component.html',
   styleUrls: ['./photos-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -51,11 +51,13 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly computeGridStyleSubject = new BehaviorSubject<{ rowHeight: number; rowGap: number } | undefined>(undefined);
   computeGridStyle$ = this.computeGridStyleSubject.asObservable();
 
+  private readonly sizeOfScaleSubject = new BehaviorSubject<{ curr: number, prev: number | undefined }>({ curr: 1, prev: undefined });
+  readonly sizeOfScale$ = this.sizeOfScaleSubject.asObservable();
+
   private readonly selectedIdSubject = new BehaviorSubject<string>('');
   private readonly selectedId$ = this.selectedIdSubject.asObservable().pipe(shareReplay(1));
 
   private readonly previousIdSubject = new BehaviorSubject<string | undefined>('');
-  private previousId$ = this.previousIdSubject.asObservable();
 
   private sub = new Subscription();
 
@@ -64,7 +66,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     private store: Store<GalleryState>,
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
-    private highlightChapterService: HighlightChapterService
+    private highlightChapterService: HighlightChapterService,
+    private cdr: ChangeDetectorRef,
+    private renderer: Renderer2
   ) {
   }
 
@@ -80,7 +84,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   setGalleryProps(): void {
     const computedStyles = window.getComputedStyle(this.gallery.nativeElement);
     const rowHeight = parseInt(computedStyles.getPropertyValue('grid-auto-rows'));
-    console.log('ROW___HEIGHT_____', rowHeight)
     const rowGap = parseInt(computedStyles.getPropertyValue('grid-row-gap'));
     this.computeGridStyleSubject.next({ rowGap, rowHeight });
   }
@@ -95,6 +98,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.allChapters$ = this.store.pipe(select(chaptersHierarchySelector)).pipe(shareReplay(1));
     this.initForm();
     this.subscribeToChapterChanges();
+    this.subscribeToSizeChange();
     this.subscribeToRoute();
     this.photos$ = this.store.pipe(select(photosSelector));
 
@@ -155,8 +159,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       chapterToGoBack = this.previousIdSubject.value;
       if (this.stateOfChapters) {
         const parentOfChapterToGo = this.findChapterById(this.stateOfChapters, chapterToGoBack)?.parent;
-        console.log('PARENT___CHAPTER________________________________', parentOfChapterToGo);
-
         if (parentOfChapterToGo) {
           this.previousIdSubject.next(parentOfChapterToGo);
         }
@@ -177,18 +179,14 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     if (id) {
       this.selectSubChapter(id);
     }
-    console.log('CONTROL_____1', this.selectChapter.get('chapter')?.value)
     this.selectChapter.get('chapter')?.setValue(id);
-    console.log('CONTROL_____2', this.selectChapter.get('chapter')?.value)
   }
 
   private findChapterById(rootChapter: Chapter, targetChapterId: string): Chapter | null {
-    // Check if the current chapter is the one we are looking for
     if (rootChapter._id === targetChapterId) {
       return rootChapter;
     }
 
-    // Recursively search through the children
     if (rootChapter.children && rootChapter.children.length > 0) {
       for (const child of rootChapter.children) {
         const foundChapter = this.findChapterById(child, targetChapterId);
@@ -198,7 +196,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
-    // If the target chapter is not found in the current branch, return null
     return null;
   }
 
@@ -209,8 +206,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         return foundChapter; // Return the first match found in the array
       }
     }
-
-    // If the target chapter is not found in any branch, return null
     return null;
   }
 
@@ -240,11 +235,39 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectChapter.valueChanges.pipe(distinctUntilChanged())
       .subscribe((form) => {
         if (form.chapter) {
-          console.log('CHAPTER___FORM_________________', form.chapter);
           this.selectedIdSubject.next(form.chapter);
           this.store.dispatch(receivePhotos({ chapter: form.chapter }));
           this.highlightChapterService.chapterIdSubject.next(form.chapter);
         }
       })
+  }
+
+  private subscribeToSizeChange(): void {
+    this.size.valueChanges.subscribe((size: string) => {
+
+      const numberSize = +size;
+      const { curr, prev } = this.sizeOfScaleSubject.value;
+
+      const isMore = !prev || (this.sizeOfScaleSubject.value.curr - numberSize) < 0;
+
+      console.log('IsMOre___________', isMore);
+
+      let gridTemplateColumns: number;
+      const computedStyle = window.getComputedStyle(this.gallery.nativeElement);
+      console.log('COLUMNS_____________', computedStyle.getPropertyValue('grid-template-columns'))
+      if (isMore) {
+        gridTemplateColumns = parseInt(computedStyle.getPropertyValue('grid-template-columns'), 10) * 2;
+      } else {
+        gridTemplateColumns = parseInt(computedStyle.getPropertyValue('grid-template-columns'), 10) / 2;
+      }
+
+      this.renderer.setStyle(
+        this.gallery.nativeElement,
+        'gridTemplateColumns',
+        `repeat(auto-fill, minmax(${gridTemplateColumns}px, 1fr))`
+      )
+
+      this.sizeOfScaleSubject.next({ curr: numberSize, prev: curr });
+    });
   }
 }

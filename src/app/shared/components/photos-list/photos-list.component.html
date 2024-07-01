@@ -28,17 +28,25 @@
     </ng-container>
 
 
-    <div #gallery class="gallery">
-      <ng-container *ngIf="photos$ | async as photos">
-        <ng-container *ngFor="let photo of photos">
-          <app-photo (click)="openFullSize($event, photo!)"
-                     (updatedPhoto)="onPhotoUpdate($event)"
-                     (imageLoaded)="onImageLoad()"
-                     [appSetHeight]="computeGridStyle$ | async"
-                     [imageSrc]="photo"></app-photo>
+    <ng-container *ngIf="{
+      sizeA: (sizeOfScale$ | async),
+      photos: photos$ | async
+    } as state">
+<!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
+      <div #gallery class="gallery">
+        <ng-container *ngIf="state.photos">
+          <ng-container *ngFor="let photo of state.photos">
+            <app-photo [appEnlarge]="state.sizeA"
+                       (click)="openFullSize($event, photo!)"
+                       (updatedPhoto)="onPhotoUpdate($event)"
+                       (imageLoaded)="onImageLoad()"
+                       [appSetHeight]="computeGridStyle$ | async"
+                       [imageSrc]="photo"></app-photo>
+          </ng-container>
         </ng-container>
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
+
 
     <div class="change-size">
       <app-range-size [formControl]="size"></app-range-size>

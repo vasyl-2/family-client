@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import { BehaviorSubject, Subscription } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 

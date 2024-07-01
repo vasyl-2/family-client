@@ -57,13 +57,10 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.isAdmin$.subscribe(x => console.log('IS_ADMIN____', x))
-
     const token = localStorage.getItem('auth');
 
     if (!!token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      console.log('EMAIL_____', payload.email);
 
 
       const isNotExp = Date.now() / 1000 < payload.exp;
@@ -73,8 +70,6 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
         const item: { token: string; isAdmin?: boolean } = { token: localStorage.getItem('auth') as string };
 
-        console.log('ITEM____________1', item)
-        console.log('ITEM____________2', payload.email)
 
         if (payload.email) {
           if (payload.email !== 'dom') {
@@ -108,7 +103,9 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
       select(isAuthenticated)
     );
 
-    this.isAuthenticated$.pipe(filter(Boolean)).subscribe((_) => {
+    this.isAuthenticated$
+      .pipe(filter(Boolean))
+      .subscribe((_) => {
       this.router.navigate(["/"]).then(() => {
         // location.reload();
       });
