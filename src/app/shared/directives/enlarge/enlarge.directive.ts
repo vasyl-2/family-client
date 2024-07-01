@@ -4,7 +4,7 @@ import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
   selector: '[appEnlarge]'
 })
 export class EnlargeDirective {
-  @Input() set appEnlarge(scale: { curr: number, prev: number | undefined } | null) {
+  @Input() set appEnlarge(scale: { curr: number, prev: number | undefined, step: number } | null) {
     if (scale) {
       const gridRowEnd = window.getComputedStyle(this.el.nativeElement).getPropertyValue('grid-row-end');
       const currentSpan = parseInt(gridRowEnd.split(' ')[1]);

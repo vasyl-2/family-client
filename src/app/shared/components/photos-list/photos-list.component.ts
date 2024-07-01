@@ -51,7 +51,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly computeGridStyleSubject = new BehaviorSubject<{ rowHeight: number; rowGap: number } | undefined>(undefined);
   computeGridStyle$ = this.computeGridStyleSubject.asObservable();
 
-  private readonly sizeOfScaleSubject = new BehaviorSubject<{ curr: number, prev: number | undefined }>({ curr: 1, prev: undefined });
+  private readonly sizeOfScaleSubject = new BehaviorSubject<{ curr: number, prev: number | undefined, step: number }>({ curr: 1, prev: undefined, step: 1 });
   readonly sizeOfScale$ = this.sizeOfScaleSubject.asObservable();
 
   private readonly selectedIdSubject = new BehaviorSubject<string>('');
@@ -59,7 +59,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private readonly previousIdSubject = new BehaviorSubject<string | undefined>('');
 
+  private readonly gridColumnsValuesSubject = new BehaviorSubject<{ init: number, second?: number, third?: number } | undefined >(undefined);
+
   private sub = new Subscription();
+
+  private stepToGridColumns = new Map<number, number>();
 
   constructor(
     private route: ActivatedRoute,
@@ -246,28 +250,45 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.size.valueChanges.subscribe((size: string) => {
 
       const numberSize = +size;
-      const { curr, prev } = this.sizeOfScaleSubject.value;
-
-      const isMore = !prev || (this.sizeOfScaleSubject.value.curr - numberSize) < 0;
-
-      console.log('IsMOre___________', isMore);
-
-      let gridTemplateColumns: number;
+      let { curr, prev, step } = this.sizeOfScaleSubject.value;
       const computedStyle = window.getComputedStyle(this.gallery.nativeElement);
-      console.log('COLUMNS_____________', computedStyle.getPropertyValue('grid-template-columns'))
-      if (isMore) {
-        gridTemplateColumns = parseInt(computedStyle.getPropertyValue('grid-template-columns'), 10) * 2;
+      const isMore = !prev || (this.sizeOfScaleSubject.value.curr - numberSize) < 0;
+      const currentGridColumns = parseInt(computedStyle.getPropertyValue('grid-template-columns'), 10);
+
+      if (!this.stepToGridColumns.has(step)) {
+        this.stepToGridColumns.set(step, currentGridColumns);
+      }
+
+
+      let newGridTemplateColumns: number;
+      console.log('COLUMNS_____________', currentGridColumns);
+
+      let newStep;
+
+      if (isMore && !this.stepToGridColumns.has(numberSize)) {
+        newStep = step + 1;
+        newGridTemplateColumns = currentGridColumns * 2;
       } else {
-        gridTemplateColumns = parseInt(computedStyle.getPropertyValue('grid-template-columns'), 10) / 2;
+        // newGridTemplateColumns = currentGridColumns / 2;
+        newStep = step - 1;
+        newGridTemplateColumns = this.stepToGridColumns.get(numberSize)!
+      }
+
+      if (!prev) {
+        // increase 100%
+        this.gridColumnsValuesSubject.next({ init: currentGridColumns, second: newGridTemplateColumns })
+      } else {
+        // or from 2 to 3 (or from 3 to 2, or from 2 to 1) or from 1 to 2 next iteration
+
       }
 
       this.renderer.setStyle(
         this.gallery.nativeElement,
         'gridTemplateColumns',
-        `repeat(auto-fill, minmax(${gridTemplateColumns}px, 1fr))`
+        `repeat(auto-fill, minmax(${newGridTemplateColumns}px, 1fr))`
       )
 
-      this.sizeOfScaleSubject.next({ curr: numberSize, prev: curr });
+      this.sizeOfScaleSubject.next({ curr: numberSize, prev: curr, step: newStep });
     });
   }
 }
