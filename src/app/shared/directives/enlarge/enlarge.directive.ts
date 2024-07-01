@@ -9,12 +9,33 @@ export class EnlargeDirective {
       const gridRowEnd = window.getComputedStyle(this.el.nativeElement).getPropertyValue('grid-row-end');
       const currentSpan = parseInt(gridRowEnd.split(' ')[1]);
 
+      const { prev, curr } = scale;
+
       let newSpan;
 
-      if (!scale.prev || (scale.curr > scale.prev)) {
-        newSpan = currentSpan * 2;
+      let multiPly: number = 2;
+
+      if (!prev || (curr > prev)) {
+
+        if (!prev) {
+          multiPly = 2;
+        } else {
+          if (Math.abs(prev - curr) > 1) {
+            multiPly = 4;
+          } else {
+            multiPly = 2;
+          }
+        }
+        newSpan = currentSpan * multiPly;
       } else {
-        newSpan = currentSpan / 2;
+
+
+        if (Math.abs(prev - curr) > 1) {
+          multiPly = 4;
+        } else {
+          multiPly = 2;
+        }
+        newSpan = currentSpan / multiPly;
       }
 
       this.renderer.setStyle(this.el.nativeElement, 'gridRowEnd', `span ${newSpan}`);
