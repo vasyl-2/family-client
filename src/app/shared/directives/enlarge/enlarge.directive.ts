@@ -9,7 +9,7 @@ export class EnlargeDirective {
       const gridRowEnd = window.getComputedStyle(this.el.nativeElement).getPropertyValue('grid-row-end');
       const currentSpan = parseInt(gridRowEnd.split(' ')[1]);
 
-      if (gridRowEnd === 'auto') {  // from start before setGalleryProps() call
+      if (gridRowEnd === 'auto') {  // from start, here works different directive appSetHeight
         return;
       }
 
