@@ -250,6 +250,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.size.valueChanges.subscribe((size: string) => {
 
       const numberSize = +size;
+
+      console.log('NUMBER_SIZE_____', numberSize)
       let { curr, prev, step } = this.sizeOfScaleSubject.value;
       const computedStyle = window.getComputedStyle(this.gallery.nativeElement);
       const isMore = !prev || (this.sizeOfScaleSubject.value.curr - numberSize) < 0;
@@ -263,23 +265,43 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       let newGridTemplateColumns: number;
       console.log('COLUMNS_____________', currentGridColumns);
 
-      let newStep;
+
+      let multiPly: number;
 
       if (isMore && !this.stepToGridColumns.has(numberSize)) {
-        newStep = step + 1;
-        newGridTemplateColumns = currentGridColumns * 2;
+
+        if (!prev) {
+          if (numberSize === 3) {
+            multiPly = 4;
+          } else {
+            multiPly = 2;
+          }
+        } else {
+          if (Math.abs(numberSize - step) > 1) {
+            multiPly = 4;
+          } else {
+            multiPly = 2;
+          }
+        }
+
+        newGridTemplateColumns = currentGridColumns * multiPly;
       } else {
-        // newGridTemplateColumns = currentGridColumns / 2;
-        newStep = step - 1;
-        newGridTemplateColumns = this.stepToGridColumns.get(numberSize)!
+        if (!this.stepToGridColumns.has(numberSize)) {
+
+          console.log('LESS_________________', numberSize)
+          const divider = (Math.abs(numberSize - step) > 1) ? 4 : 2.3;
+          console.log('DIVIDER_________', divider);
+          newGridTemplateColumns = currentGridColumns / divider;
+          console.log('newGridTemplateColumns_________', newGridTemplateColumns);
+        } else {
+          newGridTemplateColumns = this.stepToGridColumns.get(numberSize)!
+        }
+
       }
 
       if (!prev) {
         // increase 100%
         this.gridColumnsValuesSubject.next({ init: currentGridColumns, second: newGridTemplateColumns })
-      } else {
-        // or from 2 to 3 (or from 3 to 2, or from 2 to 1) or from 1 to 2 next iteration
-
       }
 
       this.renderer.setStyle(
@@ -288,7 +310,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         `repeat(auto-fill, minmax(${newGridTemplateColumns}px, 1fr))`
       )
 
-      this.sizeOfScaleSubject.next({ curr: numberSize, prev: curr, step: newStep });
+      this.sizeOfScaleSubject.next({ curr: numberSize, prev: curr, step: numberSize });
     });
   }
 }
