@@ -37,10 +37,10 @@
         <ng-container *ngIf="state.photos">
           <ng-container *ngFor="let photo of state.photos">
             <app-photo [appEnlarge]="state.sizeA"
+                       [appSetHeight]="computeGridStyle$ | async"
                        (click)="openFullSize($event, photo!)"
                        (updatedPhoto)="onPhotoUpdate($event)"
                        (imageLoaded)="onImageLoad()"
-                       [appSetHeight]="computeGridStyle$ | async"
                        [imageSrc]="photo"></app-photo>
           </ng-container>
         </ng-container>
