@@ -5,11 +5,6 @@ import {EntryComponent} from "./components/entry/entry.component";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'listphotos',
-    pathMatch: 'full'
-  },
-  {
-    path: 'listphotos',
     component: EntryComponent,
     data: { animation: 'heroes' }
   }

@@ -34,7 +34,7 @@
     } as state">
 <!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
       <div #gallery class="gallery">
-        <ng-container *ngIf="state.photos">
+        <ng-container *ngIf="state.photos && !!state.photos?.length">
           <ng-container *ngFor="let photo of state.photos">
             <app-photo [appEnlarge]="state.sizeA"
                        [appSetHeight]="computeGridStyle$ | async"
@@ -43,14 +43,18 @@
                        (imageLoaded)="onImageLoad()"
                        [imageSrc]="photo"></app-photo>
           </ng-container>
+
+          <div class="change-size">
+            <app-range-size [formControl]="size"></app-range-size>
+          </div>
         </ng-container>
       </div>
+
+
     </ng-container>
 
 
-    <div class="change-size">
-      <app-range-size [formControl]="size"></app-range-size>
-    </div>
+
   </div>
 
 </div>
