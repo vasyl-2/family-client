@@ -1,18 +1,32 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from "@angular/common";
-import { EntryComponent } from './components/entry/entry.component';
-import {EntryRoutingModule} from "./entry-routing.module";
 
+import { EntryComponent } from './components/entry/entry.component';
+import { EntryRoutingModule } from "./entry-routing.module";
+import { UsersComponent } from './components/users/users.component';
+import { SharedModule } from "../shared/shared.module";
+import { RolesComponent } from './components/roles/roles.component';
+import { UserEditComponent } from './components/user-edit/user-edit.component';
+import { CreateUserComponent } from './components/create-user/create-user.component';
+
+const components = [
+  EntryComponent,
+  UsersComponent,
+  RolesComponent,
+  UserEditComponent,
+  CreateUserComponent
+]
 @NgModule({
   declarations: [
-    EntryComponent,
+    ...components,
   ],
   imports: [
     CommonModule,
-    EntryRoutingModule
+    EntryRoutingModule,
+    SharedModule
   ],
   exports: [
-    EntryComponent
+    ...components
   ]
 })
 export class EntryModule { }

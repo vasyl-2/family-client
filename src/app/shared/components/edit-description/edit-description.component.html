@@ -1,6 +1,6 @@
 <ng-container [formGroup]="photoForm" >
     <mat-form-field appearance="fill">
-      <mat-label>Змінити або додати  опис</mat-label>
+      <mat-label>Изменить или добавить описание</mat-label>
       <textarea matInput
                 cdkTextareaAutosize
                 #autosize="cdkTextareaAutosize"
@@ -10,13 +10,13 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Змінити назву фотографії</mat-label>
+      <mat-label>Изменить название фоттграфии</mat-label>
       <input matInput formControlName="nameOfPhoto" />
     </mat-form-field>
 
   <div mat-dialog-actions>
     <button mat-button (click)="close()">Закрити</button>
-    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Зберегти</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Сохранить</button>
   </div>
 </ng-container>
 

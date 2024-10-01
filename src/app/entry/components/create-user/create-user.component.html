@@ -1,0 +1,18 @@
+<ng-container [formGroup]="user">
+
+  <mat-form-field appearance="fill">
+    <mat-label>Роль</mat-label>
+    <input matInput formControlName="role" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Имя</mat-label>
+    <input matInput formControlName="email" />
+  </mat-form-field>
+
+  <div mat-dialog-actions>
+    <button mat-button (click)="close()">Закрыть</button>
+    <button mat-button [mat-dialog-close]="user" cdkFocusInitial>Сохранить</button>
+  </div>
+</ng-container>
+

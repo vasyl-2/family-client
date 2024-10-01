@@ -1,0 +1,18 @@
+.user-list {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+h1 {
+  text-align: center;
+}
+
+.user {
+  flex: 1;
+
+  .header-user {
+    display: flex;
+    align-items: center;justify-content: space-between;
+  }
+}

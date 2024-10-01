@@ -1,3 +1,24 @@
-<div >
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Пользователи
+    </ng-template>
+    <app-users (user)="onUpdate($event)" (newUser)="createUser($event)" [users]="users$ | async"></app-users>
+  </mat-tab>
 
-</div>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Роли
+    </ng-template>
+    <app-roles></app-roles>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Дизайн
+    </ng-template>
+
+    Content 3
+  </mat-tab>
+</mat-tab-group>
+

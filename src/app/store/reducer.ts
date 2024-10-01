@@ -13,12 +13,16 @@ import {
   authenticateAlertHide,
   logout,
   createdVideo,
-  receivedVideos
+  receivedVideos,
+  getUsers, gotUsers,
+  createUser, editUser, getRoles, gotRoles, createRole, editRole, RECEIVE_USERS
 } from './action';
 import { Chapter } from '../models/chapter';
 import { Photo } from '../models/photo';
 import { Video } from "../models/video";
 import {RouterStateUrl} from "../models/router-utils";
+import {User} from "../models/user";
+import {Role} from "../models/role";
 
 export interface GalleryState {
   chapters: Chapter[];
@@ -35,6 +39,10 @@ export interface GalleryState {
       email: string;
     }
   },
+  admin: {
+    users?: User[];
+    roles?: Role[];
+  }
 }
 
 export const GALLERY_INIT_STATE: GalleryState = {
@@ -45,6 +53,9 @@ export const GALLERY_INIT_STATE: GalleryState = {
   auth: {
     showAlert: true,
     authenticated: false,
+  },
+  admin: {
+
   }
 }
 
@@ -87,6 +98,24 @@ export const mainReducer = createReducer(
     const newState = { ...state, videos: action.videos };
     return newState;
   }),
+
+  immerOn(gotUsers, (state: GalleryState, action): void => {
+
+    console.log('ACTION_____', action)
+    state.admin.users = action.users;
+    console.log('STATE___________', state.admin)
+  }),
+
+  // on(gotUsers, (state: GalleryState, action): GalleryState => {
+  //
+  //   const newAdmin = state.admin;
+  //   newAdmin.users = action.users;
+  //   const newState = { ...state, admin: newAdmin }
+  //   console.log('ACTION_____', action)
+  //
+  //   return newState;
+  // }),
+
 
 
   on(authenticateAlert, (state: GalleryState, action): GalleryState => {

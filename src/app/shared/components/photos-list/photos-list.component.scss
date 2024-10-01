@@ -63,3 +63,15 @@ h2, h3 {
   justify-content: center;
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.change-size {
+  margin-top: auto;
+  position: sticky;
+  bottom: 0; /* Sticks to the bottom of the viewport */
+  z-index: 20;
+  background-color: cornflowerblue;
+}

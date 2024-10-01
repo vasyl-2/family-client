@@ -4,6 +4,8 @@ import {Chapter} from "../models/chapter";
 import {CreateChapter} from "../models/dto/create-chapter";
 import {Photo} from "../models/photo";
 import {Video} from "../models/video";
+import {User} from "../models/user";
+import {Role} from "../models/role";
 
 export const CREATE_ACTION = '[Gallery] CREATE';
 export const CREATED_ACTION = '[Gallery] CREATED';
@@ -40,6 +42,19 @@ export const AUTHENTICATE_ERROR = '[AUTHENTICATE] AUTHENTICATE ERROR';
 
 export const SHOW_AUTHENTICATION_ALERT = '[AUTHENTICATE] SHOW ALERT';
 export const AUTHENTICATION_ALERT_HIDE = '[AUTHENTICATE] SHOW ALERT HIDE';
+
+
+export const RECEIVE_USERS = '[ADMIN] RECEIVE USERS';
+export const RECEIVED_USERS = '[ADMIN] RECEIVED USERS';
+export const CREATE_USER = '[ADMIN] CREATE USER';
+export const CREATED_USER = '[ADMIN] CREATED USER';
+export const EDIT_USER = '[ADMIN] EDIT USER';
+export const EDITED_USER = '[ADMIN] EDITED USER';
+
+export const RECEIVE_ROLES = '[ADMIN] RECEIVE ROLES';
+export const RECEIVED_ROLES = '[ADMIN] RECEIVED ROLES';
+export const CREATE_ROLE = '[ADMIN] CREATE ROLE';
+export const EDIT_ROLE = '[ADMIN] EDIT ROLE';
 
 export const createChapter = createAction(
   CREATE_ACTION,
@@ -168,5 +183,57 @@ export const authenticateAlert = createAction(
 
 export const authenticateAlertHide = createAction(
   AUTHENTICATION_ALERT_HIDE,
+);
+
+// USERS
+export const getUsers = createAction(
+  RECEIVE_USERS,
+);
+
+export const gotUsers = createAction(
+  RECEIVED_USERS,
+  props<{ users: User[] }>()
+);
+
+export const createUser = createAction(
+  CREATE_USER,
+  props<{ user: User }>()
+);
+
+export const createdUser = createAction(
+  CREATED_USER,
+  props<{ user: User }>()
+);
+
+export const editUser = createAction(
+  EDIT_USER,
+  props<{ user: User }>()
+);
+
+export const editedUser = createAction(
+  EDITED_USER,
+  props<{ user: User }>()
+);
+
+
+// ROLES
+
+export const getRoles = createAction(
+  RECEIVE_ROLES,
+);
+
+export const gotRoles = createAction(
+  RECEIVED_ROLES,
+  props<{ users: Role[] }>()
+);
+
+export const createRole = createAction(
+  CREATE_ROLE,
+  props<{ user: Role }>()
+);
+
+export const editRole = createAction(
+  EDIT_ROLE,
+  props<{ user: Role }>()
 );
 

@@ -22,4 +22,7 @@ export const videosSelector = createSelector(gallerySelector, (state: GallerySta
 export const alertSelector = createSelector(gallerySelector, (state: GalleryState) => state.auth.showAlert);
 export const isAuthenticated = createSelector(gallerySelector, (state: GalleryState) => state.auth.authenticated);
 
+export const usersSelector = createSelector(gallerySelector, (state: GalleryState) => state.admin.users);
+export const rolesSelector = createSelector(gallerySelector, (state: GalleryState) => state.admin.roles);
+
 export const getRouterState = createFeatureSelector<fromRouter.RouterReducerState<RouterStateUrl>>('router');

@@ -3,7 +3,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {CdkTextareaAutosize} from "@angular/cdk/text-field";
 import {Subscription} from "rxjs";
-import {distinctUntilChanged} from "rxjs/operators";
 
 @Component({
   selector: 'app-edit-description',
@@ -17,7 +16,6 @@ export class EditDescriptionComponent implements OnInit {
   photoForm!: FormGroup;
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
-  // descriptionControl: FormControl = new FormControl<string>('');
 
   get descriptionControl(): FormControl {
     return this.photoForm.get('description') as FormControl;
@@ -40,8 +38,6 @@ export class EditDescriptionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('THIS___DATA____', this.data);
-
     this.setPhotoForm();
 
     if(!!this.data) {
@@ -49,7 +45,6 @@ export class EditDescriptionComponent implements OnInit {
         this.descriptionControl.setValue(this.data.description);
       }
       if (this.data.nameOfPhoto) {
-        console.log('NAME___OF____PHOTO______', this.data.nameOfPhoto);
         this.nameOfPhotoControl.setValue(this.data.nameOfPhoto);
       }
     }
@@ -64,18 +59,14 @@ export class EditDescriptionComponent implements OnInit {
 
   private subscribeToDescriptionChange(): void {
     this.sub = this.descriptionControl.valueChanges.pipe(
-      // distinctUntilChanged(),
     ).subscribe((val: string) => {
-      console.log('DESCR___________', val);
       this.data.description = val;
     })
   }
 
   private subscribeToNameOfPhotoChange(): void {
     this.sub = this.nameOfPhotoControl.valueChanges.pipe(
-      // distinctUntilChanged(),
     ).subscribe((val: string) => {
-      console.log('NAME___OF____PHOTO________________', val);
       this.data.nameOfPhoto = val;
     })
   }

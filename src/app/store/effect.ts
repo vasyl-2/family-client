@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {EMPTY} from 'rxjs';
 import {map, exhaustMap, catchError, tap} from 'rxjs/operators';
+
 import {Store} from "@ngrx/store";
 
 import {
@@ -10,7 +11,8 @@ import {
   CREATE_PHOTO_ACTION, CREATE_VIDEO_ACTION, CREATE_VIDEO_CHAPTER_ACTION,
   createdPhoto, createdVideo, EDIT_PHOTO_ACTION, editedPhoto, RECEIVE_ALL_PHOTOS, RECEIVE_ALL_VIDEOS,
   RECEIVE_CHAPTERS, RECEIVE_VIDEO_CHAPTERS,
-  receivedChapters, receivedPhotos, receivedVideoChapters, receivedVideos
+  receivedChapters, receivedPhotos, receivedVideoChapters, receivedVideos, getUsers, gotUsers,
+  createUser, editUser, getRoles, gotRoles, createRole, editRole, RECEIVE_USERS, CREATE_USER, createdUser
 } from './action';
 
 import {CreateChapter} from "../models/dto/create-chapter";
@@ -20,6 +22,8 @@ import {Video} from "../models/video";
 
 import {AuthorizationService} from "../services/authorization/authorization.service";
 import {UploadPhotoService} from "../services/upload-photo.service";
+import {UserService} from "../entry/user.service";
+import {User} from "../models/user";
 
 @Injectable()
 export class GalleryEffects {
@@ -102,10 +106,25 @@ export class GalleryEffects {
     map((token: string) => authenticated({ token }))
   ));
 
+  getUsers$ = createEffect(() => this.actions$.pipe(
+    ofType(RECEIVE_USERS),
+    exhaustMap(() => this.userService.getUsers()),
+    tap((u) => console.log('TEST__________', u)),
+    map((users: User[]) => gotUsers({ users }))
+  ));
+
+  createUser$ = createEffect(() => this.actions$.pipe(
+    ofType(CREATE_USER),
+    exhaustMap(() => this.userService.createUser()),
+    tap((u) => console.log('TEST__________', u)),
+    map((user: User) => createdUser({ user }))
+  ));
+
   constructor(
     private actions$: Actions,
     private uploadService: UploadPhotoService,
     private authorizationService: AuthorizationService,
+    private userService: UserService,
     private store: Store<any>
   ) {
   }

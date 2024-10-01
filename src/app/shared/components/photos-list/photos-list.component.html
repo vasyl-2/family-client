@@ -14,17 +14,17 @@
     <ng-container *ngIf="subChapter$ | async as subChapter">
 <!--      <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack(subChapter.parent)" mat-button color="primary">назад</button></div>-->
       <div class="header"><h2>{{ subChapter.nameForUI }}</h2></div>
-      <h3>{{ subLevels }}</h3>
-      <div class="sub-chapters">
-        <ng-container *ngIf="subChapter.children">
-          <ng-container *ngFor="let sC of subChapter.children">
-            <button  mat-button color="primary" (click)="selectSubChapter(sC._id!)">
-              {{ sC.nameForUI }}
-            </button>
-          </ng-container>
-        </ng-container>
+      <ng-container *ngIf="subChapter.children">
+        <h3>{{ subLevels }}</h3>
+        <div class="sub-chapters">
+            <ng-container *ngFor="let sC of subChapter.children">
+              <button  mat-button color="primary" (click)="selectSubChapter(sC._id!)">
+                {{ sC.nameForUI }}
+              </button>
+            </ng-container>
 
-      </div>
+        </div>
+      </ng-container>
     </ng-container>
 
 
@@ -43,12 +43,14 @@
                        (imageLoaded)="onImageLoad()"
                        [imageSrc]="photo"></app-photo>
           </ng-container>
-
-          <div class="change-size">
-            <app-range-size [formControl]="size"></app-range-size>
-          </div>
         </ng-container>
       </div>
+
+      <ng-container *ngIf="state.photos && !!state.photos?.length">
+        <div class="change-size">
+          <app-range-size [formControl]="size"></app-range-size>
+        </div>
+      </ng-container>
 
 
     </ng-container>
