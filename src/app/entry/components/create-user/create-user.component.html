@@ -1,9 +1,8 @@
 <ng-container [formGroup]="user">
 
-  <mat-form-field appearance="fill">
-    <mat-label>Роль</mat-label>
-    <input matInput formControlName="role" />
-  </mat-form-field>
+  <div>
+    <app-select-role formControlName="role" [roles]="roles$ | async"></app-select-role>
+  </div>
 
   <mat-form-field appearance="fill">
     <mat-label>Имя</mat-label>
@@ -12,7 +11,6 @@
 
   <div mat-dialog-actions>
     <button mat-button (click)="close()">Закрыть</button>
-    <button mat-button [mat-dialog-close]="user" cdkFocusInitial>Сохранить</button>
+    <button mat-button [mat-dialog-close]="user.value" [disabled]="!user.valid" cdkFocusInitial>Сохранить</button>
   </div>
 </ng-container>
-

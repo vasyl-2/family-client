@@ -3,7 +3,10 @@
     <ng-template mat-tab-label>
       Пользователи
     </ng-template>
-    <app-users (user)="onUpdate($event)" (newUser)="createUser($event)" [users]="users$ | async"></app-users>
+    <app-users (user)="onUpdate($event)"
+               (newUser)="createUser($event)"
+               [roles]="roles$ | async"
+               [users]="users$ | async"></app-users>
   </mat-tab>
 
   <mat-tab>
@@ -15,10 +18,10 @@
 
   <mat-tab>
     <ng-template mat-tab-label>
-      Дизайн
+      Разрешения
     </ng-template>
 
-    Content 3
+    <app-permissions></app-permissions>
   </mat-tab>
 </mat-tab-group>
 

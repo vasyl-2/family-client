@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {GalleryState} from "./store/reducer";
-import {select, Store} from "@ngrx/store";
+import {Store} from "@ngrx/store";
+
 import {receiveChapters, receiveVideoChapters} from "./store/action";
-import {alertSelector} from "./store/selectors";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -12,8 +11,6 @@ import {Observable} from "rxjs";
 })
 export class AppComponent {
   title = 'family-client';
-
-  public description = '';
 
   constructor(private store: Store<GalleryState>) {
     this.store.dispatch(receiveChapters());

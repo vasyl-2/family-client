@@ -37,11 +37,14 @@ export interface GalleryState {
     user?: {
       name: string;
       email: string;
+      roles?: string[];
+      permissions?: string[]
     }
   },
   admin: {
     users?: User[];
     roles?: Role[];
+    permissions?: Permissions[];
   }
 }
 
@@ -103,6 +106,13 @@ export const mainReducer = createReducer(
 
     console.log('ACTION_____', action)
     state.admin.users = action.users;
+    console.log('STATE___________', state.admin)
+  }),
+
+  immerOn(gotRoles, (state: GalleryState, action): void => {
+
+    console.log('ACTION_____', action)
+    state.admin.roles = action.roles;
     console.log('STATE___________', state.admin)
   }),
 

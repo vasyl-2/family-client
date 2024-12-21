@@ -6,13 +6,37 @@ import {map, exhaustMap, catchError, tap} from 'rxjs/operators';
 import {Store} from "@ngrx/store";
 
 import {
-  AUTHENTICATE, authenticated,
+  AUTHENTICATE,
+  authenticated,
   CREATE_ACTION,
-  CREATE_PHOTO_ACTION, CREATE_VIDEO_ACTION, CREATE_VIDEO_CHAPTER_ACTION,
-  createdPhoto, createdVideo, EDIT_PHOTO_ACTION, editedPhoto, RECEIVE_ALL_PHOTOS, RECEIVE_ALL_VIDEOS,
-  RECEIVE_CHAPTERS, RECEIVE_VIDEO_CHAPTERS,
-  receivedChapters, receivedPhotos, receivedVideoChapters, receivedVideos, getUsers, gotUsers,
-  createUser, editUser, getRoles, gotRoles, createRole, editRole, RECEIVE_USERS, CREATE_USER, createdUser
+  CREATE_PHOTO_ACTION,
+  CREATE_VIDEO_ACTION,
+  CREATE_VIDEO_CHAPTER_ACTION,
+  createdPhoto,
+  createdVideo,
+  EDIT_PHOTO_ACTION,
+  editedPhoto,
+  RECEIVE_ALL_PHOTOS,
+  RECEIVE_ALL_VIDEOS,
+  RECEIVE_CHAPTERS,
+  RECEIVE_VIDEO_CHAPTERS,
+  receivedChapters,
+  receivedPhotos,
+  receivedVideoChapters,
+  receivedVideos,
+  getUsers,
+  gotUsers,
+  createUser,
+  editUser,
+  getRoles,
+  gotRoles,
+  createRole,
+  editRole,
+  RECEIVE_USERS,
+  CREATE_USER,
+  createdUser,
+  RECEIVE_ROLES,
+  EDIT_USER
 } from './action';
 
 import {CreateChapter} from "../models/dto/create-chapter";
@@ -24,6 +48,8 @@ import {AuthorizationService} from "../services/authorization/authorization.serv
 import {UploadPhotoService} from "../services/upload-photo.service";
 import {UserService} from "../entry/user.service";
 import {User} from "../models/user";
+import {RoleService} from "../entry/services/role.service";
+import {Role} from "../models/role";
 
 @Injectable()
 export class GalleryEffects {
@@ -115,9 +141,24 @@ export class GalleryEffects {
 
   createUser$ = createEffect(() => this.actions$.pipe(
     ofType(CREATE_USER),
-    exhaustMap(() => this.userService.createUser()),
+    exhaustMap(({ user }: { user: User }) => this.userService.createUser(user)),
     tap((u) => console.log('TEST__________', u)),
     map((user: User) => createdUser({ user }))
+  ));
+
+  updateUser$ = createEffect(() => this.actions$.pipe(
+    ofType(EDIT_USER),
+    exhaustMap(({ user }: { user: User }) => this.userService.editUser(user)),
+    tap((u) => console.log('EDITED____USER______', u)),
+    map((user: User) => createdUser({ user }))
+  ));
+
+  // ROLES
+  getRoles$ = createEffect(() => this.actions$.pipe(
+    ofType(RECEIVE_ROLES),
+    exhaustMap(() => this.roleService.getRoles()),
+    tap((roles) => console.log('ROLES__________', roles)),
+    map((roles: Role[]) => gotRoles({ roles }))
   ));
 
   constructor(
@@ -125,6 +166,7 @@ export class GalleryEffects {
     private uploadService: UploadPhotoService,
     private authorizationService: AuthorizationService,
     private userService: UserService,
+    private roleService: RoleService,
     private store: Store<any>
   ) {
   }

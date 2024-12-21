@@ -18,8 +18,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { TextFieldModule } from '@angular/cdk/text-field';
-import {MatTreeModule} from "@angular/material/tree";
-import {MatSliderModule} from '@angular/material/slider';
+import { MatTreeModule } from "@angular/material/tree";
+import { MatSliderModule } from '@angular/material/slider';
 
 
 

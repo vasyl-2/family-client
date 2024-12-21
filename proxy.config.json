@@ -1,9 +1,12 @@
 {
-  "/api": {
+  "/api/family-back": {
     "target": "http://localhost:3000",
     "secure": false,
-    "pathRewrite": {
-      "^/api": ""
-    }
+    "changeOrigin": true
+  },
+  "/static-api/family-back": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "changeOrigin": true
   }
 }

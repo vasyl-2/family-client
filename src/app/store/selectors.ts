@@ -13,16 +13,20 @@ export const chaptersHierarchySelector =
   createSelector(gallerySelector, (state: GalleryState) => state.hierarchyChapters);
 
 
-export const videoChaptersSelector = createSelector(gallerySelector, (state: GalleryState) => state.videoChapters);
+export const videoChaptersSelector =
+  createSelector(gallerySelector, (state: GalleryState) => state.videoChapters);
 export const videoChaptersHierarchySelector =
   createSelector(gallerySelector, (state: GalleryState) => state.videoHierarchyChapters);
 
 export const photosSelector = createSelector(gallerySelector, (state: GalleryState) => state.photos);
 export const videosSelector = createSelector(gallerySelector, (state: GalleryState) => state.videos);
 export const alertSelector = createSelector(gallerySelector, (state: GalleryState) => state.auth.showAlert);
-export const isAuthenticated = createSelector(gallerySelector, (state: GalleryState) => state.auth.authenticated);
+export const isAuthenticated =
+  createSelector(gallerySelector, (state: GalleryState) => state.auth.authenticated);
 
 export const usersSelector = createSelector(gallerySelector, (state: GalleryState) => state.admin.users);
 export const rolesSelector = createSelector(gallerySelector, (state: GalleryState) => state.admin.roles);
+export const permissionsSelector =
+  createSelector(gallerySelector, (state: GalleryState) => state.admin.permissions);
 
 export const getRouterState = createFeatureSelector<fromRouter.RouterReducerState<RouterStateUrl>>('router');

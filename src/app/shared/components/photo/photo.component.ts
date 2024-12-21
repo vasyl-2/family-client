@@ -44,7 +44,9 @@ export class PhotoComponent implements OnDestroy {
     this.imageLoaded.emit();
   }
 
-  edit(): void {
+  edit(e: MouseEvent): void {
+    e.stopPropagation();
+    console.log('EDIT___PHOTO___')
     const description = this.photoSubject.value?.description;
     const nameOfPhoto = this.photoSubject.value?.name;
 
@@ -108,7 +110,7 @@ export class PhotoComponent implements OnDestroy {
   private getAsset(photo: Photo): string {
     const { fullPath, name } = photo;
     let path =  fullPath ? `${fullPath}/${name}` : name;
-    path = `${environment.apiUrl}/${path}`;
+    path = `${environment.apiStaticUrl}/${path}`;
     return path;
   }
 

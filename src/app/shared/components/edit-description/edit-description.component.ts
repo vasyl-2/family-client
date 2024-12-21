@@ -38,6 +38,7 @@ export class EditDescriptionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log('EDIT__COMPONENT____')
     this.setPhotoForm();
 
     if(!!this.data) {

@@ -4,10 +4,14 @@
 
 export const environment = {
   production: false,
-  apiUrl: '/api',
-  apiVideoUrl: '/api/videos',
+  apiUrl: '/api/family-back',
+  apiStaticUrl: '/static-api/family-back',
 };
-
+// export const environment = {
+//   production: false,
+//   apiUrl: '/api/family-back',
+//   apiVideoUrl: '/api/family-back/videos',
+// };
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

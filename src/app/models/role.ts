@@ -1,3 +1,5 @@
 export interface Role {
-  roleName: string;
+  _id?: string;
+  name: string;
+  permissions?: string[]
 }

@@ -32,9 +32,8 @@ export class FullSizePhotoComponent implements OnInit {
   private getAsset(): string {
     const { fullPath, name } = this.image;
     let path =  fullPath ? `${fullPath}/${name}` : name;
-    path = `${environment.apiUrl}/${path}`;
+    path = `${environment.apiStaticUrl}/${path}`;
 
     return path;
   }
-
 }

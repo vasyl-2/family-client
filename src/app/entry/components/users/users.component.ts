@@ -4,6 +4,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {User} from "../../../models/user";
 import {UserEditComponent} from "../user-edit/user-edit.component";
 import {CreateUserComponent} from "../create-user/create-user.component";
+import {Role} from "../../../models/role";
+import {areEqualFlatArrays} from "../../../utils/arrays/are-equal";
 
 @Component({
   selector: 'app-users',
@@ -13,7 +15,8 @@ import {CreateUserComponent} from "../create-user/create-user.component";
 })
 export class UsersComponent {
 
-  @Input() users!: User[] | null;
+  @Input() users!: User[] | null | undefined;
+  @Input() roles!: Role[] | null | undefined;
   @Output() user = new EventEmitter<User>();
   @Output() newUser = new EventEmitter<User>();
 
@@ -31,28 +34,39 @@ export class UsersComponent {
       return;
     }
     const user = this.users.find((user: User) => user._id === id);
+    console.log('EXISTING__USER____', user)
 
     if (!user) {
       return;
     }
 
     const dialogRef = this.dialog.open(UserEditComponent, {
-      data: user
+      data: { ...user }
     })
 
     dialogRef.afterClosed().subscribe((u: User) => {
-      console.log('USED EDITED____', u);
-      if (u.name !== user.name || u.role !== user.role) {
-        let userChanges: User = {} as User;
-        if (u.name !== user.name) {
-          userChanges.name = u.name;
-        }
-        if (u.role !== user.role) {
-          userChanges.role = u.role;
-        }
 
-        this.user.emit(userChanges);
+      if (u) {
+        console.log('U_____________', u)
+        const rolesChanged = !areEqualFlatArrays(u.role!, user.role!);
+        const nameChanged = u?.email !== user.email;
+
+        if (nameChanged || rolesChanged) {
+
+          let userChanges: User = {} as User;
+
+          if (nameChanged) {
+            userChanges.email = u.email;
+          }
+          if (rolesChanged) {
+            userChanges.role = u.role;
+          }
+
+          userChanges._id = user._id;
+          this.user.emit(userChanges);
+        }
       }
+
     })
   }
 
@@ -66,8 +80,9 @@ export class UsersComponent {
         return;
       }
 
-      this.newUser.emit(u);
+      console.log('NEW_USER_TO__ADD+!!!!', u)
 
+      this.newUser.emit(u);
     })
   }
 }

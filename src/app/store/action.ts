@@ -224,16 +224,16 @@ export const getRoles = createAction(
 
 export const gotRoles = createAction(
   RECEIVED_ROLES,
-  props<{ users: Role[] }>()
+  props<{ roles: Role[] }>()
 );
 
 export const createRole = createAction(
   CREATE_ROLE,
-  props<{ user: Role }>()
+  props<{ role: Role }>()
 );
 
 export const editRole = createAction(
   EDIT_ROLE,
-  props<{ user: Role }>()
+  props<{ role: Role }>()
 );
 
