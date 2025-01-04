@@ -5,11 +5,15 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {NestedTreeControl} from "@angular/cdk/tree";
-import {MatTreeNestedDataSource} from "@angular/material/tree";
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
+import { NestedTreeControl } from '@angular/cdk/tree';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
 
-import {Chapter} from "../../../models/chapter";
+import { Chapter } from '../../../models/chapter';
 
 @Component({
   selector: 'app-tree-chapters',
@@ -20,14 +24,14 @@ import {Chapter} from "../../../models/chapter";
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => TreeChaptersComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
   @Input() chapters!: Chapter[] | null;
 
-  treeControl = new NestedTreeControl<Chapter>(node => node.children);
+  treeControl = new NestedTreeControl<Chapter>((node) => node.children);
   dataSource = new MatTreeNestedDataSource<Chapter>();
 
   public control!: FormControl;
@@ -37,7 +41,7 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
   ngOnInit(): void {
     if (this.chapters) {
       this.dataSource.data = this.chapters;
-      console.log('TREE________________________________', this.dataSource.data)
+      console.log('TREE________________________________', this.dataSource.data);
     }
   }
 
@@ -45,12 +49,9 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
-  }
+  registerOnTouched(fn: any): void {}
 
-  setDisabledState(isDisabled: boolean): void {
-  }
-
+  setDisabledState(isDisabled: boolean): void {}
 
   writeValue(id: string): void {
     // if (this.chapters) {
@@ -63,14 +64,18 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
     // }
   }
 
-  hasChild = (_: number, node: Chapter) => !!node.children && node.children.length > 0;
+  hasChild = (_: number, node: Chapter) =>
+    !!node.children && node.children.length > 0;
 
   selectChapter(chapter: Chapter): void {
-    console.log('SELECT$D____CHAPTER___________', chapter)
+    console.log('SELECT$D____CHAPTER___________', chapter);
     this.onChange(chapter._id!);
   }
 
-  private findChapterById(rootChapter: Chapter, targetChapterId: string): Chapter | null {
+  private findChapterById(
+    rootChapter: Chapter,
+    targetChapterId: string,
+  ): Chapter | null {
     // Check if the current chapter is the one we are looking for
     if (rootChapter._id === targetChapterId) {
       return rootChapter;
@@ -90,7 +95,10 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
     return null;
   }
 
-  private findChapterByIdInArray(chapters: Chapter[], targetChapterId: string): Chapter | null {
+  private findChapterByIdInArray(
+    chapters: Chapter[],
+    targetChapterId: string,
+  ): Chapter | null {
     for (const rootChapter of chapters) {
       const foundChapter = this.findChapterById(rootChapter, targetChapterId);
       if (foundChapter) {
@@ -101,6 +109,4 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
     // If the target chapter is not found in any branch, return null
     return null;
   }
-
-
 }

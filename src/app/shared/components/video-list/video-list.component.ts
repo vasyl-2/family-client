@@ -5,36 +5,42 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
-import {BehaviorSubject, Observable, Subscription} from "rxjs";
-import {Video} from "../../../models/video";
-import {Chapter} from "../../../models/chapter";
-import {distinctUntilChanged, map, shareReplay, withLatestFrom} from "rxjs/operators";
-import {ActivatedRoute} from "@angular/router";
-import {select, Store} from "@ngrx/store";
-import {GalleryState} from "../../../store/reducer";
-import {MatDialog} from "@angular/material/dialog";
-import {Photo} from "../../../models/photo";
-import {receivePhotos, receiveVideos} from "../../../store/action";
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Video } from '../../../models/video';
+import { Chapter } from '../../../models/chapter';
+import {
+  distinctUntilChanged,
+  map,
+  shareReplay,
+  withLatestFrom,
+} from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { GalleryState } from '../../../store/reducer';
+import { MatDialog } from '@angular/material/dialog';
+import { Photo } from '../../../models/photo';
+import { receivePhotos, receiveVideos } from '../../../store/action';
 import {
   chaptersHierarchySelector,
   photosSelector,
   videoChaptersHierarchySelector,
-  videosSelector
-} from "../../../store/selectors";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {HighlightChapterService} from "../../../services/highlight-chapter.service";
+  videosSelector,
+} from '../../../store/selectors';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { HighlightChapterService } from '../../../services/highlight-chapter.service';
 
 @Component({
   selector: 'app-video-list',
   templateUrl: './video-list.component.html',
   styleUrls: ['./video-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('gallery', { static: false, read: ElementRef }) gallery!: ElementRef;
-  videos$!: Observable<Video[] | undefined> ;
+  @ViewChild('gallery', { static: false, read: ElementRef })
+  gallery!: ElementRef;
+  videos$!: Observable<Video[] | undefined>;
   subLevels = 'Подразделы';
 
   private stateOfChapters: Chapter | undefined;
@@ -49,11 +55,15 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   subChapter$!: Observable<Chapter>;
 
-  private readonly computeGridStyleSubject = new BehaviorSubject<{ rowHeight: number; rowGap: number } | undefined>(undefined);
+  private readonly computeGridStyleSubject = new BehaviorSubject<
+    { rowHeight: number; rowGap: number } | undefined
+  >(undefined);
   computeGridStyle$ = this.computeGridStyleSubject.asObservable();
 
   private readonly selectedIdSubject = new BehaviorSubject<string>('');
-  private readonly selectedId$ = this.selectedIdSubject.asObservable().pipe(shareReplay(1));
+  private readonly selectedId$ = this.selectedIdSubject
+    .asObservable()
+    .pipe(shareReplay(1));
 
   private sub = new Subscription();
 
@@ -62,17 +72,17 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
     private store: Store<GalleryState>,
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
-    private highlightChapterService: HighlightChapterService
-  ) {
-  }
+    private highlightChapterService: HighlightChapterService,
+  ) {}
 
   ngAfterViewInit(): void {
-    this.loadedVideosCountSubject.pipe(withLatestFrom(this.videos$))
+    this.loadedVideosCountSubject
+      .pipe(withLatestFrom(this.videos$))
       .subscribe(([count, photos]: [number, Photo[] | undefined]) => {
-        if (photos && (count === photos?.length)) {
+        if (photos && count === photos?.length) {
           this.setGalleryProps();
         }
-      })
+      });
   }
 
   ngOnDestroy(): void {
@@ -80,13 +90,14 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.allChapters$ = this.store.pipe(select(videoChaptersHierarchySelector)).pipe(shareReplay(1));
+    this.allChapters$ = this.store
+      .pipe(select(videoChaptersHierarchySelector))
+      .pipe(shareReplay(1));
     this.initForm();
     this.subscribeToChapterChanges();
     this.subscribeToRoute();
     this.videos$ = this.store.pipe(select(videosSelector));
     // withLatestFrom(this.store.pipe(select(videoChaptersHierarchySelector)))
-
 
     this.subChapter$ = this.selectedId$.pipe(
       withLatestFrom(this.allChapters$),
@@ -96,12 +107,12 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
         if (chapter) {
           return chapter;
         } else {
-          return chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!;
+          return chapters.find(
+            (c: Chapter) => c._id === this.route.snapshot.params['chapter'],
+          )!;
         }
-
       }),
     );
-
   }
 
   onImageLoad() {
@@ -112,15 +123,21 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   setGalleryProps(): void {
     const computedStyles = window.getComputedStyle(this.gallery.nativeElement);
-    const rowHeight = parseInt(computedStyles.getPropertyValue('grid-auto-rows'));
+    const rowHeight = parseInt(
+      computedStyles.getPropertyValue('grid-auto-rows'),
+    );
     const rowGap = parseInt(computedStyles.getPropertyValue('grid-row-gap'));
     this.computeGridStyleSubject.next({ rowGap, rowHeight });
   }
 
   private subscribeToRoute(): void {
-    console.log('ROUTE__PARAM____________', this.route.snapshot.params['chapter']);
-    this.store.dispatch(receiveVideos({ chapter: this.route.snapshot.params['chapter'] }));
-
+    console.log(
+      'ROUTE__PARAM____________',
+      this.route.snapshot.params['chapter'],
+    );
+    this.store.dispatch(
+      receiveVideos({ chapter: this.route.snapshot.params['chapter'] }),
+    );
 
     // route is autoSubscribed
     // TODO remove manually handling sub
@@ -132,7 +149,10 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
     // )
   }
 
-  private findChapterByIdInArray(chapters: Chapter[], targetChapterId: string): Chapter | null {
+  private findChapterByIdInArray(
+    chapters: Chapter[],
+    targetChapterId: string,
+  ): Chapter | null {
     for (const rootChapter of chapters) {
       const foundChapter = this.findChapterById(rootChapter, targetChapterId);
       if (foundChapter) {
@@ -144,7 +164,10 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
     return null;
   }
 
-  private findChapterById(rootChapter: Chapter, targetChapterId: string): Chapter | null {
+  private findChapterById(
+    rootChapter: Chapter,
+    targetChapterId: string,
+  ): Chapter | null {
     // Check if the current chapter is the one we are looking for
     if (rootChapter._id === targetChapterId) {
       return rootChapter;
@@ -171,12 +194,13 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private initForm(): void {
     this.selectChapter = this.formBuilder.group({
-      chapter: ['']
+      chapter: [''],
     });
   }
 
   private subscribeToChapterChanges(): void {
-    this.selectChapter.valueChanges.pipe(distinctUntilChanged())
+    this.selectChapter.valueChanges
+      .pipe(distinctUntilChanged())
       .subscribe((form) => {
         if (form.chapter) {
           console.log('CHAPTER___FORM_________________', form.chapter);
@@ -184,7 +208,6 @@ export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
           this.store.dispatch(receiveVideos({ chapter: form.chapter }));
           this.highlightChapterService.chapterIdSubject.next(form.chapter);
         }
-      })
+      });
   }
-
 }

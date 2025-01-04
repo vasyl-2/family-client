@@ -4,8 +4,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'app-role-edit',
   templateUrl: './role-edit.component.html',
   styleUrls: ['./role-edit.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RoleEditComponent {
-
-}
+export class RoleEditComponent {}

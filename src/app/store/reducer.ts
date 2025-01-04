@@ -1,4 +1,4 @@
-import {ActionReducerMap, createReducer, on} from '@ngrx/store';
+import { ActionReducerMap, createReducer, on } from '@ngrx/store';
 import { immerOn } from 'ngrx-immer/store';
 import { cloneDeep } from 'lodash';
 import * as fromRouter from '@ngrx/router-store';
@@ -14,15 +14,24 @@ import {
   logout,
   createdVideo,
   receivedVideos,
-  getUsers, gotUsers,
-  createUser, editUser, getRoles, gotRoles, createRole, editRole, RECEIVE_USERS
+  getUsers,
+  gotUsers,
+  createUser,
+  editUser,
+  getRoles,
+  gotRoles,
+  createRole,
+  editRole,
+  RECEIVE_USERS,
+  gotPermissionsByUser,
 } from './action';
 import { Chapter } from '../models/chapter';
 import { Photo } from '../models/photo';
-import { Video } from "../models/video";
-import {RouterStateUrl} from "../models/router-utils";
-import {User} from "../models/user";
-import {Role} from "../models/role";
+import { Video } from '../models/video';
+import { RouterStateUrl } from '../models/router-utils';
+import { User } from '../models/user';
+import { Role } from '../models/role';
+import { Permission } from '../models/permission';
 
 export interface GalleryState {
   chapters: Chapter[];
@@ -35,17 +44,18 @@ export interface GalleryState {
     authenticated: boolean;
     showAlert: boolean;
     user?: {
-      name: string;
-      email: string;
+      name?: string;
+      email?: string;
       roles?: string[];
-      permissions?: string[]
-    }
-  },
+      permissions?: Permission[] | undefined;
+    };
+    permissionsLoaded: boolean;
+  };
   admin: {
     users?: User[];
     roles?: Role[];
-    permissions?: Permissions[];
-  }
+    permissions?: Permission[];
+  };
 }
 
 export const GALLERY_INIT_STATE: GalleryState = {
@@ -56,11 +66,10 @@ export const GALLERY_INIT_STATE: GalleryState = {
   auth: {
     showAlert: true,
     authenticated: false,
+    permissionsLoaded: false,
   },
-  admin: {
-
-  }
-}
+  admin: {},
+};
 
 export const mainReducer = createReducer(
   GALLERY_INIT_STATE,
@@ -74,46 +83,56 @@ export const mainReducer = createReducer(
   }),
 
   immerOn(receivedChapters, (state: GalleryState, action): GalleryState => {
-
     const newChapters = cloneDeep(action.chapters);
     const hierarchy = buildHierarchyTree(newChapters, '');
-    const newState = { ...state, chapters: action.chapters, hierarchyChapters: hierarchy };
+    const newState = {
+      ...state,
+      chapters: action.chapters,
+      hierarchyChapters: hierarchy,
+    };
     return newState;
   }),
 
-  immerOn(receivedVideoChapters, (state: GalleryState, action): GalleryState => {
-
-    const newChapters = cloneDeep(action.chapters);
-    const hierarchy = buildHierarchyTree(newChapters, '');
-    const newState = { ...state, videoChapters: action.chapters, videoHierarchyChapters: hierarchy };
-    return newState;
-  }),
-
+  immerOn(
+    receivedVideoChapters,
+    (state: GalleryState, action): GalleryState => {
+      const newChapters = cloneDeep(action.chapters);
+      const hierarchy = buildHierarchyTree(newChapters, '');
+      const newState = {
+        ...state,
+        videoChapters: action.chapters,
+        videoHierarchyChapters: hierarchy,
+      };
+      return newState;
+    },
+  ),
 
   on(receivedPhotos, (state: GalleryState, action): GalleryState => {
-
     const newState = { ...state, photos: action.photos };
     return newState;
   }),
 
   on(receivedVideos, (state: GalleryState, action): GalleryState => {
-
     const newState = { ...state, videos: action.videos };
     return newState;
   }),
 
   immerOn(gotUsers, (state: GalleryState, action): void => {
-
-    console.log('ACTION_____', action)
+    console.log('ACTION_____', action);
     state.admin.users = action.users;
-    console.log('STATE___________', state.admin)
+    console.log('STATE___________', state.admin);
   }),
 
   immerOn(gotRoles, (state: GalleryState, action): void => {
-
-    console.log('ACTION_____', action)
+    console.log('ACTION_____', action);
     state.admin.roles = action.roles;
-    console.log('STATE___________', state.admin)
+    console.log('STATE___________', state.admin);
+  }),
+
+  immerOn(gotPermissionsByUser, (state: GalleryState, action) => {
+    console.log('ACTION_____', action);
+    state.auth.user = { permissions: action.permissions };
+    state.auth.permissionsLoaded = true;
   }),
 
   // on(gotUsers, (state: GalleryState, action): GalleryState => {
@@ -126,29 +145,26 @@ export const mainReducer = createReducer(
   //   return newState;
   // }),
 
-
-
   on(authenticateAlert, (state: GalleryState, action): GalleryState => {
-    const s = { ...state, auth: { ...state.auth, showAlert: true }};
+    const s = { ...state, auth: { ...state.auth, showAlert: true } };
     return s;
   }),
 
   on(authenticateAlertHide, (state: GalleryState, action): GalleryState => {
-    const s = { ...state, auth: { ...state.auth, showAlert: false }};
+    const s = { ...state, auth: { ...state.auth, showAlert: false } };
     return s;
   }),
 
   on(authenticated, (state: GalleryState, action): GalleryState => {
-    const s = { ...state, auth: { ...state.auth, authenticated: true }};
+    const s = { ...state, auth: { ...state.auth, authenticated: true } };
     return s;
   }),
 
   on(logout, (state: GalleryState, action): GalleryState => {
-    const s = { ...state, auth: { ...state.auth, authenticated: false }};
+    const s = { ...state, auth: { ...state.auth, authenticated: false } };
     return s;
   }),
-
-)
+);
 
 function buildHierarchyTree(chapters: Chapter[], parentId: string | undefined) {
   const tree: Chapter[] = [];
@@ -172,10 +188,10 @@ function buildHierarchyTree(chapters: Chapter[], parentId: string | undefined) {
 // interface to be passed to the Generic type ActionReducerMap
 export interface State {
   gallery: GalleryState;
-  router: fromRouter.RouterReducerState<RouterStateUrl>,
+  router: fromRouter.RouterReducerState<RouterStateUrl>;
 }
 
 export const actionReducers: ActionReducerMap<State> = {
   gallery: mainReducer,
-  router: fromRouter.routerReducer
-}
+  router: fromRouter.routerReducer,
+};

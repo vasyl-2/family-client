@@ -21,21 +21,24 @@
       <span class="example-spacer"></span>
       <button routerLink="/entry" mat-button class="add-photo">панель управления</button>
       <span class="example-spacer"></span>
-      <button [disabled]="!(isAdmin$ | async)" (click)="addPhoto()" mat-button class="add-photo">
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPhoto()" mat-button class="add-photo">
         добавить фото в галерею
       </button>
 
       <span class="example-spacer"></span>
-      <button [disabled]="!(isAdmin$ | async)" (click)="addVideo()" mat-button class="add-photo">
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addVideo()" mat-button class="add-photo">
         добавить видео в галерею
       </button>
 
+<!--      <span class="example-spacer"></span>-->
+<!--      <div>is Admin:!!!! {{ checkTokenService.isAdmin$ | async }}</div>-->
+
       <span class="example-spacer"></span>
-      <button [disabled]="!(isAdmin$ | async)" (click)="addChapter()" mat-button class="add-photo">
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
         добавить раздел в фото-галерею
       </button>
       <span class="example-spacer"></span>
-      <button [disabled]="!(isAdmin$ | async)" (click)="addChapter('video')" mat-button class="add-photo">
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter('video')" mat-button class="add-photo">
         добавить раздел в видео-галерею
       </button>
       <span class="example-spacer"></span>
@@ -48,13 +51,13 @@
         видео галерея
       </button>
 
-      <ng-container *ngIf="!(isAuthenticated$ | async)">
+      <ng-container *ngIf="!(isLoggedIn$ | async)">
         <button mat-icon-button class="login" [routerLink]="['/auth', 'login']">
           <mat-icon> login</mat-icon>
         </button>
       </ng-container>
 
-      <ng-container *ngIf="isAuthenticated$ | async">
+      <ng-container *ngIf="isLoggedIn$ | async">
         <button mat-icon-button class="login" (click)="logout()">
           <mat-icon>logout!</mat-icon>
         </button>

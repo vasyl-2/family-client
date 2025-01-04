@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
-import {RouterModule, Routes} from "@angular/router";
-import {EntryComponent} from "./components/entry/entry.component";
+import { RouterModule, Routes } from '@angular/router';
+import { EntryComponent } from './components/entry/entry.component';
 
 const routes: Routes = [
   {
     path: '',
     component: EntryComponent,
-    data: { animation: 'heroes' }
-  }
-]
+    data: { animation: 'heroes' },
+  },
+];
 @NgModule({
   declarations: [],
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class EntryRoutingModule { }
+export class EntryRoutingModule {}

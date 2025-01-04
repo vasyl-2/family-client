@@ -1,26 +1,32 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {BehaviorSubject} from "rxjs";
-import {Store} from "@ngrx/store";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { Store } from '@ngrx/store';
 
-import {GalleryState} from "../../store/reducer";
-import {authenticate} from "../../store/action";
+import { GalleryState } from '../../store/reducer';
+import { login } from '../../store/action';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
-
   loginForm!: FormGroup;
 
   private readonly hideSubject = new BehaviorSubject(true);
   hide$ = this.hideSubject.asObservable();
 
-  constructor(private fB: FormBuilder, private store: Store<GalleryState>) {
-  }
+  constructor(
+    private fB: FormBuilder,
+    private store: Store<GalleryState>,
+  ) {}
 
   get nameControl(): FormControl {
     return this.loginForm.get('name') as FormControl;
@@ -47,8 +53,6 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     const { name, password } = this.loginForm.value;
-    this.store.dispatch(authenticate(
-      { credentials: { email: name, password }}
-      ))
+    this.store.dispatch(login({ credentials: { email: name, password } }));
   }
 }

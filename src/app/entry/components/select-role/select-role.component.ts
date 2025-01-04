@@ -6,21 +6,23 @@ import {
   Injector,
   Input,
   OnDestroy,
-  OnInit
+  OnInit,
 } from '@angular/core';
 import {
   ControlContainer,
   ControlValueAccessor,
-  FormControl, FormControlDirective, FormControlName, FormGroupDirective,
+  FormControl,
+  FormControlDirective,
+  FormControlName,
+  FormGroupDirective,
   NG_VALUE_ACCESSOR,
   NgControl,
-  NgModel
-} from "@angular/forms";
-import {BehaviorSubject, Subscription} from "rxjs";
-import {filter, tap} from "rxjs/operators";
+  NgModel,
+} from '@angular/forms';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { filter, tap } from 'rxjs/operators';
 
-import {Role} from "../../../models/role";
-
+import { Role } from '../../../models/role';
 
 @Component({
   selector: 'app-select-role',
@@ -31,12 +33,13 @@ import {Role} from "../../../models/role";
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: SelectRoleComponent,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class SelectRoleComponent implements OnInit, ControlValueAccessor, OnDestroy {
-
+export class SelectRoleComponent
+  implements OnInit, ControlValueAccessor, OnDestroy
+{
   show = true;
   private ready = new BehaviorSubject(false);
   @Input() roles!: Role[] | undefined | null;
@@ -47,12 +50,10 @@ export class SelectRoleComponent implements OnInit, ControlValueAccessor, OnDest
 
   private sub = new Subscription();
 
-
   constructor(
     private parent: ControlContainer,
-    @Inject(Injector) private injector: Injector
-  ) {
-  }
+    @Inject(Injector) private injector: Injector,
+  ) {}
 
   ngOnInit(): void {
     this.setControl();
@@ -70,8 +71,7 @@ export class SelectRoleComponent implements OnInit, ControlValueAccessor, OnDest
     this.onTouched = fn;
   }
 
-  setDisabledState(isDisabled: boolean): void {
-  }
+  setDisabledState(isDisabled: boolean): void {}
 
   writeValue(selectedRoles: string[] | null): void {
     this.ready.pipe(filter(Boolean)).subscribe(() => {
@@ -79,8 +79,7 @@ export class SelectRoleComponent implements OnInit, ControlValueAccessor, OnDest
         console.log('SELECTED___ROLES_____', selectedRoles);
         this.control.setValue(selectedRoles, { emitEvent: false });
       }
-    })
-
+    });
   }
 
   onSelectionChange(selectedRoles: string[]) {
@@ -105,23 +104,26 @@ export class SelectRoleComponent implements OnInit, ControlValueAccessor, OnDest
 
         this.sub.add(
           this.control.valueChanges
-            .pipe(tap((value) => update.emit(value))).subscribe()
+            .pipe(tap((value) => update.emit(value)))
+            .subscribe(),
         );
         break;
       }
 
       case FormControlName: {
-        this.control = this.injector.get(FormGroupDirective).getControl(injectedControl as FormControlName);
+        this.control = this.injector
+          .get(FormGroupDirective)
+          .getControl(injectedControl as FormControlName);
         break;
       }
 
       default: {
-        this.control = (injectedControl as FormControlDirective).form as FormControl;
+        this.control = (injectedControl as FormControlDirective)
+          .form as FormControl;
         break;
       }
     }
 
     this.ready.next(true);
   }
-
 }

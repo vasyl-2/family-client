@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
@@ -8,15 +8,12 @@ import { IUploadPhotoService } from '../models/services/upload-photo-service';
 import { CreateChapter } from '../models/dto/create-chapter';
 import { environment } from '../../environments/environment';
 import { Photo } from '../models/photo';
-import {Chapter} from "../models/chapter";
-import {Video} from "../models/video";
+import { Chapter } from '../models/chapter';
+import { Video } from '../models/video';
 
 @Injectable({ providedIn: 'root' })
 export class UploadPhotoService implements IUploadPhotoService {
-
-  constructor(
-    private http: HttpClient,
-  ) { }
+  constructor(private http: HttpClient) {}
 
   // TODO change from any !!!!
   uploadPhoto(photo: { payload: Photo }): Observable<any> {
@@ -45,21 +42,27 @@ export class UploadPhotoService implements IUploadPhotoService {
     }
 
     if (photo.payload.chapter) {
-
       const { chapter } = photo.payload;
       formData.append('chapter', chapter);
       let headers = new HttpHeaders();
       let { chapterName, fullPath = undefined } = photo.payload;
 
       if (fullPath) {
-        chapterName = `${fullPath}`
+        chapterName = `${fullPath}`;
       }
       headers = headers.set('chapterName', chapterName!!);
 
-      return this.http.post(url, formData, { responseType: 'text', reportProgress: true, headers });
+      return this.http.post(url, formData, {
+        responseType: 'text',
+        reportProgress: true,
+        headers,
+      });
     }
 
-    return this.http.post(url, formData, { responseType: 'text', reportProgress: true });
+    return this.http.post(url, formData, {
+      responseType: 'text',
+      reportProgress: true,
+    });
   }
 
   updatePhoto(photo: Partial<Photo>) {
@@ -94,21 +97,27 @@ export class UploadPhotoService implements IUploadPhotoService {
     }
 
     if (video.payload.chapter) {
-
       const { chapter } = video.payload;
       formData.append('chapter', chapter);
       let headers = new HttpHeaders();
       let { chapterName, fullPath = undefined } = video.payload;
 
       if (fullPath) {
-        chapterName = `${fullPath}`
+        chapterName = `${fullPath}`;
       }
       headers = headers.set('chapterName', chapterName!!);
 
-      return this.http.post(url, formData, { responseType: 'text', reportProgress: true, headers });
+      return this.http.post(url, formData, {
+        responseType: 'text',
+        reportProgress: true,
+        headers,
+      });
     }
 
-    return this.http.post(url, formData, { responseType: 'text', reportProgress: true });
+    return this.http.post(url, formData, {
+      responseType: 'text',
+      reportProgress: true,
+    });
   }
 
   createChapter(chapter: { payload: CreateChapter }): Observable<any> {
@@ -123,38 +132,48 @@ export class UploadPhotoService implements IUploadPhotoService {
 
   getAllPhotos(chapter: string): Observable<Photo[]> {
     // return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photos/${chapter}`);
-    return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photoslist/${chapter}`);
+    return this.http.get<Photo[]>(
+      `${environment.apiUrl}/upload-photo/photoslist/${chapter}`,
+    );
   }
 
   getAllVideos(chapter: string): Observable<Video[]> {
     // return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photos/${chapter}`);
-    return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/videolist/${chapter}`);
+    return this.http.get<Photo[]>(
+      `${environment.apiUrl}/upload-photo/videolist/${chapter}`,
+    );
   }
 
   getAllPhotosList(chapter: string): Observable<Photo[]> {
-    return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photos/${chapter}`);
+    return this.http.get<Photo[]>(
+      `${environment.apiUrl}/upload-photo/photos/${chapter}`,
+    );
   }
 
   // TODO add type
   getChapters(): Observable<Chapter[]> {
-    return this.http.get<Chapter[]>(`${environment.apiUrl}/upload-photo/chapters`).pipe(
-      catchError((error) => {
-        if (error instanceof HttpErrorResponse) {
-          console.log('Hi, please do authorization)', error);
-        }
-        return of([]);
-      })
-    );
+    return this.http
+      .get<Chapter[]>(`${environment.apiUrl}/upload-photo/chapters`)
+      .pipe(
+        catchError((error) => {
+          if (error instanceof HttpErrorResponse) {
+            console.log('Hi, please do authorization)', error);
+          }
+          return of([]);
+        }),
+      );
   }
 
   getVideoChapters(): Observable<Chapter[]> {
-    return this.http.get<Chapter[]>(`${environment.apiUrl}/upload-photo/video-chapters`).pipe(
-      catchError((error) => {
-        if (error instanceof HttpErrorResponse) {
-          console.log('Hi, please do authorization)', error);
-        }
-        return of([]);
-      })
-    );
+    return this.http
+      .get<Chapter[]>(`${environment.apiUrl}/upload-photo/video-chapters`)
+      .pipe(
+        catchError((error) => {
+          if (error instanceof HttpErrorResponse) {
+            console.log('Hi, please do authorization)', error);
+          }
+          return of([]);
+        }),
+      );
   }
 }

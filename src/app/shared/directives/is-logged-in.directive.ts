@@ -1,11 +1,9 @@
 import { Directive } from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import { BehaviorSubject } from 'rxjs';
 
 @Directive({
-  selector: '[appIsLoggedIn]'
+  selector: '[appIsLoggedIn]',
 })
 export class IsLoggedInDirective {
-
-  constructor() { }
-
+  constructor() {}
 }

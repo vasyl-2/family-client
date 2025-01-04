@@ -1,4 +1,4 @@
-import {Params} from "@angular/router";
+import { Params } from '@angular/router';
 
 export interface RoutePart {
   params: Params;
@@ -11,4 +11,3 @@ export interface RouterStateUrl {
   queryParams: Params;
   parsedRoute?: RoutePart[];
 }
-

@@ -8,9 +8,8 @@ describe('RoleEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RoleEditComponent ]
-    })
-    .compileComponents();
+      declarations: [RoleEditComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RoleEditComponent);
     component = fixture.componentInstance;

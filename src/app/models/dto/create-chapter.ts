@@ -1,3 +1,3 @@
-import {Chapter} from "../chapter";
+import { Chapter } from '../chapter';
 
 export type CreateChapter = Omit<Chapter, 'id'>;

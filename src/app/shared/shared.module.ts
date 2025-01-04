@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from './material/material.module';
 
@@ -36,32 +36,25 @@ const components = [
   VideoListComponent,
   VideoElementComponent,
   SearchComponent,
-  RangeSizeComponent
+  RangeSizeComponent,
 ];
 
 const directives = [
   IsLoggedInDirective,
   HighlightDirective,
   SetHeightDirective,
-  EnlargeDirective
-]
+  EnlargeDirective,
+];
 @NgModule({
-  declarations: [
-    ...components, ...directives
-  ],
-  imports: [
-    CommonModule,
-    MaterialModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
+  declarations: [...components, ...directives],
+  imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [
     MaterialModule,
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
     ...components,
-    ...directives
-  ]
+    ...directives,
+  ],
 })
-export class SharedModule { }
+export class SharedModule {}

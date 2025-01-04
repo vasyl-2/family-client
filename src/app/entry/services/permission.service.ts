@@ -1,14 +1,13 @@
-import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-import {PermissionsServiceInterface} from "../models/permissions.service.interface";
-import {Permission} from "../../models/permission";
+import { PermissionsServiceInterface } from '../models/permissions.service.interface';
+import { Permission } from '../../models/permission';
 
-@Injectable({ providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class PermissionService implements PermissionsServiceInterface {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   createPermission(): Observable<Permission> {
     return this.http.post<Permission>('', {});
@@ -23,6 +22,6 @@ export class PermissionService implements PermissionsServiceInterface {
   }
 
   deletePermission(): Observable<string> {
-    return this.http.delete<string>('', { });
+    return this.http.delete<string>('', {});
   }
 }

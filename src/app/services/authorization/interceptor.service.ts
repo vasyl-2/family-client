@@ -1,28 +1,34 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
-import { Observable } from "rxjs";
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InterceptorService implements HttpInterceptor {
+  constructor() {}
 
-  constructor() { }
-
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<any>> {
     const token = localStorage.getItem('auth');
 
     if (!!token) {
       const authReq = req.clone({
         headers: req.headers.set(
           'Authorization',
-          `bearer ${token as string}`
+          `bearer ${token as string}`,
           // `${token as string}`
         ),
       });
 
-      return next.handle(authReq)
+      return next.handle(authReq);
     }
 
     return next.handle(req);

@@ -1,32 +1,45 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { StartComponent } from "./componenta/start/start.component";
+import { StartComponent } from './componenta/start/start.component';
+import { RbacIsReadyGuard } from './shared/guards/rbac-is-ready.guard';
+import { NgxPermissionsGuard } from 'ngx-permissions';
 
 const routes: Routes = [
   {
     path: '',
-    component: StartComponent
+    canActivate: [RbacIsReadyGuard],
+    component: StartComponent,
   },
   {
     path: 'entry',
-    loadChildren: () => import('./entry/entry.module').then(m => m.EntryModule)
+    canActivate: [NgxPermissionsGuard],
+    data: {
+      permissions: {
+        only: ['create_user', 'edit_user'],
+      },
+    },
+    loadChildren: () =>
+      import('./entry/entry.module').then((m) => m.EntryModule),
   },
   {
-    path: 'gallery', loadChildren: () => import('./gallery/gallery.module').then(m => m.GalleryModule)
+    path: 'gallery',
+    loadChildren: () =>
+      import('./gallery/gallery.module').then((m) => m.GalleryModule),
   },
   {
-    path: 'video', loadChildren: () => import('./video/video.module').then(m => m.VideoModule)
+    path: 'video',
+    loadChildren: () =>
+      import('./video/video.module').then((m) => m.VideoModule),
   },
   {
-    path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
-  }
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { enableTracing: false })],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule {
-
-}
+export class AppRoutingModule {}

@@ -1,26 +1,37 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component, ElementRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
   OnDestroy,
-  OnInit, Renderer2,
-  ViewChild
+  OnInit,
+  Renderer2,
+  ViewChild,
 } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {BehaviorSubject, Observable, Subscription} from "rxjs";
-import {select, Store} from "@ngrx/store";
-import {distinctUntilChanged, map, shareReplay, withLatestFrom} from "rxjs/operators";
+import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import {
+  distinctUntilChanged,
+  map,
+  shareReplay,
+  withLatestFrom,
+} from 'rxjs/operators';
 
-import {GalleryState} from "../../../store/reducer";
-import {editPhoto, receivePhotos} from "../../../store/action";
-import {chaptersHierarchySelector, photosSelector} from "../../../store/selectors";
-import {Photo} from "../../../models/photo";
-import {environment} from "../../../../environments/environment";
-import {Chapter} from "../../../models/chapter";
-import {MatDialog} from "@angular/material/dialog";
-import {FullSizePhotoComponent} from "../full-size-photo/full-size-photo.component";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {HighlightChapterService} from "../../../services/highlight-chapter.service";
+import { GalleryState } from '../../../store/reducer';
+import { editPhoto, receivePhotos } from '../../../store/action';
+import {
+  chaptersHierarchySelector,
+  photosSelector,
+} from '../../../store/selectors';
+import { Photo } from '../../../models/photo';
+import { environment } from '../../../../environments/environment';
+import { Chapter } from '../../../models/chapter';
+import { MatDialog } from '@angular/material/dialog';
+import { FullSizePhotoComponent } from '../full-size-photo/full-size-photo.component';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { HighlightChapterService } from '../../../services/highlight-chapter.service';
 
 @Component({
   selector: 'app-photos-list',
@@ -29,8 +40,8 @@ import {HighlightChapterService} from "../../../services/highlight-chapter.servi
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
-
-  @ViewChild('gallery', { static: false, read: ElementRef }) gallery!: ElementRef;
+  @ViewChild('gallery', { static: false, read: ElementRef })
+  gallery!: ElementRef;
   photos$!: Observable<Photo[] | undefined>;
   subLevels = 'Подразделы';
 
@@ -48,18 +59,30 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   allChapters$!: Observable<Chapter[]>;
 
-  private readonly computeGridStyleSubject = new BehaviorSubject<{ rowHeight: number; rowGap: number } | undefined>(undefined);
+  private readonly computeGridStyleSubject = new BehaviorSubject<
+    { rowHeight: number; rowGap: number } | undefined
+  >(undefined);
   computeGridStyle$ = this.computeGridStyleSubject.asObservable();
 
-  private readonly sizeOfScaleSubject = new BehaviorSubject<{ curr: number, prev: number | undefined, step: number }>({ curr: 1, prev: undefined, step: 1 });
+  private readonly sizeOfScaleSubject = new BehaviorSubject<{
+    curr: number;
+    prev: number | undefined;
+    step: number;
+  }>({ curr: 1, prev: undefined, step: 1 });
   readonly sizeOfScale$ = this.sizeOfScaleSubject.asObservable();
 
   private readonly selectedIdSubject = new BehaviorSubject<string>('');
-  private readonly selectedId$ = this.selectedIdSubject.asObservable().pipe(shareReplay(1));
+  private readonly selectedId$ = this.selectedIdSubject
+    .asObservable()
+    .pipe(shareReplay(1));
 
-  private readonly previousIdSubject = new BehaviorSubject<string | undefined>('');
+  private readonly previousIdSubject = new BehaviorSubject<string | undefined>(
+    '',
+  );
 
-  private readonly gridColumnsValuesSubject = new BehaviorSubject<{ init: number, second?: number, third?: number } | undefined >(undefined);
+  private readonly gridColumnsValuesSubject = new BehaviorSubject<
+    { init: number; second?: number; third?: number } | undefined
+  >(undefined);
 
   private sub = new Subscription();
 
@@ -72,22 +95,24 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     private formBuilder: FormBuilder,
     private highlightChapterService: HighlightChapterService,
     private cdr: ChangeDetectorRef,
-    private renderer: Renderer2
-  ) {
-  }
+    private renderer: Renderer2,
+  ) {}
 
   ngAfterViewInit(): void {
-    this.loadedImagesCountSubject.pipe(withLatestFrom(this.photos$))
+    this.loadedImagesCountSubject
+      .pipe(withLatestFrom(this.photos$))
       .subscribe(([count, photos]: [number, Photo[] | undefined]) => {
-        if (photos && (count === photos?.length)) {
+        if (photos && count === photos?.length) {
           this.setGalleryProps();
         }
-    })
+      });
   }
 
   setGalleryProps(): void {
     const computedStyles = window.getComputedStyle(this.gallery.nativeElement);
-    const rowHeight = parseInt(computedStyles.getPropertyValue('grid-auto-rows'));
+    const rowHeight = parseInt(
+      computedStyles.getPropertyValue('grid-auto-rows'),
+    );
     const rowGap = parseInt(computedStyles.getPropertyValue('grid-row-gap'));
     this.computeGridStyleSubject.next({ rowGap, rowHeight });
   }
@@ -99,7 +124,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.allChapters$ = this.store.pipe(select(chaptersHierarchySelector)).pipe(shareReplay(1));
+    this.allChapters$ = this.store
+      .pipe(select(chaptersHierarchySelector))
+      .pipe(shareReplay(1));
     this.initForm();
     this.subscribeToChapterChanges();
     this.subscribeToSizeChange();
@@ -114,13 +141,14 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         if (chapter) {
           return chapter;
         } else {
-          return chapters.find((c: Chapter) => c._id === this.route.snapshot.params['chapter'])!;
+          return chapters.find(
+            (c: Chapter) => c._id === this.route.snapshot.params['chapter'],
+          )!;
         }
-
       }),
     );
 
-    this.subChapter$.subscribe(cH => this.stateOfChapters = cH);
+    this.subChapter$.subscribe((cH) => (this.stateOfChapters = cH));
   }
 
   ngOnDestroy(): void {
@@ -130,11 +158,10 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   openFullSize(event: MouseEvent, photo: Photo): void {
     event.stopPropagation();
 
-   this.dialog.open(FullSizePhotoComponent, {
-        data: photo,
-        panelClass: 'full-size-photo'
-      }
-    )
+    this.dialog.open(FullSizePhotoComponent, {
+      data: photo,
+      panelClass: 'full-size-photo',
+    });
   }
 
   onPhotoUpdate(photo: Partial<Photo>): void {
@@ -143,7 +170,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getAsset(photo: Photo): string {
     const { fullPath, name } = photo;
-    let path =  fullPath ? `${fullPath}/${name}` : name;
+    let path = fullPath ? `${fullPath}/${name}` : name;
     path = `${environment.apiUrl}/${path}`;
 
     return path;
@@ -162,7 +189,10 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.previousIdSubject.value) {
       chapterToGoBack = this.previousIdSubject.value;
       if (this.stateOfChapters) {
-        const parentOfChapterToGo = this.findChapterById(this.stateOfChapters, chapterToGoBack)?.parent;
+        const parentOfChapterToGo = this.findChapterById(
+          this.stateOfChapters,
+          chapterToGoBack,
+        )?.parent;
         if (parentOfChapterToGo) {
           this.previousIdSubject.next(parentOfChapterToGo);
         }
@@ -186,7 +216,10 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectChapter.get('chapter')?.setValue(id);
   }
 
-  private findChapterById(rootChapter: Chapter, targetChapterId: string): Chapter | null {
+  private findChapterById(
+    rootChapter: Chapter,
+    targetChapterId: string,
+  ): Chapter | null {
     if (rootChapter._id === targetChapterId) {
       return rootChapter;
     }
@@ -203,7 +236,10 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     return null;
   }
 
-  private findChapterByIdInArray(chapters: Chapter[], targetChapterId: string): Chapter | null {
+  private findChapterByIdInArray(
+    chapters: Chapter[],
+    targetChapterId: string,
+  ): Chapter | null {
     for (const rootChapter of chapters) {
       const foundChapter = this.findChapterById(rootChapter, targetChapterId);
       if (foundChapter) {
@@ -213,11 +249,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     return null;
   }
 
-
   private subscribeToRoute(): void {
     this.selectedIdSubject.next(this.route.snapshot.params['chapter']);
-    this.store.dispatch(receivePhotos({ chapter: this.route.snapshot.params['chapter'] }));
-
+    this.store.dispatch(
+      receivePhotos({ chapter: this.route.snapshot.params['chapter'] }),
+    );
 
     // route is autoSubscribed
     // TODO remove manually handling sub
@@ -231,45 +267,46 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private initForm(): void {
     this.selectChapter = this.formBuilder.group({
-      chapter: ['']
+      chapter: [''],
     });
   }
 
   private subscribeToChapterChanges(): void {
-    this.selectChapter.valueChanges.pipe(distinctUntilChanged())
+    this.selectChapter.valueChanges
+      .pipe(distinctUntilChanged())
       .subscribe((form) => {
         if (form.chapter) {
           this.selectedIdSubject.next(form.chapter);
           this.store.dispatch(receivePhotos({ chapter: form.chapter }));
           this.highlightChapterService.chapterIdSubject.next(form.chapter);
         }
-      })
+      });
   }
 
   private subscribeToSizeChange(): void {
     this.size.valueChanges.subscribe((size: string) => {
-
       const numberSize = +size;
 
-      console.log('NUMBER_SIZE_____', numberSize)
+      console.log('NUMBER_SIZE_____', numberSize);
       let { curr, prev, step } = this.sizeOfScaleSubject.value;
       const computedStyle = window.getComputedStyle(this.gallery.nativeElement);
-      const isMore = !prev || (this.sizeOfScaleSubject.value.curr - numberSize) < 0;
-      const currentGridColumns = parseInt(computedStyle.getPropertyValue('grid-template-columns'), 10);
+      const isMore =
+        !prev || this.sizeOfScaleSubject.value.curr - numberSize < 0;
+      const currentGridColumns = parseInt(
+        computedStyle.getPropertyValue('grid-template-columns'),
+        10,
+      );
 
       if (!this.stepToGridColumns.has(step)) {
         this.stepToGridColumns.set(step, currentGridColumns);
       }
 
-
       let newGridTemplateColumns: number;
       console.log('COLUMNS_____________', currentGridColumns);
-
 
       let multiPly: number;
 
       if (isMore && !this.stepToGridColumns.has(numberSize)) {
-
         if (!prev) {
           if (numberSize === 3) {
             multiPly = 4;
@@ -287,30 +324,38 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         newGridTemplateColumns = currentGridColumns * multiPly;
       } else {
         if (!this.stepToGridColumns.has(numberSize)) {
-
-          console.log('LESS_________________', numberSize)
-          const divider = (Math.abs(numberSize - step) > 1) ? 4 : 2.3;
+          console.log('LESS_________________', numberSize);
+          const divider = Math.abs(numberSize - step) > 1 ? 4 : 2.3;
           console.log('DIVIDER_________', divider);
           newGridTemplateColumns = currentGridColumns / divider;
-          console.log('newGridTemplateColumns_________', newGridTemplateColumns);
+          console.log(
+            'newGridTemplateColumns_________',
+            newGridTemplateColumns,
+          );
         } else {
-          newGridTemplateColumns = this.stepToGridColumns.get(numberSize)!
+          newGridTemplateColumns = this.stepToGridColumns.get(numberSize)!;
         }
-
       }
 
       if (!prev) {
         // increase 100%
-        this.gridColumnsValuesSubject.next({ init: currentGridColumns, second: newGridTemplateColumns })
+        this.gridColumnsValuesSubject.next({
+          init: currentGridColumns,
+          second: newGridTemplateColumns,
+        });
       }
 
       this.renderer.setStyle(
         this.gallery.nativeElement,
         'gridTemplateColumns',
-        `repeat(auto-fill, minmax(${newGridTemplateColumns}px, 1fr))`
-      )
+        `repeat(auto-fill, minmax(${newGridTemplateColumns}px, 1fr))`,
+      );
 
-      this.sizeOfScaleSubject.next({ curr: numberSize, prev: curr, step: numberSize });
+      this.sizeOfScaleSubject.next({
+        curr: numberSize,
+        prev: curr,
+        step: numberSize,
+      });
     });
   }
 }

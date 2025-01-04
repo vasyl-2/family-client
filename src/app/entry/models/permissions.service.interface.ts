@@ -1,5 +1,5 @@
-import {Observable} from "rxjs";
-import {Permission} from "../../models/permission";
+import { Observable } from 'rxjs';
+import { Permission } from '../../models/permission';
 
 export interface PermissionsServiceInterface {
   getPermissions(): Observable<Permission[]>;

@@ -8,9 +8,8 @@ describe('FullSizePhotoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FullSizePhotoComponent ]
-    })
-    .compileComponents();
+      declarations: [FullSizePhotoComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FullSizePhotoComponent);
     component = fixture.componentInstance;

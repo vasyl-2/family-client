@@ -1,8 +1,10 @@
-import {RouterStateUrl} from "../models/router-utils";
+import { RouterStateUrl } from '../models/router-utils';
 import { RouterStateSerializer } from '@ngrx/router-store';
-import {ActivatedRouteSnapshot, RouterStateSnapshot} from "@angular/router";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-export class RouterCustomSerializer implements RouterStateSerializer<RouterStateUrl> {
+export class RouterCustomSerializer
+  implements RouterStateSerializer<RouterStateUrl>
+{
   // serialize(routerState: RouterStateSnapshot): RouterStateUrl {
   //   let route = routerState.root;
   //
@@ -26,12 +28,21 @@ export class RouterCustomSerializer implements RouterStateSerializer<RouterState
       route = route.firstChild;
     }
 
-    const parsedRoute = route.pathFromRoot.filter((data: ActivatedRouteSnapshot) => !!data.routeConfig ? data.routeConfig.path : null )
+    const parsedRoute = route.pathFromRoot
+      .filter((data: ActivatedRouteSnapshot) =>
+        !!data.routeConfig ? data.routeConfig.path : null,
+      )
       .map((data) => {
-        return { params: data.params, path: data.routeConfig ? data.routeConfig.path : null};
+        return {
+          params: data.params,
+          path: data.routeConfig ? data.routeConfig.path : null,
+        };
       });
 
-    const { url, root: { queryParams } } = routerState;
+    const {
+      url,
+      root: { queryParams },
+    } = routerState;
 
     return { url, queryParams, parsedRoute };
   }

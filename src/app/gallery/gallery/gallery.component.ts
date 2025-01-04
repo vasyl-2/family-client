@@ -1,33 +1,36 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable, Subscription} from "rxjs";
-import {select, Store} from "@ngrx/store";
-import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
-import {UploadPhotoService} from "../../services/upload-photo.service";
-import {GalleryState} from "../../store/reducer";
-import {receivePhotos} from "../../store/action";
-import {photosSelector} from "../../store/selectors";
-import {Photo} from "../../models/photo";
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
-import {ActivatedRoute, Router} from "@angular/router";
-
+import { UploadPhotoService } from '../../services/upload-photo.service';
+import { GalleryState } from '../../store/reducer';
+import { receivePhotos } from '../../store/action';
+import { photosSelector } from '../../store/selectors';
+import { Photo } from '../../models/photo';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GalleryComponent implements OnInit, OnDestroy {
-
   // image!: SafeUrl;
   image!: any;
   // private readonly photosSubject = new BehaviorSubject<Photo[] | undefined>(undefined);
   // public readonly photos$ = this.photosSubject.asObservable();
 
-  photos$!: Observable<Photo[] | undefined>
-
+  photos$!: Observable<Photo[] | undefined>;
 
   loaded$ = new BehaviorSubject(false);
 
@@ -40,9 +43,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private route: ActivatedRoute
-  ) {
-  }
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit() {
     // this.http.get(`${environment.apiUrl}/upload-photo/photos/6403643ce6ebaa85b246723f`,
@@ -60,10 +62,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     //   reader.readAsDataURL(blob)
     // });
 
-    this.photos$ = this.store.pipe(
-      select(photosSelector)
-    )
-
+    this.photos$ = this.store.pipe(select(photosSelector));
   }
 
   ngOnDestroy() {
@@ -74,5 +73,4 @@ export class GalleryComponent implements OnInit, OnDestroy {
     // WITHOUT { relativeTo: this.route } broke
     this.router.navigate([chapter], { relativeTo: this.route });
   }
-
 }
