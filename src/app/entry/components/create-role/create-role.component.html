@@ -1,1 +1,11 @@
-<p>create-role works!</p>
+<ng-container [formGroup]="role">
+  <div>
+    <app-select-permission formControlName="permissions" [permissions]="permissions$ | async"></app-select-permission>
+  </div>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Имя</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+
+</ng-container>

@@ -53,6 +53,7 @@ export class CreateUserComponent implements OnInit {
     this.user = this.fB.group({
       email: this.fB.control('', [Validators.required]),
       role: this.fB.control('', [rolesValidator()]),
+      password: this.fB.control('', [Validators.required, Validators.minLength(8)]),
     });
   }
 }

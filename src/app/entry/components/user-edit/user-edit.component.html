@@ -14,6 +14,11 @@
     <input matInput formControlName="email" />
   </mat-form-field>
 
+  <mat-form-field appearance="fill">
+    <mat-label>Изменить Пароль</mat-label>
+    <input matInput formControlName="password" />
+  </mat-form-field>
+
   <div mat-dialog-actions>
     <button mat-button (click)="close()">Закрыть</button>
     <button mat-button [mat-dialog-close]="data" [disabled]="!user.valid" cdkFocusInitial>Сохранить</button>

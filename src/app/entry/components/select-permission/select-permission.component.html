@@ -4,7 +4,7 @@
                 (selectionChange)="onSelectionChange($event.value)"
     >
       <mat-option *ngFor="let permission of permissions" [value]="permission._id">
-        {{ permission.name }}
+        {{ permission.displayName }}
       </mat-option>
     </mat-select>
     <!--</ng-container>-->

@@ -39,8 +39,9 @@ import {
   LOGIN,
   LOAD_PERMISSIONS,
   RECEIVE_PERMISSIONS_BY_USER,
+  RECEIVE_PERMISSIONS,
   gotPermissionsByUser,
-  RECEIVED_PERMISSIONS_BY_USER,
+  RECEIVED_PERMISSIONS_BY_USER, gotPermissions,
 } from './action';
 
 import { CreateChapter } from '../models/dto/create-chapter';
@@ -57,6 +58,7 @@ import { Role } from '../models/role';
 import { PermissionsService } from '../services/permissions.service';
 import { Permission } from '../models/permission';
 import { NgxPermissionsService } from 'ngx-permissions';
+import {PermissionService} from "../entry/services/permission.service";
 
 @Injectable()
 export class GalleryEffects {
@@ -208,7 +210,7 @@ export class GalleryEffects {
     ),
   );
 
-  getPermissions$ = createEffect(() =>
+  getPermissionsByUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RECEIVE_PERMISSIONS_BY_USER),
       exhaustMap(() => this.permissionsService.getPermissions()),
@@ -219,6 +221,21 @@ export class GalleryEffects {
         );
         this.ngxPermissionsService.loadPermissions(permissionsNames);
         return gotPermissionsByUser({ permissions });
+      }),
+    ),
+  );
+
+  getPermissions$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RECEIVE_PERMISSIONS),
+      exhaustMap(() => this.permissionService.getPermissions()),
+      map((permissions: Permission[]) => {
+        console.log('PERMISSIONS___BY___SERVICE____', permissions);
+        const permissionsNames = permissions.map(
+          (perm: Permission) => perm.name,
+        );
+        this.ngxPermissionsService.loadPermissions(permissionsNames);
+        return gotPermissions({ permissions });
       }),
     ),
   );
@@ -236,6 +253,7 @@ export class GalleryEffects {
     private userService: UserService,
     private roleService: RoleService,
     private permissionsService: PermissionsService,
+    private permissionService: PermissionService,
     private ngxPermissionsService: NgxPermissionsService,
     private store: Store<any>,
   ) {}

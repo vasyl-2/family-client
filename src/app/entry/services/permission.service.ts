@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { PermissionsServiceInterface } from '../models/permissions.service.interface';
 import { Permission } from '../../models/permission';
+import {environment} from "../../../environments/environment";
 
 @Injectable({ providedIn: 'root' })
 export class PermissionService implements PermissionsServiceInterface {
@@ -18,7 +19,7 @@ export class PermissionService implements PermissionsServiceInterface {
   }
 
   getPermissions(): Observable<Permission[]> {
-    return this.http.get<Permission[]>('');
+    return this.http.get<Permission[]>(`${environment.apiUrl}/permissions`);
   }
 
   deletePermission(): Observable<string> {

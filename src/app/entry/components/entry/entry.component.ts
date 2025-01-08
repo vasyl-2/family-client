@@ -6,7 +6,7 @@ import {
   getUsers,
   createUser,
   editUser,
-  getRoles,
+  getRoles, getPermissions,
 } from '../../../store/action';
 import { GalleryState } from '../../../store/reducer';
 import { rolesSelector, usersSelector } from '../../../store/selectors';
@@ -33,6 +33,7 @@ export class EntryComponent implements OnInit {
 
     this.store.dispatch(getUsers());
     this.store.dispatch(getRoles());
+    this.store.dispatch(getPermissions());
   }
 
   onUpdate(user: User): void {

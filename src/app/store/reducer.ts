@@ -24,6 +24,7 @@ import {
   editRole,
   RECEIVE_USERS,
   gotPermissionsByUser,
+  gotPermissions,
 } from './action';
 import { Chapter } from '../models/chapter';
 import { Photo } from '../models/photo';
@@ -118,7 +119,7 @@ export const mainReducer = createReducer(
   }),
 
   immerOn(gotUsers, (state: GalleryState, action): void => {
-    console.log('ACTION_____', action);
+    console.log('ACTION_____USER', action);
     state.admin.users = action.users;
     console.log('STATE___________', state.admin);
   }),
@@ -134,6 +135,12 @@ export const mainReducer = createReducer(
     state.auth.user = { permissions: action.permissions };
     state.auth.permissionsLoaded = true;
   }),
+
+  immerOn(gotPermissions, (state: GalleryState, action) => {
+    console.log('ACTION_____', action);
+    state.admin.permissions = action.permissions;
+  }),
+
 
   // on(gotUsers, (state: GalleryState, action): GalleryState => {
   //

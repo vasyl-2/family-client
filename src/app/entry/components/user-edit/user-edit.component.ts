@@ -39,6 +39,10 @@ export class UserEditComponent implements OnInit {
     return this.user.get('email') as FormControl;
   }
 
+  get passwordControl(): FormControl {
+    return this.user.get('password') as FormControl;
+  }
+
   constructor(
     public dialogRef: MatDialogRef<UserEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: User,
@@ -57,6 +61,9 @@ export class UserEditComponent implements OnInit {
       }
       if (this.data.role) {
         this.roleControl.setValue(this.data.role);
+      }
+      if (this.data.password) {
+        this.passwordControl.setValue(this.data.password);
       }
     }
 
@@ -87,6 +94,7 @@ export class UserEditComponent implements OnInit {
     this.user = this.fB.group({
       email: this.fB.control('', [Validators.required]),
       role: this.fB.control(this.data?.role || [], [rolesValidator()]),
+      password: this.fB.control('', [Validators.required, Validators.minLength(8)]),
     });
   }
 }
