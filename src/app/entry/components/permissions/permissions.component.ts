@@ -10,14 +10,4 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class PermissionsComponent {
   @Input() permissions!: Permission[] | null | undefined;
-
-  constructor(private dialog: MatDialog) {}
-
-  addPermission(): void {}
-
-  editPermission(permission: string | undefined): void {
-    if (!permission) {
-      return;
-    }
-  }
 }

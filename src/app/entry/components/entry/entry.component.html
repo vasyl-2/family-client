@@ -20,12 +20,12 @@
     ></app-roles>
   </mat-tab>
 
-<!--  <mat-tab>-->
-<!--    <ng-template mat-tab-label>-->
-<!--      Разрешения-->
-<!--    </ng-template>-->
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Разрешения
+    </ng-template>
 
-<!--    <app-permissions></app-permissions>-->
-<!--  </mat-tab>-->
+    <app-permissions [permissions]="permissions$ | async"></app-permissions>
+  </mat-tab>
 </mat-tab-group>
 

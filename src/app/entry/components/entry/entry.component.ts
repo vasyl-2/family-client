@@ -9,9 +9,10 @@ import {
   getRoles, getPermissions, createRole, editRole,
 } from '../../../store/action';
 import { GalleryState } from '../../../store/reducer';
-import { rolesSelector, usersSelector } from '../../../store/selectors';
+import {permissionsSelector, rolesSelector, usersSelector} from '../../../store/selectors';
 import { User } from '../../../models/user';
 import { Role } from '../../../models/role';
+import {Permission} from "../../../models/permission";
 
 @Component({
   selector: 'app-entry',
@@ -22,14 +23,14 @@ import { Role } from '../../../models/role';
 export class EntryComponent implements OnInit {
   users$!: Observable<User[] | undefined>;
   roles$!: Observable<Role[] | undefined>;
-  permissions$!: Observable<Permissions[] | undefined>;
+  permissions$!: Observable<Permission[] | undefined>;
 
   constructor(private store: Store<GalleryState>) {}
 
   ngOnInit(): void {
     this.users$ = this.store.pipe(select(usersSelector));
-
     this.roles$ = this.store.pipe(select(rolesSelector));
+    this.permissions$ = this.store.pipe(select(permissionsSelector));
 
     this.store.dispatch(getUsers());
     this.store.dispatch(getRoles());

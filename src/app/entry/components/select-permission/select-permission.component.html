@@ -1,5 +1,6 @@
 <ng-container *ngIf="show">
   <mat-form-field appearance="fill">
+    <mat-label>выбор разрешений</mat-label>
     <mat-select [formControl]="control" name="" id="" multiple
                 (selectionChange)="onSelectionChange($event.value)"
     >
