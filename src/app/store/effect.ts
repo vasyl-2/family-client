@@ -41,7 +41,7 @@ import {
   RECEIVE_PERMISSIONS_BY_USER,
   RECEIVE_PERMISSIONS,
   gotPermissionsByUser,
-  RECEIVED_PERMISSIONS_BY_USER, gotPermissions,
+  RECEIVED_PERMISSIONS_BY_USER, gotPermissions, CREATE_ROLE, createdRole,
 } from './action';
 
 import { CreateChapter } from '../models/dto/create-chapter';
@@ -188,6 +188,17 @@ export class GalleryEffects {
       ),
       tap((u) => console.log('TEST__________', u)),
       map((user: User) => createdUser({ user })),
+    ),
+  );
+
+  createRole$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CREATE_ROLE),
+      exhaustMap(({ role }: { role: Role }) =>
+        this.roleService.createRole(role),
+      ),
+      tap((u) => console.log('ROLE__CREATED_!!__________', u)),
+      map((role: Role) => createdRole({ role })),
     ),
   );
 

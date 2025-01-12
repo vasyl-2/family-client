@@ -13,15 +13,19 @@
     <ng-template mat-tab-label>
       Роли
     </ng-template>
-    <app-roles></app-roles>
+    <app-roles
+      [roles]="roles$ | async"
+      (newRole)="createRole($event)"
+      (updatedRole)="onUpdateRole($event)"
+    ></app-roles>
   </mat-tab>
 
-  <mat-tab>
-    <ng-template mat-tab-label>
-      Разрешения
-    </ng-template>
+<!--  <mat-tab>-->
+<!--    <ng-template mat-tab-label>-->
+<!--      Разрешения-->
+<!--    </ng-template>-->
 
-    <app-permissions></app-permissions>
-  </mat-tab>
+<!--    <app-permissions></app-permissions>-->
+<!--  </mat-tab>-->
 </mat-tab-group>
 

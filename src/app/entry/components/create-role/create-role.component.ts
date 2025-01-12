@@ -38,6 +38,10 @@ export class CreateRoleComponent implements OnInit {
     return this.role.get('name') as FormControl;
   }
 
+  get displayNameControl(): FormControl {
+    return this.role.get('displayName') as FormControl;
+  }
+
   ngOnInit(): void {
     this.permissions$ = this.store.pipe(select(permissionsSelector));
 
@@ -51,6 +55,7 @@ export class CreateRoleComponent implements OnInit {
   private initForm(): void {
     this.role = this.fB.group({
       name: this.fB.control('', [Validators.required]),
+      displayName: this.fB.control('', [Validators.required]),
       permissions: this.fB.control('', [rolesValidator()]),
     });
   }

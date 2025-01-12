@@ -53,6 +53,7 @@ export const EDITED_USER = '[ADMIN] EDITED USER';
 export const RECEIVE_ROLES = '[ADMIN] RECEIVE ROLES';
 export const RECEIVED_ROLES = '[ADMIN] RECEIVED ROLES';
 export const CREATE_ROLE = '[ADMIN] CREATE ROLE';
+export const CREATED_ROLE = '[ADMIN] CREATED ROLE';
 export const EDIT_ROLE = '[ADMIN] EDIT ROLE';
 
 export const RECEIVE_PERMISSIONS = '[ADMIN] RECEIVE PERMISSIONS';
@@ -210,6 +211,7 @@ export const gotRoles = createAction(
 );
 
 export const createRole = createAction(CREATE_ROLE, props<{ role: Role }>());
+export const createdRole = createAction(CREATED_ROLE, props<{ role: Role }>());
 
 export const editRole = createAction(EDIT_ROLE, props<{ role: Role }>());
 

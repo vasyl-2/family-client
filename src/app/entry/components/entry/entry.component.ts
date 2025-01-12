@@ -6,7 +6,7 @@ import {
   getUsers,
   createUser,
   editUser,
-  getRoles, getPermissions,
+  getRoles, getPermissions, createRole, editRole,
 } from '../../../store/action';
 import { GalleryState } from '../../../store/reducer';
 import { rolesSelector, usersSelector } from '../../../store/selectors';
@@ -44,5 +44,15 @@ export class EntryComponent implements OnInit {
   createUser(user: User): void {
     console.log('CREATE___USER____', user);
     this.store.dispatch(createUser({ user }));
+  }
+
+  createRole(role: Role): void {
+    console.log('CREATE___ROLE____', role);
+    this.store.dispatch(createRole({ role }));
+  }
+
+  onUpdateRole(role: Role): void {
+    console.log('UPDATED___ROLE____', role);
+    this.store.dispatch(editRole({ role }));
   }
 }

@@ -12,11 +12,11 @@ export class RoleService implements RoleServiceInterface {
 
   constructor(private http: HttpClient) {}
 
-  createRole(): Observable<Role> {
-    return this.http.post<Role>(this.url, {});
+  createRole(role: Role): Observable<Role> {
+    return this.http.post<Role>(`${this.url}`, role);
   }
 
-  editRole(): Observable<Role> {
+  editRole(role: Role): Observable<Role> {
     return this.http.put<Role>(this.url, {});
   }
 
@@ -24,7 +24,7 @@ export class RoleService implements RoleServiceInterface {
     return this.http.get<Role[]>(this.url);
   }
 
-  deleteRole(): Observable<string> {
-    return this.http.delete<string>(this.url, {});
+  deleteRole(roleId: string): Observable<string> {
+    return this.http.delete<string>(`${this.url}/${roleId}`);
   }
 }

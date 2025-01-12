@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 
 import { Role } from '../../../models/role';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,9 +14,21 @@ import { RoleEditComponent } from '../role-edit/role-edit.component';
 export class RolesComponent {
   @Input() roles!: Role[] | null | undefined;
   constructor(private dialog: MatDialog) {}
+  @Output() newRole = new EventEmitter<Role>();
+  @Output() updatedRole = new EventEmitter<Role>();
 
   addRole(): void {
     const dialogRef = this.dialog.open(CreateRoleComponent, {});
+
+    dialogRef.afterClosed().subscribe((role: Role) => {
+      if (!role) {
+        return;
+      }
+
+      console.log('NEW_ROLE_TO__ADD+!!!!', role);
+
+      this.newRole.emit(role);
+    });
   }
 
   editRole(role: string | undefined): void {
