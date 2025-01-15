@@ -1,1 +1,20 @@
-<p>role-edit works!</p>
+<ng-container [formGroup]="role">
+  <div>
+    <app-select-permission formControlName="permissions" [permissions]="permissions$ | async"></app-select-permission>
+  </div>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Имя для базы данных (латиницей)</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Имя для отображения</mat-label>
+    <input matInput formControlName="displayName" />
+  </mat-form-field>
+
+  <div mat-dialog-actions>
+    <button mat-button (click)="close()">Закрыть</button>
+    <button mat-button [mat-dialog-close]="role.value" [disabled]="!role.valid" cdkFocusInitial>Сохранить</button>
+  </div>
+</ng-container>
