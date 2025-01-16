@@ -16,7 +16,7 @@
       <div class="header"><h2>{{ subChapter.nameForUI }}</h2></div>
 
       <ng-container *ngIf="subChapter.parent">
-        <button mat-button color="primary" (click)="goBack(subChapter.parent)">go back to {{ subChapter.parentTitle }}</button>
+        <button mat-button color="primary" (click)="goBack(subChapter.parent)">вернуться к разделу {{ subChapter.parentTitle }}</button>
       </ng-container>
 
 
