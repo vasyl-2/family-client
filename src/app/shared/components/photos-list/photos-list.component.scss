@@ -5,14 +5,14 @@
   height: 100%;
 }
 .container {
-  display: grid;
-  height: 100%;
-  grid-template-columns: 300px 1fr;
-  gap: 20px;
-  padding: 20px;
-
-  .side-bar {
-  }
+  //display: grid;
+  //height: 100%;
+  //grid-template-columns: 300px 1fr;
+  //gap: 20px;
+  //padding: 20px;
+  //
+  //.side-bar {
+  //}
 }
 
 
@@ -22,9 +22,22 @@
   grid-auto-rows: 10px;
   gap: 10px;
 
+
+  .empty {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+  }
+
+
   app-photo {
     overflow: hidden;
   }
+
 }
 
 

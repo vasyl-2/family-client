@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import {
-  distinctUntilChanged,
+  distinctUntilChanged, filter,
   map,
   shareReplay,
   withLatestFrom,
@@ -126,11 +126,20 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.allChapters$ = this.store
       .pipe(select(chaptersHierarchySelector))
-      .pipe(shareReplay(1));
+      .pipe(
+        map((chapters: Chapter[]) => {
+          console.log('CURRENT____', chapters, this.route.snapshot.params['chapter']);
+          const related = chapters.filter((c: Chapter) => c._id === this.route.snapshot.params['chapter']);
+          return related;
+        }),
+        shareReplay(1)
+      );
+
     this.initForm();
     this.subscribeToChapterChanges();
     this.subscribeToSizeChange();
     this.subscribeToRoute();
+
     this.photos$ = this.store.pipe(select(photosSelector));
 
     this.subChapter$ = this.selectedId$.pipe(
@@ -148,7 +157,10 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       }),
     );
 
-    this.subChapter$.subscribe((cH) => (this.stateOfChapters = cH));
+    this.subChapter$.subscribe((cH: Chapter) => {
+      console.log('SUB___CHAPTERS_____', cH)
+      this.stateOfChapters = cH;
+    });
   }
 
   ngOnDestroy(): void {

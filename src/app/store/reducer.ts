@@ -87,7 +87,7 @@ export const mainReducer = createReducer(
 
   immerOn(receivedChapters, (state: GalleryState, action): GalleryState => {
     const newChapters = cloneDeep(action.chapters);
-    const hierarchy = buildHierarchyTree(newChapters, '');
+    const hierarchy = buildHierarchyTree(newChapters, '', '');
     const newState = {
       ...state,
       chapters: action.chapters,
@@ -100,7 +100,7 @@ export const mainReducer = createReducer(
     receivedVideoChapters,
     (state: GalleryState, action): GalleryState => {
       const newChapters = cloneDeep(action.chapters);
-      const hierarchy = buildHierarchyTree(newChapters, '');
+      const hierarchy = buildHierarchyTree(newChapters, '', '');
       const newState = {
         ...state,
         videoChapters: action.chapters,
@@ -187,13 +187,18 @@ export const mainReducer = createReducer(
   }),
 );
 
-function buildHierarchyTree(chapters: Chapter[], parentId: string | undefined) {
+function buildHierarchyTree(chapters: Chapter[], parentId: string | undefined, parentTitle: string | undefined) {
   const tree: Chapter[] = [];
 
   chapters.forEach((item: Chapter) => {
     item.highlighted = false;
     if (item.parent === parentId) {
-      const children = buildHierarchyTree(chapters, item._id);
+
+      if (parentTitle) {
+        item.parentTitle = parentTitle;
+      }
+
+      const children = buildHierarchyTree(chapters, item._id, item.nameForUI);
 
       if (children.length) {
         item.children = children;

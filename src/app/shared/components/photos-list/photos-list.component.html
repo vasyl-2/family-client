@@ -1,19 +1,26 @@
 <div class="container">
 
-  <div class="side-bar">
-    <ng-container  [formGroup]="selectChapter">
-      <app-tree-chapters formControlName="chapter" [chapters]="allChapters$ | async"></app-tree-chapters>
-    </ng-container>
-  </div>
+<!--  <div class="side-bar">-->
+<!--    <ng-container  [formGroup]="selectChapter">-->
+<!--      <app-tree-chapters formControlName="chapter" [chapters]="allChapters$ | async"></app-tree-chapters>-->
+<!--    </ng-container>-->
+<!--  </div>-->
 
 
   <div class="content">
-    <div>
-      <app-search [formControl]="search"></app-search>
-    </div>
+<!--    <div>-->
+<!--      <app-search [formControl]="search"></app-search>-->
+<!--    </div>-->
     <ng-container *ngIf="subChapter$ | async as subChapter">
 <!--      <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack(subChapter.parent)" mat-button color="primary">назад</button></div>-->
       <div class="header"><h2>{{ subChapter.nameForUI }}</h2></div>
+
+      <ng-container *ngIf="subChapter.parent">
+        <button mat-button color="primary" (click)="goBack(subChapter.parent)">go back to {{ subChapter.parentTitle }}</button>
+      </ng-container>
+
+
+<!--  if subChapters are    -->
       <ng-container *ngIf="subChapter.children">
         <h3>{{ subLevels }}</h3>
         <div class="sub-chapters">
@@ -25,16 +32,18 @@
 
         </div>
       </ng-container>
+<!--   end of if subChapters are   -->
+
     </ng-container>
 
 
     <ng-container *ngIf="{
       sizeA: (sizeOfScale$ | async),
       photos: photos$ | async
-    } as state">
+    } as state;">
 <!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
       <div #gallery class="gallery">
-        <ng-container *ngIf="state.photos && !!state.photos?.length">
+        <ng-container *ngIf="state.photos && !!state.photos?.length; else empty">
           <ng-container *ngFor="let photo of state.photos">
             <app-photo [appEnlarge]="state.sizeA"
                        [appSetHeight]="computeGridStyle$ | async"
@@ -55,8 +64,12 @@
 
     </ng-container>
 
-
-
   </div>
 
 </div>
+
+
+<ng-template #empty>
+  <div class="empty"> В этом разделе еще нет фотографий</div>
+
+</ng-template>
