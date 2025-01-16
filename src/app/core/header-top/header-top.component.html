@@ -22,12 +22,12 @@
       <button routerLink="/entry" mat-button class="add-photo">панель управления</button>
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPhoto()" mat-button class="add-photo">
-        добавить фото в галерею
+        добавить фото в галерею *
       </button>
 
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addVideo()" mat-button class="add-photo">
-        добавить видео в галерею
+        добавить видео в галерею *
       </button>
 
 <!--      <span class="example-spacer"></span>-->
@@ -35,20 +35,20 @@
 
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
-        добавить раздел в фото-галерею
+        добавить раздел в фото-галерею *
       </button>
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter('video')" mat-button class="add-photo">
-        добавить раздел в видео-галерею
+        добавить раздел в видео-галерею *
       </button>
       <span class="example-spacer"></span>
 
       <button routerLink="/gallery" mat-button class="add-photo">
-        галерея
+        галерея *
       </button>
       <span class="example-spacer"></span>
       <button routerLink="/video" mat-button class="add-photo">
-        видео галерея
+        видео галерея *
       </button>
 
       <ng-container *ngIf="!(isLoggedIn$ | async)">
