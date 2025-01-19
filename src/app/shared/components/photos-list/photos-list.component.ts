@@ -15,7 +15,7 @@ import { select, Store } from '@ngrx/store';
 import {
   distinctUntilChanged, filter,
   map,
-  shareReplay,
+  shareReplay, tap,
   withLatestFrom,
 } from 'rxjs/operators';
 
@@ -127,10 +127,19 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.allChapters$ = this.store
       .pipe(select(chaptersHierarchySelector))
       .pipe(
+        tap((cHs: Chapter[]) => {
+          // if (cHs.length) {
+          //   this.selectedIdSubject.next(cHs[0]._id!);
+          //   this.store.dispatch(
+          //     receivePhotos({ chapter: cHs[0]._id! }),
+          //   );
+          // }
+        }),
         map((chapters: Chapter[]) => {
-          console.log('CURRENT____', chapters, this.route.snapshot.params['chapter']);
-          const related = chapters.filter((c: Chapter) => c._id === this.route.snapshot.params['chapter']);
-          return related;
+          // console.log('CURRENT____', chapters, this.route.snapshot.params['chapter']);
+          // const related = chapters.filter((c: Chapter) => c._id === this.route.snapshot.params['chapter']);
+          // return related;
+          return chapters;
         }),
         shareReplay(1)
       );
@@ -138,7 +147,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initForm();
     this.subscribeToChapterChanges();
     this.subscribeToSizeChange();
-    this.subscribeToRoute();
+    // this.subscribeToRoute();
 
     this.photos$ = this.store.pipe(select(photosSelector));
 
@@ -288,6 +297,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(distinctUntilChanged())
       .subscribe((form) => {
         if (form.chapter) {
+          console.log('!!!!!___!!!!')
           this.selectedIdSubject.next(form.chapter);
           this.store.dispatch(receivePhotos({ chapter: form.chapter }));
           this.highlightChapterService.chapterIdSubject.next(form.chapter);

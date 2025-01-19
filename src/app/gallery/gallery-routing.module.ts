@@ -7,12 +7,13 @@ import { PhotosListComponent } from '../shared/components/photos-list/photos-lis
 const routes: Routes = [
   {
     path: '',
-    component: GalleryComponent,
-  },
-  {
-    path: ':chapter',
     component: PhotosListComponent,
+    // component: GalleryComponent,
   },
+  // {
+  //   path: ':chapter',
+  //   component: PhotosListComponent,
+  // },
 ];
 
 @NgModule({

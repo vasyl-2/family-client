@@ -19,7 +19,7 @@
       </button>
       <span>: - )</span>
       <span class="example-spacer"></span>
-      <button routerLink="/entry" mat-button class="add-photo">панель управления</button>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">панель управления</button>
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPhoto()" mat-button class="add-photo">
         добавить фото в галерею *

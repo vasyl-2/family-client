@@ -2,7 +2,7 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  OnDestroy,
+  OnDestroy, ChangeDetectorRef,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
@@ -55,6 +55,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     private store: Store<GalleryState>,
     private router: Router,
     public checkTokenService: CheckTokenService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -62,7 +63,10 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
     this.store
       .pipe(select(permissionsForUserLoaded))
-      .subscribe((x) => console.log('LOADED_____!!!!', x));
+      .subscribe((x) => {
+        console.log('LOADED_____!!!!', x);
+        this.cdr.detectChanges();
+      });
 
     this.setSubs();
 

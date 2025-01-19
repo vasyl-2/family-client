@@ -5,14 +5,14 @@
   height: 100%;
 }
 .container {
-  //display: grid;
-  //height: 100%;
-  //grid-template-columns: 300px 1fr;
-  //gap: 20px;
-  //padding: 20px;
-  //
-  //.side-bar {
-  //}
+  display: grid;
+  height: 100%;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  padding: 20px;
+
+  .side-bar {
+  }
 }
 
 

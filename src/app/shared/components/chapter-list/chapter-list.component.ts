@@ -13,8 +13,7 @@ import { select, Store } from '@ngrx/store';
 import { GalleryState } from '../../../store/reducer';
 import {
   chaptersHierarchySelector,
-  chaptersSelector, videoChaptersHierarchySelector,
-  videoChaptersSelector,
+  videoChaptersHierarchySelector
 } from '../../../store/selectors';
 
 @Component({
@@ -31,6 +30,7 @@ export class ChapterListComponent implements OnInit {
   photoChapters$!: Observable<Chapter[]>;
 
   constructor(private store: Store<{ gallery: GalleryState }>) {}
+  // constructor(private store: Store<GalleryState>) {}
 
   ngOnInit(): void {
     const selector =
