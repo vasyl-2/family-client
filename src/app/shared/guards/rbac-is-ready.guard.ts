@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { filter, tap } from 'rxjs/operators';
@@ -14,7 +10,7 @@ import { permissionsForUserLoaded } from '../../store/selectors';
 @Injectable({
   providedIn: 'root',
 })
-export class RbacIsReadyGuard implements CanActivate {
+export class RbacIsReadyGuard  {
   constructor(private store: Store<GalleryState>) {}
   canActivate(
     route: ActivatedRouteSnapshot,
