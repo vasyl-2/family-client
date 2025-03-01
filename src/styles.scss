@@ -35,13 +35,25 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; padding: 0 
   cursor: pointer;
 }
 
+.cdk-global-overlay-wrapper {
+  background-color: #9A907070;
+}
+
 .full-size-photo {
-  width: 99vw !important;
-  height: 99vh;
+  width: 90vw !important;
+  height: 90vh;
 
   .mat-mdc-dialog-surface  {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+  }
+
+  div.mdc-dialog__container {
+    transform: scale(1) !important;
+  }
+
+  .mat-mdc-dialog-actions {
+    transform: translateX(-15px);
   }
 }

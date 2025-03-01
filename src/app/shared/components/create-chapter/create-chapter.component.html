@@ -12,6 +12,11 @@
       <mat-error *ngIf="addChapterForm?.get('name')?.hasError('required')">название нового раздела обязательно указать</mat-error>
     </mat-form-field>
 
+    <mat-form-field appearance="fill">
+      <mat-label>Описание</mat-label>
+      <input formControlName="description" matInput>
+    </mat-form-field>
+
 <!--    <mat-form-field appearance="fill">-->
 <!--      <mat-label>главный раздел</mat-label>-->
 <!--      <app-tree-chapters formControlName="parentChapter"></app-tree-chapters>-->

@@ -37,6 +37,12 @@
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
         добавить раздел в фото-галерею *
       </button>
+
+      <span class="example-spacer"></span>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="editChapters()" mat-button class="add-photo">
+        редактировать разделы *
+      </button>
+
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter('video')" mat-button class="add-photo">
         добавить раздел в видео-галерею *

@@ -10,4 +10,5 @@ export interface Chapter {
   nameForUI?: string;
   fullPath?: string | null;
   highlighted?: boolean;
+  description?: string;
 }

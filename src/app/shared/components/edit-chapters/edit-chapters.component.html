@@ -1,0 +1,21 @@
+<div class="edit-chapters">
+<!--  <ng-container *ngIf="selectedChapterToEdit$ | async as selectedChapterToEdit">-->
+    <div class="edit-chapter">
+      <mat-slide-toggle
+        [formControl]="toEditChapter">
+        Редактириовать выбранный раздел {{ getNameOfChapterById(editChapters.value) }} ?
+      </mat-slide-toggle>
+
+
+      <div [class.show]="">
+
+      </div>
+
+    </div>
+
+<!--  </ng-container>-->
+
+  <app-tree-chapters [formControl]="editChapters" [chapters]="photoChapters$ | async"></app-tree-chapters>
+</div>
+
+

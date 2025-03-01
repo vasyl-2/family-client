@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -20,54 +21,42 @@ import { MatSelectModule } from '@angular/material/select';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { DragDropModule } from "@angular/cdk/drag-drop";
+
+const modules = [
+  MatSlideToggleModule,
+  MatTabsModule,
+  MatPaginatorModule,
+  MatFormFieldModule,
+  MatExpansionModule,
+  MatCheckboxModule,
+  MatCardModule,
+  MatButtonModule,
+  MatDialogModule,
+  MatMenuModule,
+  MatRadioModule,
+  MatTableModule,
+  MatTooltipModule,
+  MatInputModule,
+  MatDatepickerModule,
+  MatToolbarModule,
+  MatIconModule,
+  MatSelectModule,
+  TextFieldModule,
+  MatTreeModule,
+  MatSliderModule,
+  MatButtonToggleModule,
+  DragDropModule
+];
 
 @NgModule({
   declarations: [],
   imports: [
-    MatSlideToggleModule,
-    MatTabsModule,
-    MatPaginatorModule,
-    MatFormFieldModule,
-    MatExpansionModule,
-    MatCheckboxModule,
-    MatCardModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatMenuModule,
-    MatRadioModule,
-    MatTableModule,
-    MatTooltipModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatSelectModule,
-    TextFieldModule,
-    MatTreeModule,
-    MatSliderModule,
+    ...modules
   ],
   exports: [
-    MatSlideToggleModule,
-    MatTabsModule,
-    MatPaginatorModule,
-    MatFormFieldModule,
-    MatExpansionModule,
-    MatCheckboxModule,
-    MatCardModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatMenuModule,
-    MatRadioModule,
-    MatTableModule,
-    MatTooltipModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatSelectModule,
-    TextFieldModule,
-    MatTreeModule,
-    MatSliderModule,
+    ...modules
   ],
 })
 export class MaterialModule {}

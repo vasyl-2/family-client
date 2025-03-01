@@ -63,6 +63,7 @@ export class CreateChapterComponent {
       name: ['', Validators.required],
       latinname: ['', Validators.required],
       parentChapter: '',
+      description: ''
     });
   }
 }

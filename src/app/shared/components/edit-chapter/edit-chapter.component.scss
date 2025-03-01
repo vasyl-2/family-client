@@ -24,20 +24,3 @@
 .example-tree div[role=group] > .mat-tree-node {
   padding-left: 40px;
 }
-
-.highlight {
-  background-color: dodgerblue;
-  color: white;
-  box-shadow: 1px 1px 2px 2px lightskyblue;
-  border-radius: 3px;
-}
-
-.arrow {
-  cursor: pointer;
-  align-items: center;
-}
-
-.mat-tree-node {
-  display: flex;
-  align-items: center;
-}

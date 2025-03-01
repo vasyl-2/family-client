@@ -36,6 +36,8 @@ import { CreateChapter } from '../../models/dto/create-chapter';
 import { CreateVideoComponent } from '../../shared/components/create-video/create-video.component';
 import { Video } from '../../models/video';
 import { CheckTokenService } from '../../services/authorization/check-token.service';
+import {EditChaptersComponent} from "../../shared/components/edit-chapters/edit-chapters.component";
+import {NgxPermissionsObject, NgxPermissionsService} from "ngx-permissions";
 
 @Component({
   selector: 'app-header-top',
@@ -55,11 +57,16 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     private store: Store<GalleryState>,
     private router: Router,
     public checkTokenService: CheckTokenService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private ngxPermissionsService: NgxPermissionsService,
   ) {}
 
   ngOnInit(): void {
     this.checkTokenService.checkToken();
+    this.ngxPermissionsService.permissions$.subscribe((x: NgxPermissionsObject) => {
+      console.log('PERM_________________________, x', x);
+    })
+    // this.ngxPermissionsService.getPermissions()
 
     this.store
       .pipe(select(permissionsForUserLoaded))
@@ -145,6 +152,11 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
           this.store.dispatch(createVideo({ payload: video }));
         }),
     );
+  }
+
+  editChapters(): void {
+    this.dialog
+      .open(EditChaptersComponent);
   }
 
   addChapter(type: 'photo' | 'video' = 'photo'): void {

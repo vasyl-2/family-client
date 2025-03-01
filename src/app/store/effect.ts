@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY, of } from 'rxjs';
+import { EMPTY } from 'rxjs';
 import { map, exhaustMap, catchError, tap } from 'rxjs/operators';
-
-import { Store } from '@ngrx/store';
 
 import {
   authenticated,
@@ -226,11 +224,12 @@ export class GalleryEffects {
       ofType(RECEIVE_PERMISSIONS_BY_USER),
       exhaustMap(() => this.permissionsService.getPermissions()),
       map((permissions: Permission[]) => {
-        console.log('PERMISSIONS___BY___SERVICE____', permissions);
+        console.log('PERMISSIONS___BY___SERVICE____1', permissions);
         const permissionsNames = permissions.map(
           (perm: Permission) => perm.name,
         );
         this.ngxPermissionsService.loadPermissions(permissionsNames);
+        // this.ngxPermissionsService.getPermissions();
         return gotPermissionsByUser({ permissions });
       }),
     ),
@@ -241,11 +240,11 @@ export class GalleryEffects {
       ofType(RECEIVE_PERMISSIONS),
       exhaustMap(() => this.permissionService.getPermissions()),
       map((permissions: Permission[]) => {
-        console.log('PERMISSIONS___BY___SERVICE____', permissions);
+        console.log('PERMISSIONS___BY___SERVICE____2', permissions);
         const permissionsNames = permissions.map(
           (perm: Permission) => perm.name,
         );
-        this.ngxPermissionsService.loadPermissions(permissionsNames);
+        // this.ngxPermissionsService.loadPermissions(permissionsNames);
         return gotPermissions({ permissions });
       }),
     ),
@@ -266,6 +265,5 @@ export class GalleryEffects {
     private permissionsService: PermissionsService,
     private permissionService: PermissionService,
     private ngxPermissionsService: NgxPermissionsService,
-    private store: Store<any>,
   ) {}
 }

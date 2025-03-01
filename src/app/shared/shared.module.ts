@@ -22,6 +22,8 @@ import { VideoListComponent } from './components/video-list/video-list.component
 import { VideoElementComponent } from './components/video-element/video-element.component';
 import { SearchComponent } from './components/search/search.component';
 import { RangeSizeComponent } from './components/range-size/range-size.component';
+import { EditChapterComponent } from './components/edit-chapter/edit-chapter.component';
+import { EditChaptersComponent } from './components/edit-chapters/edit-chapters.component';
 
 const components = [
   CreatePhotoComponent,
@@ -37,6 +39,8 @@ const components = [
   VideoElementComponent,
   SearchComponent,
   RangeSizeComponent,
+  EditChapterComponent,
+  EditChaptersComponent
 ];
 
 const directives = [
@@ -46,7 +50,7 @@ const directives = [
   EnlargeDirective,
 ];
 @NgModule({
-  declarations: [...components, ...directives],
+  declarations: [...components, ...directives,],
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [
     MaterialModule,
