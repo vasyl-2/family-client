@@ -6,7 +6,7 @@ import {
   RouterStateSerializer,
 } from '@ngrx/router-store';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { EffectsModule } from '@ngrx/effects';
@@ -24,30 +24,24 @@ import { InterceptorService } from './services/authorization/interceptor.service
 import { RouterCustomSerializer } from './services/router-custom-serializer';
 import { NgxPermissionsModule } from 'ngx-permissions';
 
-@NgModule({
-  declarations: [AppComponent, StartComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    StoreRouterConnectingModule.forRoot(),
-    NoopAnimationsModule,
-    SharedModule,
-    StoreModule.forRoot(actionReducers),
-    // StoreModule.forRoot({
-    //   gallery: mainReducer,
-    //   router: fromRouter.routerReducer
-    // }),
-    EffectsModule.forRoot([GalleryEffects]),
-    CoreModule,
-    HttpClientModule,
-    CommonModule,
-    NgxPermissionsModule.forRoot(),
-  ],
-  providers: [
-    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: DIALOG_CONFIG },
-    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
-    { provide: RouterStateSerializer, useClass: RouterCustomSerializer },
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [AppComponent, StartComponent],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        StoreRouterConnectingModule.forRoot(),
+        NoopAnimationsModule,
+        SharedModule,
+        StoreModule.forRoot(actionReducers),
+        // StoreModule.forRoot({
+        //   gallery: mainReducer,
+        //   router: fromRouter.routerReducer
+        // }),
+        EffectsModule.forRoot([GalleryEffects]),
+        CoreModule,
+        CommonModule,
+        NgxPermissionsModule.forRoot()], providers: [
+        { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: DIALOG_CONFIG },
+        { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
+        { provide: RouterStateSerializer, useClass: RouterCustomSerializer },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}
