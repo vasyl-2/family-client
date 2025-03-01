@@ -15,10 +15,11 @@ import { Role } from '../../../models/role';
 import {Permission} from "../../../models/permission";
 
 @Component({
-  selector: 'app-entry',
-  templateUrl: './entry.component.html',
-  styleUrls: ['./entry.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-entry',
+    templateUrl: './entry.component.html',
+    styleUrls: ['./entry.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EntryComponent implements OnInit {
   users$!: Observable<User[] | undefined>;

@@ -6,10 +6,11 @@ import { CreateRoleComponent } from '../create-role/create-role.component';
 import { RoleEditComponent } from '../role-edit/role-edit.component';
 
 @Component({
-  selector: 'app-roles',
-  templateUrl: './roles.component.html',
-  styleUrls: ['./roles.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-roles',
+    templateUrl: './roles.component.html',
+    styleUrls: ['./roles.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RolesComponent {
   @Input() roles!: Role[] | null | undefined;

@@ -15,10 +15,11 @@ import { rolesSelector } from '../../../store/selectors';
 import { rolesValidator } from '../../validators/roles-validator';
 
 @Component({
-  selector: 'app-create-user',
-  templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-create-user',
+    templateUrl: './create-user.component.html',
+    styleUrls: ['./create-user.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CreateUserComponent implements OnInit {
   user!: FormGroup;

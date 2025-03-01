@@ -11,10 +11,11 @@ import {MatDialog} from "@angular/material/dialog";
 import {EditChapterComponent} from "../edit-chapter/edit-chapter.component";
 
 @Component({
-  selector: 'app-edit-chapters',
-  templateUrl: './edit-chapters.component.html',
-  styleUrls: ['./edit-chapters.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-edit-chapters',
+    templateUrl: './edit-chapters.component.html',
+    styleUrls: ['./edit-chapters.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EditChaptersComponent implements OnInit{
 

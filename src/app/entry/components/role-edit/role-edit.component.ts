@@ -9,10 +9,11 @@ import {permissionsSelector} from "../../../store/selectors";
 import {rolesValidator} from "../../validators/roles-validator";
 
 @Component({
-  selector: 'app-role-edit',
-  templateUrl: './role-edit.component.html',
-  styleUrls: ['./role-edit.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-role-edit',
+    templateUrl: './role-edit.component.html',
+    styleUrls: ['./role-edit.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RoleEditComponent {
   role!: FormGroup;

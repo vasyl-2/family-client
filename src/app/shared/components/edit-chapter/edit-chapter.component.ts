@@ -13,10 +13,10 @@ interface ExampleFlatNode {
 }
 
 @Component({
-  selector: 'app-edit-chapter',
-  templateUrl: './edit-chapter.component.html',
-  styleUrls: ['./edit-chapter.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-edit-chapter',
+    templateUrl: './edit-chapter.component.html',
+    styleUrls: ['./edit-chapter.component.scss'],
+    standalone: false
 })
 export class EditChapterComponent implements OnInit {
 

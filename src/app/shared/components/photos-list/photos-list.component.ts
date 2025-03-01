@@ -34,10 +34,10 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
 
 @Component({
-  selector: 'app-photos-list',
-  templateUrl: './photos-list.component.html',
-  styleUrls: ['./photos-list.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-photos-list',
+    templateUrl: './photos-list.component.html',
+    styleUrls: ['./photos-list.component.scss'],
+    standalone: false
 })
 export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('gallery', { static: false, read: ElementRef })

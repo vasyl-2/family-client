@@ -15,10 +15,11 @@ import { environment } from '../../../../environments/environment';
 import { EditDescriptionComponent } from '../edit-description/edit-description.component';
 
 @Component({
-  selector: 'app-photo',
-  templateUrl: './photo.component.html',
-  styleUrls: ['./photo.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-photo',
+    templateUrl: './photo.component.html',
+    styleUrls: ['./photo.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PhotoComponent implements OnDestroy {
   image!: string;

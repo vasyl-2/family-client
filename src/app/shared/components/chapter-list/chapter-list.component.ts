@@ -17,10 +17,11 @@ import {
 } from '../../../store/selectors';
 
 @Component({
-  selector: 'app-chapter-list',
-  templateUrl: './chapter-list.component.html',
-  styleUrls: ['./chapter-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-chapter-list',
+    templateUrl: './chapter-list.component.html',
+    styleUrls: ['./chapter-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ChapterListComponent implements OnInit {
   @Input() type: 'photo' | 'video' = 'photo';

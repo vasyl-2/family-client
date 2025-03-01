@@ -13,10 +13,11 @@ import {
 import { CreateChapter } from '../../../models/dto/create-chapter';
 
 @Component({
-  selector: 'app-create-chapter',
-  templateUrl: './create-chapter.component.html',
-  styleUrls: ['./create-chapter.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-create-chapter',
+    templateUrl: './create-chapter.component.html',
+    styleUrls: ['./create-chapter.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CreateChapterComponent {
   addChapterForm!: FormGroup;

@@ -21,10 +21,11 @@ import { rolesSelector } from '../../../store/selectors';
 import { rolesValidator } from '../../validators/roles-validator';
 
 @Component({
-  selector: 'app-user-edit',
-  templateUrl: './user-edit.component.html',
-  styleUrls: ['./user-edit.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-user-edit',
+    templateUrl: './user-edit.component.html',
+    styleUrls: ['./user-edit.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class UserEditComponent implements OnInit {
   user!: FormGroup;

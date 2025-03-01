@@ -16,17 +16,18 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { Chapter } from '../../../models/chapter';
 
 @Component({
-  selector: 'app-tree-chapters',
-  templateUrl: './tree-chapters.component.html',
-  styleUrls: ['./tree-chapters.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => TreeChaptersComponent),
-      multi: true,
-    },
-  ],
+    selector: 'app-tree-chapters',
+    templateUrl: './tree-chapters.component.html',
+    styleUrls: ['./tree-chapters.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => TreeChaptersComponent),
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
   @Input() chapters!: Chapter[] | null;

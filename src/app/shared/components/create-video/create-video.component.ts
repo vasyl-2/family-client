@@ -27,10 +27,11 @@ import { Photo } from '../../../models/photo';
 import { Video } from '../../../models/video';
 
 @Component({
-  selector: 'app-create-video',
-  templateUrl: './create-video.component.html',
-  styleUrls: ['./create-video.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-create-video',
+    templateUrl: './create-video.component.html',
+    styleUrls: ['./create-video.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CreateVideoComponent implements OnInit, OnDestroy {
   addVideoForm!: FormGroup;

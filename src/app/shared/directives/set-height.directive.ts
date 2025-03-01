@@ -9,7 +9,8 @@ import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Directive({
-  selector: '[appSetHeight]',
+    selector: '[appSetHeight]',
+    standalone: false
 })
 export class SetHeightDirective implements AfterViewInit {
   rowSpan!: any;

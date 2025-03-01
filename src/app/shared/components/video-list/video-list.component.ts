@@ -32,10 +32,11 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
 
 @Component({
-  selector: 'app-video-list',
-  templateUrl: './video-list.component.html',
-  styleUrls: ['./video-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-video-list',
+    templateUrl: './video-list.component.html',
+    styleUrls: ['./video-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('gallery', { static: false, read: ElementRef })

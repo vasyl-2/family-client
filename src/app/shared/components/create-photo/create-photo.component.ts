@@ -26,10 +26,11 @@ import {
 import { Chapter } from '../../../models/chapter';
 
 @Component({
-  selector: 'app-create-photo',
-  templateUrl: './create-photo.component.html',
-  styleUrls: ['./create-photo.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-create-photo',
+    templateUrl: './create-photo.component.html',
+    styleUrls: ['./create-photo.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CreatePhotoComponent implements OnInit, OnDestroy {
   addPhotoForm!: FormGroup;

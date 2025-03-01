@@ -11,10 +11,11 @@ import { Photo } from '../../../models/photo';
 import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: 'app-video-element',
-  templateUrl: './video-element.component.html',
-  styleUrls: ['./video-element.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-video-element',
+    templateUrl: './video-element.component.html',
+    styleUrls: ['./video-element.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class VideoElementComponent implements OnDestroy {
   video!: string;

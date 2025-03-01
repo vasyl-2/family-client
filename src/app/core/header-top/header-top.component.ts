@@ -40,10 +40,11 @@ import {EditChaptersComponent} from "../../shared/components/edit-chapters/edit-
 import {NgxPermissionsObject, NgxPermissionsService} from "ngx-permissions";
 
 @Component({
-  selector: 'app-header-top',
-  templateUrl: './header-top.component.html',
-  styleUrls: ['./header-top.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-header-top',
+    templateUrl: './header-top.component.html',
+    styleUrls: ['./header-top.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class HeaderTopComponent implements OnInit, OnDestroy {
   imageUrl!: string;

@@ -11,10 +11,11 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-edit-description',
-  templateUrl: './edit-description.component.html',
-  styleUrls: ['./edit-description.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-edit-description',
+    templateUrl: './edit-description.component.html',
+    styleUrls: ['./edit-description.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EditDescriptionComponent implements OnInit {
   photoForm!: FormGroup;

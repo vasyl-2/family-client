@@ -23,17 +23,18 @@ import { Permission } from '../../../models/permission';
 import { filter, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-select-permission',
-  templateUrl: './select-permission.component.html',
-  styleUrls: ['./select-permission.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: SelectPermissionComponent,
-      multi: true,
-    },
-  ],
+    selector: 'app-select-permission',
+    templateUrl: './select-permission.component.html',
+    styleUrls: ['./select-permission.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: SelectPermissionComponent,
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 export class SelectPermissionComponent
   implements OnInit, ControlValueAccessor, OnDestroy
