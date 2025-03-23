@@ -20,10 +20,10 @@ import {
 } from 'rxjs/operators';
 
 import { GalleryState } from '../../../store/reducer';
-import { editPhoto, receivePhotos } from '../../../store/action';
+import {editPhoto, receivePhotos, receiveVideos} from '../../../store/action';
 import {
   chaptersHierarchySelector,
-  photosSelector,
+  photosSelector, videosSelector,
 } from '../../../store/selectors';
 import { Photo } from '../../../models/photo';
 import { environment } from '../../../../environments/environment';
@@ -32,6 +32,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FullSizePhotoComponent } from '../full-size-photo/full-size-photo.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
+import {Video} from "../../../models/video";
 
 @Component({
     selector: 'app-photos-list',
@@ -43,6 +44,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('gallery', { static: false, read: ElementRef })
   gallery!: ElementRef;
   photos$!: Observable<Photo[] | undefined>;
+  videos$!: Observable<Video[] | undefined>;
+
   subLevels = 'Подразделы';
 
   selectChapter!: FormGroup;
@@ -150,6 +153,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     // this.subscribeToRoute();
 
     this.photos$ = this.store.pipe(select(photosSelector));
+    this.videos$ = this.store.pipe(select(videosSelector));
 
     this.subChapter$ = this.selectedId$.pipe(
       withLatestFrom(this.allChapters$),
@@ -201,34 +205,35 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.previousIdSubject.next(this.selectedIdSubject.value);
     this.selectedIdSubject.next(subChapterId);
     this.store.dispatch(receivePhotos({ chapter: subChapterId }));
+    this.store.dispatch(receiveVideos({ chapter: subChapterId }));
     setTimeout(() => this.setGalleryProps.bind(this), 5000);
   }
 
-  goBackOld() {
-    let chapterToGoBack: string | undefined;
-
-    if (this.previousIdSubject.value) {
-      chapterToGoBack = this.previousIdSubject.value;
-      if (this.stateOfChapters) {
-        const parentOfChapterToGo = this.findChapterById(
-          this.stateOfChapters,
-          chapterToGoBack,
-        )?.parent;
-        if (parentOfChapterToGo) {
-          this.previousIdSubject.next(parentOfChapterToGo);
-        }
-      }
-    } else {
-      chapterToGoBack = this.route.snapshot.params['chapter'];
-    }
-
-    if (chapterToGoBack) {
-      this.selectedIdSubject.next(chapterToGoBack);
-      this.store.dispatch(receivePhotos({ chapter: chapterToGoBack }));
-    }
-
-    setTimeout(() => this.setGalleryProps.bind(this), 5000);
-  }
+  // goBackOld() {
+  //   let chapterToGoBack: string | undefined;
+  //
+  //   if (this.previousIdSubject.value) {
+  //     chapterToGoBack = this.previousIdSubject.value;
+  //     if (this.stateOfChapters) {
+  //       const parentOfChapterToGo = this.findChapterById(
+  //         this.stateOfChapters,
+  //         chapterToGoBack,
+  //       )?.parent;
+  //       if (parentOfChapterToGo) {
+  //         this.previousIdSubject.next(parentOfChapterToGo);
+  //       }
+  //     }
+  //   } else {
+  //     chapterToGoBack = this.route.snapshot.params['chapter'];
+  //   }
+  //
+  //   if (chapterToGoBack) {
+  //     this.selectedIdSubject.next(chapterToGoBack);
+  //     this.store.dispatch(receivePhotos({ chapter: chapterToGoBack }));
+  //   }
+  //
+  //   setTimeout(() => this.setGalleryProps.bind(this), 5000);
+  // }
 
   goBack(id: string | null | undefined) {
     if (id) {
@@ -300,6 +305,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log('!!!!!___!!!!')
           this.selectedIdSubject.next(form.chapter);
           this.store.dispatch(receivePhotos({ chapter: form.chapter }));
+          this.store.dispatch(receiveVideos({ chapter: form.chapter }));
           this.highlightChapterService.chapterIdSubject.next(form.chapter);
         }
       });

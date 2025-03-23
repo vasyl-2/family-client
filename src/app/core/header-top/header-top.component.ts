@@ -78,11 +78,13 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
     this.setSubs();
 
-    this.isLoggedIn$.pipe(filter(Boolean)).subscribe((_) => {
-      this.router.navigate(['/']).then(() => {
-        // location.reload();
-      });
-    });
+    this.showAlert$.subscribe(x => console.log('SHOW______', x))
+
+    // this.isLoggedIn$.pipe(filter(Boolean)).subscribe((_) => {
+    //   this.router.navigate(['/']).then(() => {
+    //     // location.reload();
+    //   });
+    // });
   }
 
   ngOnDestroy() {
@@ -116,7 +118,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
             ),
           ),
         )
-        .subscribe((photo) =>
+        .subscribe((photo: Photo) =>
           this.store.dispatch(createPhoto({ payload: photo })),
         ),
     );
@@ -138,7 +140,8 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
         .pipe(
           filter((video: Video) => !!video),
           switchMap((video) =>
-            this.store.pipe(select(videoChaptersSelector)).pipe(
+            // this.store.pipe(select(videoChaptersSelector)).pipe(
+            this.store.pipe(select(chaptersSelector)).pipe(
               map((chapters: Chapter[]) => {
                 const currentChapter = chapters.find(
                   (c: Chapter) => c._id === video.chapter,
@@ -150,6 +153,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
           ),
         )
         .subscribe((video: Video) => {
+          console.log('TO___SEND_____', video)
           this.store.dispatch(createVideo({ payload: video }));
         }),
     );
@@ -179,7 +183,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
           switchMap((chapter: CreateChapter | undefined) =>
             this.store.pipe(select(selector)).pipe(
               map((chapters: Chapter[]) => {
-                const newChapter = { ...chapter };
+                const newChapter: CreateChapter = { ...chapter };
 
                 let fullPath: string;
                 if (newChapter.parent) {
@@ -253,7 +257,6 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
   private setSubs(): void {
     this.showAlert$ = this.store.pipe(select(alertSelector));
-
     this.isLoggedIn$ = this.store.pipe(select(isAuthenticated));
   }
 }

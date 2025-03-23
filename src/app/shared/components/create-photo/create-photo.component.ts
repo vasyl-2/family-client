@@ -38,7 +38,7 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
 
   private sub = new Subscription();
   private readonly fileSubject = new BehaviorSubject<File | undefined>(
-    undefined,
+    undefined
   );
 
   get chapterControl(): FormControl {
@@ -91,18 +91,20 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
       description = undefined,
       fullPath,
     } = this.addPhotoForm.value;
-    if (!this.fileSubject.value) {
-      alert('__________________________________');
+
+    if (this.fileSubject.value == undefined) {
+      console.log('__________________________________!!!!!');
       return;
+    } else {
+      const photo: Photo = {
+        name,
+        chapter,
+        description,
+        photo: this.fileSubject.value,
+        fullPath,
+      };
+      this.dialogRef.close(photo);
     }
-    const photo: Photo = {
-      name,
-      chapter,
-      description,
-      photo: this.fileSubject.value,
-      fullPath,
-    };
-    this.dialogRef.close(photo);
   }
 
   cancel(): void {

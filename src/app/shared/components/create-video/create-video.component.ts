@@ -60,7 +60,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
     this.initForm();
 
     this.photoChapters$ = this.store.pipe(
-      select(videoChaptersHierarchySelector),
+      select(chaptersHierarchySelector),
     );
 
     this.sub.add(
@@ -108,10 +108,10 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
       name,
       chapter,
       description,
-      photo: this.fileSubject.value,
+      video: this.fileSubject.value,
       fullPath,
     };
-    console.log('VIDEO________________', video);
+    console.log('VIDEO________________', this.addVideoForm.value);
     this.dialogRef.close(video);
   }
 

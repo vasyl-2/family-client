@@ -39,20 +39,33 @@
 
     <ng-container *ngIf="{
       sizeA: (sizeOfScale$ | async),
-      photos: photos$ | async
+      photos: photos$ | async,
+      videos: videos$ | async
     } as state;">
 <!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
       <div #gallery class="gallery">
-        <ng-container *ngIf="state.photos && !!state.photos?.length; else empty">
-          <ng-container *ngFor="let photo of state.photos">
-            <app-photo [appEnlarge]="state.sizeA"
-                       [appSetHeight]="computeGridStyle$ | async"
-                       (click)="openFullSize($event, photo!)"
-                       (updatedPhoto)="onPhotoUpdate($event)"
-                       (imageLoaded)="onImageLoad()"
-                       [imageSrc]="photo"></app-photo>
+        <ng-container *ngIf="(state.photos && !!state.photos?.length) || (state.videos && !!state.videos?.length); else empty">
+          <ng-container *ngIf="state.photos && !!state.photos?.length">
+            <ng-container *ngFor="let photo of state.photos">
+              <app-photo [appEnlarge]="state.sizeA"
+                         [appSetHeight]="computeGridStyle$ | async"
+                         (click)="openFullSize($event, photo!)"
+                         (updatedPhoto)="onPhotoUpdate($event)"
+                         (imageLoaded)="onImageLoad()"
+                         [imageSrc]="photo"></app-photo>
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="state.videos && !!state.videos?.length">
+            <ng-container *ngFor="let video of state.videos">
+              <app-video [appEnlarge]="state.sizeA"
+                         [appSetHeight]="computeGridStyle$ | async"
+                         [videoSrc]="video"></app-video>
+            </ng-container>
           </ng-container>
         </ng-container>
+
+
       </div>
 
       <ng-container *ngIf="state.photos && !!state.photos?.length">

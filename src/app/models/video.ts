@@ -5,6 +5,6 @@ export interface Video {
   chapter?: string;
   chapterName?: string;
   description?: string;
-  photo: File;
+  video: File | undefined;
   fullPath?: string;
 }

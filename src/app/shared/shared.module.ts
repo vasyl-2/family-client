@@ -24,6 +24,7 @@ import { SearchComponent } from './components/search/search.component';
 import { RangeSizeComponent } from './components/range-size/range-size.component';
 import { EditChapterComponent } from './components/edit-chapter/edit-chapter.component';
 import { EditChaptersComponent } from './components/edit-chapters/edit-chapters.component';
+import { VideoComponent } from "./components/video/video.component";
 
 const components = [
   CreatePhotoComponent,
@@ -32,6 +33,7 @@ const components = [
   TreeChaptersComponent,
   PhotosListComponent,
   PhotoComponent,
+  VideoComponent,
   EditDescriptionComponent,
   CreateVideoComponent,
   FullSizePhotoComponent,

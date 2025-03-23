@@ -21,6 +21,13 @@
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">панель управления</button>
       <span class="example-spacer"></span>
+
+      <button  *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/gallery" mat-button class="add-photo">
+        галерея *
+      </button>
+
+      <span class="example-spacer"></span>
+
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPhoto()" mat-button class="add-photo">
         добавить фото в галерею *
       </button>
@@ -35,7 +42,7 @@
 
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
-        добавить раздел в фото-галерею *
+        добавить раздел в галерею *
       </button>
 
       <span class="example-spacer"></span>
@@ -43,19 +50,16 @@
         редактировать разделы *
       </button>
 
-      <span class="example-spacer"></span>
-      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter('video')" mat-button class="add-photo">
-        добавить раздел в видео-галерею *
-      </button>
-      <span class="example-spacer"></span>
+<!--      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter('video')" mat-button class="add-photo">-->
+<!--        добавить раздел в видео-галерею *-->
+<!--      </button>-->
+<!--      <span class="example-spacer"></span>-->
 
-      <button routerLink="/gallery" mat-button class="add-photo">
-        галерея *
-      </button>
-      <span class="example-spacer"></span>
-      <button routerLink="/video" mat-button class="add-photo">
-        видео галерея *
-      </button>
+
+<!--      <span class="example-spacer"></span>-->
+<!--      <button routerLink="/video" mat-button class="add-photo">-->
+<!--        видео галерея *-->
+<!--      </button>-->
 
       <ng-container *ngIf="!(isLoggedIn$ | async)">
         <button mat-icon-button class="login" [routerLink]="['/auth', 'login']">

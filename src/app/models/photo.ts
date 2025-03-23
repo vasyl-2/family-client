@@ -5,6 +5,6 @@ export interface Photo {
   chapter?: string;
   chapterName?: string;
   description?: string;
-  photo: File;
+  photo: File | undefined;
   fullPath?: string;
 }

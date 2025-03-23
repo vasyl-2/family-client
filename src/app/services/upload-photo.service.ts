@@ -18,7 +18,7 @@ export class UploadPhotoService implements IUploadPhotoService {
   // TODO change from any !!!!
   uploadPhoto(photo: { payload: Photo }): Observable<any> {
     const url = `${environment.apiUrl}/upload-photo/uploadfile`;
-    const file = photo.payload.photo;
+    const file = photo.payload.photo!;
 
     let { name } = file;
 
@@ -33,17 +33,17 @@ export class UploadPhotoService implements IUploadPhotoService {
 
     if (photo.payload.description) {
       const { description } = photo.payload;
-      formData.append('description', description);
+      formData.append('description', description!);
     }
 
     if (photo.payload.fullPath) {
       const { fullPath } = photo.payload;
-      formData.append('fullPath', fullPath);
+      formData.append('fullPath', fullPath!);
     }
 
     if (photo.payload.chapter) {
       const { chapter } = photo.payload;
-      formData.append('chapter', chapter);
+      formData.append('chapter', chapter!);
       let headers = new HttpHeaders();
       let { chapterName, fullPath = undefined } = photo.payload;
 
@@ -73,7 +73,7 @@ export class UploadPhotoService implements IUploadPhotoService {
   // TODO change from any !!!!
   uploadVideo(video: { payload: Video }): Observable<any> {
     const url = `${environment.apiUrl}/upload-photo/uploadvideo`;
-    const file = video.payload.photo;
+    const file = video.payload.video!;
 
     let { name } = file;
 
@@ -83,22 +83,22 @@ export class UploadPhotoService implements IUploadPhotoService {
     }
 
     const formData = new FormData();
-    formData.append('photo', file, name);
+    formData.append('video', file, name);
     formData.append('name', name);
 
     if (video.payload.description) {
       const { description } = video.payload;
-      formData.append('description', description);
+      formData.append('description', description!);
     }
 
     if (video.payload.fullPath) {
       const { fullPath } = video.payload;
-      formData.append('fullPath', fullPath);
+      formData.append('fullPath', fullPath!);
     }
 
     if (video.payload.chapter) {
       const { chapter } = video.payload;
-      formData.append('chapter', chapter);
+      formData.append('chapter', chapter!);
       let headers = new HttpHeaders();
       let { chapterName, fullPath = undefined } = video.payload;
 
@@ -139,7 +139,7 @@ export class UploadPhotoService implements IUploadPhotoService {
 
   getAllVideos(chapter: string): Observable<Video[]> {
     // return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photos/${chapter}`);
-    return this.http.get<Photo[]>(
+    return this.http.get<Video[]>(
       `${environment.apiUrl}/upload-photo/videolist/${chapter}`,
     );
   }
