@@ -42,36 +42,34 @@
 
     <ng-container *ngIf="{
       sizeA: (sizeOfScale$ | async),
-      photos: photos$ | async,
-      videos: videos$ | async
+      commonList: commonList$ | async
     } as state;">
 <!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
       <div #gallery class="gallery">
-        <ng-container *ngIf="(state.photos && !!state.photos?.length) || (state.videos && !!state.videos?.length); else empty">
-          <ng-container *ngIf="state.photos && !!state.photos?.length">
-            <ng-container *ngFor="let photo of state.photos">
+        <ng-container *ngIf="(state.commonList && !!state.commonList?.length); else empty">
+          <ng-container *ngFor="let item of state.commonList">
+
+            <ng-container *ngIf="item.type === 'photo'">
               <app-photo [appEnlarge]="state.sizeA"
                          [appSetHeight]="computeGridStyle$ | async"
-                         (click)="openFullSize($event, photo!)"
+                         (click)="openFullSize($event, item!)"
                          (updatedPhoto)="onPhotoUpdate($event)"
                          (imageLoaded)="onImageLoad()"
-                         [imageSrc]="photo"></app-photo>
+                         [imageSrc]="item"></app-photo>
             </ng-container>
-          </ng-container>
-
-          <ng-container *ngIf="state.videos && !!state.videos?.length">
-            <ng-container *ngFor="let video of state.videos">
+            <ng-container *ngIf="item.type === 'video'">
               <app-video [appEnlarge]="state.sizeA"
                          [appSetHeight]="computeGridStyle$ | async"
-                         [videoSrc]="video"></app-video>
+                         [videoSrc]="item"></app-video>
             </ng-container>
-          </ng-container>
-        </ng-container>
 
+          </ng-container>
+
+        </ng-container>
 
       </div>
 
-      <ng-container *ngIf="state.photos && !!state.photos?.length">
+      <ng-container *ngIf="state.commonList && !!state.commonList?.length">
         <div class="change-size">
           <app-range-size [formControl]="size"></app-range-size>
         </div>

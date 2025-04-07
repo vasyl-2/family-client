@@ -7,5 +7,6 @@ export interface Video {
   description?: string;
   video: File | undefined;
   fullPath?: string;
-  dateOfVideo?: Date
+  dateOfVideo?: Date;
+  type?: 'video'
 }

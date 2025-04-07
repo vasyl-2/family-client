@@ -16,8 +16,10 @@ import {
   distinctUntilChanged, filter,
   map,
   shareReplay, skip, tap,
-  withLatestFrom,
+  withLatestFrom
 } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { GalleryState } from '../../../store/reducer';
 import {editPhoto, receivePhotos, receiveVideos} from '../../../store/action';
@@ -30,7 +32,7 @@ import { environment } from '../../../../environments/environment';
 import { Chapter } from '../../../models/chapter';
 import { MatDialog } from '@angular/material/dialog';
 import { FullSizePhotoComponent } from '../full-size-photo/full-size-photo.component';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
 import {Video} from "../../../models/video";
 
@@ -45,6 +47,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   gallery!: ElementRef;
   photos$!: Observable<Photo[] | undefined>;
   videos$!: Observable<Video[] | undefined>;
+
+  commonList$!: Observable<(Photo | Video)[]>;
 
   subLevels = 'Подразделы';
 
@@ -189,6 +193,33 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       console.log('SUB___CHAPTERS_____', cH)
       this.stateOfChapters = cH;
     });
+
+    this.commonList$ = combineLatest([
+      this.photos$.pipe(map((photos: Photo[] | undefined) => {
+        if (photos && photos.length) {
+          return photos.map((photo: Photo) => {
+            const newPhoto = { ...photo }
+            newPhoto.type = 'photo';
+            return newPhoto;
+          });
+        }
+        return photos;
+      })),
+      this.videos$.pipe(map((videos: Video[] | undefined) => {
+        if (videos && videos.length) {
+          return videos.map((video: Video) => {
+            const newVideo = { ...video };
+            newVideo.type = 'video';
+            return newVideo;
+          })
+        }
+        return videos;
+      }))
+    ]).pipe(
+      map(([photos, videos]) => {
+        return [...(photos ?? []), ...(videos ?? [])];
+      })
+    );
 
     this.subscribeToToggleSideBar();
   }

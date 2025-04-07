@@ -7,5 +7,6 @@ export interface Photo {
   description?: string;
   photo: File | undefined;
   fullPath?: string;
-  dateOfPhoto?: Date
+  dateOfPhoto?: Date;
+  type?: 'photo';
 }
