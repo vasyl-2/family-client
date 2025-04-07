@@ -9,6 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Subscription } from 'rxjs';
+import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 
 @Component({
     selector: 'app-edit-description',
@@ -19,6 +20,7 @@ import { Subscription } from 'rxjs';
 })
 export class EditDescriptionComponent implements OnInit {
   photoForm!: FormGroup;
+  today!: Date;
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
 
@@ -30,6 +32,10 @@ export class EditDescriptionComponent implements OnInit {
     return this.photoForm.get('nameOfPhoto') as FormControl;
   }
 
+  get dateOfPhotoControl(): FormControl {
+    return this.photoForm.get('dateOfPhoto') as FormControl;
+  }
+
   private sub!: Subscription;
 
   constructor(
@@ -38,12 +44,15 @@ export class EditDescriptionComponent implements OnInit {
     public data: {
       description: string | undefined;
       nameOfPhoto: string | undefined;
+      dateOfPhoto: Date | undefined;
     },
     private fB: FormBuilder,
   ) {}
 
   ngOnInit(): void {
     console.log('EDIT__COMPONENT____');
+    this.today = new Date(new Date().getTime());
+
     this.setPhotoForm();
 
     if (!!this.data) {
@@ -53,14 +62,24 @@ export class EditDescriptionComponent implements OnInit {
       if (this.data.nameOfPhoto) {
         this.nameOfPhotoControl.setValue(this.data.nameOfPhoto);
       }
+
+      if (this.data.dateOfPhoto) {
+        this.dateOfPhotoControl.setValue(this.data.dateOfPhoto);
+      }
     }
 
     this.subscribeToDescriptionChange();
     this.subscribeToNameOfPhotoChange();
+    this.subscribeToDateOfPhotoChange();
   }
 
   close(): void {
     this.dialogRef.close();
+  }
+
+  addEvent(type: string, event: MatDatepickerInputEvent<Date>): void {
+    console.log('TYPE____', type);
+    console.log('EVENT_____', event);
   }
 
   private subscribeToDescriptionChange(): void {
@@ -79,10 +98,19 @@ export class EditDescriptionComponent implements OnInit {
       });
   }
 
+  private subscribeToDateOfPhotoChange(): void {
+    this.sub = this.dateOfPhotoControl.valueChanges
+      .pipe()
+      .subscribe((val: Date) => {
+        this.data.dateOfPhoto = val;
+      });
+  }
+
   private setPhotoForm(): void {
     this.photoForm = this.fB.group({
       description: '',
       nameOfPhoto: '',
+      dateOfPhoto: ''
     });
   }
 }

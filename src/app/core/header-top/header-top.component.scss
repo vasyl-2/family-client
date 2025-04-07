@@ -1,8 +1,12 @@
-.mobile {
+//@use "src/assets/mixin";
+@use "../../../mixins";
+
+mat-toolbar {
   display: none;
-  @media screen and (max-width) {
-    display: block;
-  }
+}
+
+.mobile {
+  display: block;
 }
 
 //.example-spacer {
@@ -20,4 +24,14 @@
   font-size: 24px;
   color: azure;
   height: 90px;
+}
+
+
+@include mixins.large {
+  mat-toolbar {
+    display: flex;
+  }
+  .mobile {
+    display: none;
+  }
 }

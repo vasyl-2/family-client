@@ -89,6 +89,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
   uploadVideo(event: any): void {
     console.log('1_________________________');
     const file: File = event.target.files[0];
+    console.log('!!!!', event)
 
     this.fileSubject.next(file);
   }

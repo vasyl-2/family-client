@@ -5,6 +5,8 @@ import {select, Store} from "@ngrx/store";
 
 import {isAuthenticated} from "./store/selectors";
 import {GalleryState} from "./store/reducer";
+import {Title} from "@angular/platform-browser";
+
 
 @Component({
     selector: 'app-root',
@@ -14,13 +16,15 @@ import {GalleryState} from "./store/reducer";
 })
 export class AppComponent implements OnInit {
 
+  title = 'family-client';
+
   constructor(
     private router: Router,
     private store: Store<GalleryState>,
   ) {
   }
 
-  title = 'family-client';
+
 
   ngOnInit(): void {
     this.store.pipe(select(isAuthenticated))

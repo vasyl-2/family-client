@@ -1,4 +1,7 @@
-<div class="container">
+<ng-container *ngIf="showSideBar$ | async as showSideBar">
+  <button mat-button color="primary" (click)="toggleSideBar(showSideBar)">{{ showSideBar }}</button>
+</ng-container>
+<div class="container" [class.open]="(open$ | async) === true">
 
   <div class="side-bar">
     <ng-container  [formGroup]="selectChapter">

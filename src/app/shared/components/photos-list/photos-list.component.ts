@@ -15,7 +15,7 @@ import { select, Store } from '@ngrx/store';
 import {
   distinctUntilChanged, filter,
   map,
-  shareReplay, tap,
+  shareReplay, skip, tap,
   withLatestFrom,
 } from 'rxjs/operators';
 
@@ -91,6 +91,12 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private stepToGridColumns = new Map<number, number>();
 
+  openSubject = new BehaviorSubject(false);
+  open$ = this.openSubject.asObservable();
+
+  private showSideBarSubject = new BehaviorSubject<'open' | 'close'>('open');
+  showSideBar$ = this.showSideBarSubject.asObservable();
+
   constructor(
     private route: ActivatedRoute,
     private store: Store<GalleryState>,
@@ -110,6 +116,15 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
   }
+
+  toggleSideBar(state: 'open' | 'close'): void {
+    if (state === 'open') {
+      this.showSideBarSubject.next('close');
+    } else {
+      this.showSideBarSubject.next('open');
+    }
+  }
+
 
   setGalleryProps(): void {
     const computedStyles = window.getComputedStyle(this.gallery.nativeElement);
@@ -174,6 +189,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       console.log('SUB___CHAPTERS_____', cH)
       this.stateOfChapters = cH;
     });
+
+    this.subscribeToToggleSideBar();
   }
 
   ngOnDestroy(): void {
@@ -384,6 +401,13 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         prev: curr,
         step: numberSize,
       });
+    });
+  }
+
+  private subscribeToToggleSideBar(): void {
+    this.showSideBar$.pipe(skip(1)).subscribe((state: 'open' | 'close') => {
+      console.log('CHANGED_______________________________')
+      this.openSubject.next(!this.openSubject.value);
     });
   }
 }

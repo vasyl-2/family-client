@@ -13,10 +13,45 @@
   </ng-container>
 
   <ng-template #app>
-    <mat-toolbar color="primary">
-      <button mat-icon-button class="mobile">
-        <mat-icon>menu</mat-icon>
+    <button mat-icon-button  [matMenuTriggerFor]="menu" class="mobile">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">панель управления</button>
+      <span class="example-spacer"></span>
+      <button  *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/gallery" mat-button class="add-photo">
+        галерея *
       </button>
+      <span class="example-spacer"></span>
+
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPhoto()" mat-button class="add-photo">
+        добавить фото в галерею *
+      </button>
+
+      <span class="example-spacer"></span>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addVideo()" mat-button class="add-photo">
+        добавить видео в галерею *
+      </button>
+      <span class="example-spacer"></span>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addVideo()" mat-button class="add-photo">
+        добавить видео в галерею *
+      </button>
+
+      <span class="example-spacer"></span>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
+        добавить раздел в галерею *
+      </button>
+
+      <span class="example-spacer"></span>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="editChapters()" mat-button class="add-photo">
+        редактировать разделы *
+      </button>
+
+
+    </mat-menu>
+
+
+    <mat-toolbar color="primary">
       <span>: - )</span>
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">панель управления</button>

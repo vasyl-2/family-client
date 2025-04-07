@@ -24,6 +24,8 @@ import {
   chaptersSelector,
 } from '../../../store/selectors';
 import { Chapter } from '../../../models/chapter';
+import ExifReader from 'exifreader';
+
 
 @Component({
     selector: 'app-create-photo',
@@ -56,6 +58,7 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+
   ngOnInit() {
     this.initForm();
 
@@ -78,8 +81,12 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
     );
   }
   // tslint:disable-next-line:no-any
-  uploadPhoto(event: any): void {
+  async uploadPhoto(event: any): Promise<void> {
     const file: File = event.target.files[0];
+    console.log('EVENT_____', event);
+    const resp = await ExifReader.load(file)
+    console.log('EVENT_____2', resp);
+
 
     this.fileSubject.next(file);
   }

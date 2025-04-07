@@ -23,25 +23,34 @@ import { GalleryEffects } from './store/effect';
 import { InterceptorService } from './services/authorization/interceptor.service';
 import { RouterCustomSerializer } from './services/router-custom-serializer';
 import { NgxPermissionsModule } from 'ngx-permissions';
+import { MatNativeDateModule } from '@angular/material/core';
 
-@NgModule({ declarations: [AppComponent, StartComponent],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        AppRoutingModule,
-        StoreRouterConnectingModule.forRoot(),
-        NoopAnimationsModule,
-        SharedModule,
-        StoreModule.forRoot(actionReducers),
-        // StoreModule.forRoot({
-        //   gallery: mainReducer,
-        //   router: fromRouter.routerReducer
-        // }),
-        EffectsModule.forRoot([GalleryEffects]),
-        CoreModule,
-        CommonModule,
-        NgxPermissionsModule.forRoot()], providers: [
+@NgModule({
+    declarations: [AppComponent, StartComponent],
+    bootstrap: [AppComponent],
+    imports: [
+      BrowserModule,
+      AppRoutingModule,
+      StoreRouterConnectingModule.forRoot(),
+      NoopAnimationsModule,
+      SharedModule,
+      StoreModule.forRoot(actionReducers),
+      // StoreModule.forRoot({
+      //   gallery: mainReducer,
+      //   router: fromRouter.routerReducer
+      // }),
+      EffectsModule.forRoot([GalleryEffects]),
+      CoreModule,
+      CommonModule,
+      NgxPermissionsModule.forRoot(),
+      MatNativeDateModule
+    ],
+    providers: [
         { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: DIALOG_CONFIG },
         { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
         { provide: RouterStateSerializer, useClass: RouterCustomSerializer },
         provideHttpClient(withInterceptorsFromDi()),
-    ] })
+
+      ]
+})
 export class AppModule {}

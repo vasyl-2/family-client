@@ -1,7 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 @use 'assets/mixin';
+@use 'mixins';
+
 html, body { height: 100vh; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; padding: 0 }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  padding: 0;
+  background-color: #000000; // or your desired light background
+  color: #ffffff;
+}
 *, *::after, *:before {
   box-sizing: border-box;
 }
@@ -56,4 +64,18 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; padding: 0 
   .mat-mdc-dialog-actions {
     transform: translateX(-15px);
   }
+}
+.mat-mdc-menu-panel {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mat-mdc-menu-content {
+  display: flex;
+  width: 90vw;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }

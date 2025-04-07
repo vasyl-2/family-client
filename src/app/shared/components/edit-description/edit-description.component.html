@@ -10,9 +10,24 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Изменить название фоттграфии</mat-label>
+      <mat-label>Изменить название фотографии</mat-label>
       <input matInput formControlName="nameOfPhoto" />
     </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Изменить дату фотографии!</mat-label>
+    <input
+      formControlName="dateOfPhoto"
+      [max]="today"
+      matInput
+      [matDatepicker]="picker"
+      (dateInput)="addEvent('input', $event)"
+      (dateChange)="addEvent('change', $event)"
+    />
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
 
   <div mat-dialog-actions>
     <button mat-button (click)="close()">Закрити</button>

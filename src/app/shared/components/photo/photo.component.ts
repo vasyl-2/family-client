@@ -55,9 +55,10 @@ export class PhotoComponent implements OnDestroy {
     console.log('EDIT___PHOTO___');
     const description = this.photoSubject.value?.description;
     const nameOfPhoto = this.photoSubject.value?.name;
+    const dateOfPhoto = this.photoSubject.value?.dateOfPhoto;
 
     const dialogRef = this.dialog.open(EditDescriptionComponent, {
-      data: { description, nameOfPhoto },
+      data: { description, nameOfPhoto, dateOfPhoto },
       height: '300px',
     });
 
@@ -70,10 +71,12 @@ export class PhotoComponent implements OnDestroy {
               | {
                   description: string | undefined;
                   nameOfPhoto: string | undefined;
+                  dateOfPhoto: Date | undefined;
                 }
               | undefined,
           ) => {
             if (result) {
+              console.log('RES___33333', result);
               let shouldBeUpdated = false;
               if (result.description) {
                 if (this.photoSubject.value && this.photoSubject.value?.description) {
@@ -108,6 +111,22 @@ export class PhotoComponent implements OnDestroy {
                   currentValue.name = result.nameOfPhoto;
                   this.photoSubject.next(currentValue);
                   // this.photoSubject.value!.name = result.nameOfPhoto;
+                  shouldBeUpdated = true;
+                }
+              }
+
+              if (result.dateOfPhoto) {
+                if (this.photoSubject.value?.dateOfPhoto) {
+                  if (result.dateOfPhoto !== this.photoSubject.value?.dateOfPhoto) {
+                    const currentValue = { ...this.photoSubject.value! };
+                    currentValue.dateOfPhoto = result.dateOfPhoto;
+                    this.photoSubject.next(currentValue);
+                    shouldBeUpdated = true;
+                  }
+                } else {
+                  const currentValue = { ...this.photoSubject.value! };
+                  currentValue.dateOfPhoto = result.dateOfPhoto;
+                  this.photoSubject.next(currentValue);
                   shouldBeUpdated = true;
                 }
               }

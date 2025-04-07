@@ -25,6 +25,7 @@ import { RangeSizeComponent } from './components/range-size/range-size.component
 import { EditChapterComponent } from './components/edit-chapter/edit-chapter.component';
 import { EditChaptersComponent } from './components/edit-chapters/edit-chapters.component';
 import { VideoComponent } from "./components/video/video.component";
+import { AddClassDirective } from "./directives/add-class.directive";
 
 const components = [
   CreatePhotoComponent,
@@ -50,6 +51,7 @@ const directives = [
   HighlightDirective,
   SetHeightDirective,
   EnlargeDirective,
+  AddClassDirective
 ];
 @NgModule({
   declarations: [...components, ...directives,],
