@@ -24,7 +24,6 @@ import {
   chaptersSelector,
 } from '../../../store/selectors';
 import { Chapter } from '../../../models/chapter';
-import ExifReader from 'exifreader';
 
 
 @Component({
@@ -83,11 +82,6 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line:no-any
   async uploadPhoto(event: any): Promise<void> {
     const file: File = event.target.files[0];
-    console.log('EVENT_____', event);
-    const resp = await ExifReader.load(file)
-    console.log('EVENT_____2', resp);
-
-
     this.fileSubject.next(file);
   }
 
