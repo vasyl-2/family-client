@@ -1,12 +1,12 @@
 export interface Video {
   id?: string;
-  id_?: string;
+  _id?: string;
   name: string;
   chapter?: string;
   chapterName?: string;
   description?: string;
   video: File | undefined;
   fullPath?: string;
-  dateOfVideo?: Date;
+  date?: Date;
   type?: 'video'
 }

@@ -70,6 +70,11 @@ export class UploadPhotoService implements IUploadPhotoService {
     return this.http.patch(url, { photo });
   }
 
+  updateVideo(video: Partial<Video>) {
+    const url = `${environment.apiUrl}/upload-photo/updatevideo/${video._id}`;
+    return this.http.patch(url, { video });
+  }
+
   // TODO change from any !!!!
   uploadVideo(video: { payload: Video }): Observable<any> {
     const url = `${environment.apiUrl}/upload-photo/uploadvideo`;

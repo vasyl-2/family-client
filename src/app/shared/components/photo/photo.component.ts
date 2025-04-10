@@ -38,6 +38,7 @@ export class PhotoComponent implements OnDestroy {
   }
 
   @Output() updatedPhoto = new EventEmitter<Partial<Photo>>();
+  @Output() updatedVideo = new EventEmitter<Partial<Photo>>();
   @Output() imageLoaded = new EventEmitter<void>();
 
   constructor(private dialog: MatDialog) {}
@@ -55,10 +56,10 @@ export class PhotoComponent implements OnDestroy {
     console.log('EDIT___PHOTO___');
     const description = this.photoSubject.value?.description;
     const nameOfPhoto = this.photoSubject.value?.name;
-    const dateOfPhoto = this.photoSubject.value?.dateOfPhoto;
+    const date = this.photoSubject.value?.date;
 
     const dialogRef = this.dialog.open(EditDescriptionComponent, {
-      data: { description, nameOfPhoto, dateOfPhoto },
+      data: { description, nameOfPhoto, date },
       height: '300px',
     });
 
@@ -71,7 +72,7 @@ export class PhotoComponent implements OnDestroy {
               | {
                   description: string | undefined;
                   nameOfPhoto: string | undefined;
-                  dateOfPhoto: Date | undefined;
+                  date: Date | undefined;
                 }
               | undefined,
           ) => {
@@ -115,17 +116,17 @@ export class PhotoComponent implements OnDestroy {
                 }
               }
 
-              if (result.dateOfPhoto) {
-                if (this.photoSubject.value?.dateOfPhoto) {
-                  if (result.dateOfPhoto !== this.photoSubject.value?.dateOfPhoto) {
+              if (result.date) {
+                if (this.photoSubject.value?.date) {
+                  if (result.date !== this.photoSubject.value?.date) {
                     const currentValue = { ...this.photoSubject.value! };
-                    currentValue.dateOfPhoto = result.dateOfPhoto;
+                    currentValue.date = result.date;
                     this.photoSubject.next(currentValue);
                     shouldBeUpdated = true;
                   }
                 } else {
                   const currentValue = { ...this.photoSubject.value! };
-                  currentValue.dateOfPhoto = result.dateOfPhoto;
+                  currentValue.date = result.date;
                   this.photoSubject.next(currentValue);
                   shouldBeUpdated = true;
                 }

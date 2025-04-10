@@ -60,6 +60,7 @@
             <ng-container *ngIf="item.type === 'video'">
               <app-video [appEnlarge]="state.sizeA"
                          [appSetHeight]="computeGridStyle$ | async"
+                         (updatedVideo)="onVideoUpdate($event)"
                          [videoSrc]="item"></app-video>
             </ng-container>
 

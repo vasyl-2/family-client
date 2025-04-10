@@ -44,7 +44,7 @@ export class EditDescriptionComponent implements OnInit {
     public data: {
       description: string | undefined;
       nameOfPhoto: string | undefined;
-      dateOfPhoto: Date | undefined;
+      date: Date | undefined;
     },
     private fB: FormBuilder,
   ) {}
@@ -63,8 +63,8 @@ export class EditDescriptionComponent implements OnInit {
         this.nameOfPhotoControl.setValue(this.data.nameOfPhoto);
       }
 
-      if (this.data.dateOfPhoto) {
-        this.dateOfPhotoControl.setValue(this.data.dateOfPhoto);
+      if (this.data.date) {
+        this.dateOfPhotoControl.setValue(this.data.date);
       }
     }
 
@@ -102,7 +102,7 @@ export class EditDescriptionComponent implements OnInit {
     this.sub = this.dateOfPhotoControl.valueChanges
       .pipe()
       .subscribe((val: Date) => {
-        this.data.dateOfPhoto = val;
+        this.data.date = val;
       });
   }
 

@@ -22,7 +22,7 @@ import { combineLatest } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { GalleryState } from '../../../store/reducer';
-import {editPhoto, receivePhotos, receiveVideos} from '../../../store/action';
+import {editPhoto, receivePhotos, receiveVideos, editVideo} from '../../../store/action';
 import {
   chaptersHierarchySelector,
   photosSelector, videosSelector,
@@ -217,7 +217,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       }))
     ]).pipe(
       map(([photos, videos]) => {
-        return [...(photos ?? []), ...(videos ?? [])];
+        return [...(photos ?? []), ...(videos ?? [])].sort((a,b) => {
+          const aTime = a.date ? new Date(a.date).getTime() : 0;
+          const bTime = b.date ? new Date(b.date).getTime() : 0;
+          return bTime - aTime;
+        });
       })
     );
 
@@ -239,6 +243,10 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onPhotoUpdate(photo: Partial<Photo>): void {
     this.store.dispatch(editPhoto({ photo }));
+  }
+
+  onVideoUpdate(video: Partial<Video>): void {
+    this.store.dispatch(editVideo({ video }));
   }
 
   getAsset(photo: Photo): string {

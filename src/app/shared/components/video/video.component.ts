@@ -44,7 +44,7 @@ export class VideoComponent {
     this.videoString = this.getAsset(video);
   }
 
-  @Output() updatedPhoto = new EventEmitter<Partial<Video>>();
+  @Output() updatedVideo = new EventEmitter<Partial<Video>>();
   // @Output() imageLoaded = new EventEmitter<void>();
 
   constructor(
@@ -97,10 +97,12 @@ export class VideoComponent {
               | {
               description: string | undefined;
               nameOfPhoto: string | undefined;
+              date: Date | undefined;
             }
               | undefined,
           ) => {
             if (result) {
+              console.log('RESULT_44444$$$$')
               let shouldBeUpdated = false;
               if (result.description) {
                 if (this.photoSubject.value && this.photoSubject.value?.description) {
@@ -139,12 +141,28 @@ export class VideoComponent {
                 }
               }
 
+              if (result.date) {
+                if (this.photoSubject.value?.date) {
+                  if (result.date !== this.photoSubject.value?.date) {
+                    const currentValue = { ...this.photoSubject.value! };
+                    currentValue.date = result.date;
+                    this.photoSubject.next(currentValue);
+                    shouldBeUpdated = true;
+                  }
+                } else {
+                  const currentValue = { ...this.photoSubject.value! };
+                  currentValue.date = result.date;
+                  this.photoSubject.next(currentValue);
+                  shouldBeUpdated = true;
+                }
+              }
+
               if (shouldBeUpdated) {
                 console.log(
                   'TO___UPDATE_____________',
                   this.photoSubject.value,
                 );
-                this.updatedPhoto.emit(this.photoSubject.value);
+                this.updatedVideo.emit(this.photoSubject.value);
               }
             }
           },

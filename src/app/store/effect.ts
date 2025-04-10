@@ -39,7 +39,7 @@ import {
   RECEIVE_PERMISSIONS_BY_USER,
   RECEIVE_PERMISSIONS,
   gotPermissionsByUser,
-  RECEIVED_PERMISSIONS_BY_USER, gotPermissions, CREATE_ROLE, createdRole,
+  RECEIVED_PERMISSIONS_BY_USER, gotPermissions, CREATE_ROLE, createdRole, EDIT_VIDEO_ACTION, editedVideo,
 } from './action';
 
 import { CreateChapter } from '../models/dto/create-chapter';
@@ -103,6 +103,19 @@ export class GalleryEffects {
       }),
       tap((p) => console.log('EDITED___PHOTO_________', p)),
       map((photo: any) => editedPhoto({ photo })),
+      catchError(() => EMPTY),
+    ),
+  );
+
+  updateVideo$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(EDIT_VIDEO_ACTION),
+      tap((x) => console.log('UPDATE_________________VIDEO', x)),
+      exhaustMap((video: { video: Partial<Video> }) => {
+        return this.uploadService.updateVideo(video.video);
+      }),
+      tap((p) => console.log('EDITED___VIDEO_________', p)),
+      map((video: any) => editedVideo({ video })),
       catchError(() => EMPTY),
     ),
   );

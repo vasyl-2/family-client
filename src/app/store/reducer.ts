@@ -26,7 +26,8 @@ import {
   gotPermissionsByUser,
   gotPermissions,
   createdRole,
-  createdUser
+  createdUser,
+  editedVideo
 } from './action';
 import { Chapter } from '../models/chapter';
 import { Photo } from '../models/photo';
