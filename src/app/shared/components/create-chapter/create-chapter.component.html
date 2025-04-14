@@ -1,19 +1,19 @@
 <ng-container [formGroup]="addChapterForm" >
   <div class="add-photo-wrapper">
     <mat-form-field appearance="fill">
-      <mat-label>название папки, только латинскими буквами, например, LETO1990  </mat-label>
+      <mat-label>назва папки, тільки латинськими літерами, наприклад, LETO1990  </mat-label>
       <input formControlName="latinname" matInput>
-      <mat-error *ngIf="addChapterForm?.get('latinname')?.hasError('required')">название нового раздела обязательно указать</mat-error>
+      <mat-error *ngIf="addChapterForm?.get('latinname')?.hasError('required')">назву нового розділу обов'яково вказати</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>название для отображения в браузере </mat-label>
+      <mat-label>назва для відображення в браузері </mat-label>
       <input formControlName="name" matInput>
-      <mat-error *ngIf="addChapterForm?.get('name')?.hasError('required')">название нового раздела обязательно указать</mat-error>
+      <mat-error *ngIf="addChapterForm?.get('name')?.hasError('required')">назва нового раздела обязательно вказати</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Описание</mat-label>
+      <mat-label>Опис</mat-label>
       <input formControlName="description" matInput>
     </mat-form-field>
 

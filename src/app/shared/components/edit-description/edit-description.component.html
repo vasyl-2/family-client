@@ -10,12 +10,12 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Изменить название фотографии</mat-label>
+      <mat-label>Змінити назву фотографії</mat-label>
       <input matInput formControlName="nameOfPhoto" />
     </mat-form-field>
 
   <mat-form-field appearance="fill">
-    <mat-label>Изменить дату фотографии!</mat-label>
+    <mat-label>Змінити дату фотографії!</mat-label>
     <input
       formControlName="dateOfPhoto"
       [max]="today"
@@ -31,7 +31,7 @@
 
   <div mat-dialog-actions>
     <button mat-button (click)="close()">Закрити</button>
-    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Сохранить</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Зберегти</button>
   </div>
 </ng-container>
 
