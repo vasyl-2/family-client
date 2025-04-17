@@ -2,7 +2,7 @@
 
   <ng-container *ngIf="showAlert$ | async; else app">
       <div class="show-alert">
-        <p>Нужно авторизироваться</p>
+        <p>Потрібно авторизуватися</p>
 
         <button mat-icon-button class="login" [routerLink]="['auth', 'login']">
           <mat-icon>login</mat-icon>
@@ -13,11 +13,11 @@
   </ng-container>
 
   <ng-template #app>
-    <button mat-icon-button  [matMenuTriggerFor]="menu" class="mobile">
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="mobile">
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">панель управления</button>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">панель управління</button>
       <span class="example-spacer"></span>
       <button  *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/gallery" mat-button class="add-photo">
         галерея *
@@ -50,7 +50,7 @@
     <mat-toolbar color="primary">
       <span>: - )</span>
       <span class="example-spacer"></span>
-      <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">панель управления</button>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">панель управління</button>
       <span class="example-spacer"></span>
 
       <button  *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/gallery" mat-button class="add-photo">

@@ -19,6 +19,12 @@ export class SetHeightDirective implements AfterViewInit {
 
   present = new BehaviorSubject(false);
 
+  @Input() typeOfMedia: 'video' | 'img' | undefined = undefined;
+
+  typeToProp = {
+    img: 'img', video: 'video'
+  };
+
   @Input() set appSetHeight(
     grid: { rowHeight: number; rowGap: number } | undefined | null,
   ) {
@@ -35,7 +41,11 @@ export class SetHeightDirective implements AfterViewInit {
 
   ngAfterViewInit() {
     this.present.pipe(filter(Boolean)).subscribe((p) => {
-      const img = this.el.nativeElement.querySelector('img');
+      if (!this.typeOfMedia) { return; }
+
+      // const img = this.el.nativeElement.querySelector('img');
+      const img = this.el.nativeElement.querySelector(this.typeToProp[this.typeOfMedia]);
+      console.log('TYPE_______________', img);
 
       if (img) {
         const { height } = this.el.nativeElement

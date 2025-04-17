@@ -52,6 +52,7 @@
             <ng-container *ngIf="item.type === 'photo'">
               <app-photo [appEnlarge]="state.sizeA"
                          [appSetHeight]="computeGridStyle$ | async"
+                         typeOfMedia="img"
                          (click)="openFullSize($event, item!)"
                          (updatedPhoto)="onPhotoUpdate($event)"
                          (imageLoaded)="onImageLoad()"
@@ -59,6 +60,7 @@
             </ng-container>
             <ng-container *ngIf="item.type === 'video'">
               <app-video [appEnlarge]="state.sizeA"
+                         typeOfMedia="video"
                          [appSetHeight]="computeGridStyle$ | async"
                          (updatedVideo)="onVideoUpdate($event)"
                          [videoSrc]="item"></app-video>
