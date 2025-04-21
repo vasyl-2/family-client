@@ -42,7 +42,6 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
   ngOnInit(): void {
     if (this.chapters) {
       this.dataSource.data = this.chapters;
-      console.log('TREE________________________________', this.dataSource.data);
     }
   }
 
@@ -69,7 +68,6 @@ export class TreeChaptersComponent implements ControlValueAccessor, OnInit {
     !!node.children && node.children.length > 0;
 
   selectChapter(chapter: Chapter): void {
-    console.log('SELECT$D____CHAPTER___________', chapter);
     this.onChange(chapter._id!);
   }
 

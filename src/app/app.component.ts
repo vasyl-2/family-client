@@ -29,6 +29,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.store.pipe(select(isAuthenticated))
       .pipe(filter(Boolean))
-      .subscribe((_) => { console.log('AUTH_!!!!!!!!!!!'); this.router.navigate(['/']); });
+      .subscribe((_) => { this.router.navigate(['/']); });
   }
 }

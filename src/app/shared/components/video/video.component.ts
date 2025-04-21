@@ -45,7 +45,7 @@ export class VideoComponent {
   }
 
   @Output() updatedVideo = new EventEmitter<Partial<Video>>();
-  // @Output() imageLoaded = new EventEmitter<void>();
+  @Output() videoLoaded = new EventEmitter<void>();
 
   constructor(
     private dialog: MatDialog,
@@ -58,19 +58,15 @@ export class VideoComponent {
   }
 
   onLoad(e: unknown): void {
-    console.log('VE______________', e)
-    // this.imageLoaded.emit();
+    this.videoLoaded.emit();
   }
 
   onChangeFullScreen(e: HTMLVideoElement) {
-    console.log('CHANGED___FULL_SCREEN____', e);
     const fullScreenedEl = this.document.fullscreenElement;
 
     if (fullScreenedEl) {
       this.isFullScreen$.next(true);
       const isEl = this.videoRef.nativeElement === e;
-      console.log('IS_________', isEl)
-      console.log('fullScreenedEl______________', fullScreenedEl);
       this.cdr.markForCheck();
     } else {
       this.isFullScreen$.next(false);
@@ -79,7 +75,6 @@ export class VideoComponent {
 
   edit(e: MouseEvent): void {
     e.stopPropagation();
-    console.log('EDIT___PHOTO___');
     const description = this.photoSubject.value?.description;
     const nameOfPhoto = this.photoSubject.value?.name;
 

@@ -27,7 +27,6 @@ export class HighlightDirective implements OnInit {
         if (id) {
           const a = this.findElementById(this.el.nativeElement, id);
           if (a) {
-            console.log('Element found____________________________:', a);
             this.el.nativeElement
               .querySelectorAll('.mat-tree-node')
               .forEach((c: Node) => {
@@ -40,9 +39,7 @@ export class HighlightDirective implements OnInit {
               this.renderer.addClass(a, 'highlight');
             }
           } else {
-            console.log(
-              'Element not found_____________________________________',
-            );
+
           }
         }
       });

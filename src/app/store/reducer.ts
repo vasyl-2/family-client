@@ -122,37 +122,27 @@ export const mainReducer = createReducer(
   }),
 
   immerOn(gotUsers, (state: GalleryState, action): void => {
-    console.log('ACTION_____USER', action);
     state.admin.users = action.users;
-    console.log('STATE___________', state.admin);
   }),
 
   immerOn(createdRole, (state: GalleryState, action): void => {
-    console.log('ACTION_____USER', action);
     state.admin.roles?.push(action.role);
-    console.log('STATE___________', state.admin);
   }),
 
   immerOn(createdUser, (state: GalleryState, action): void => {
-    console.log('ACTION_____USER', action);
     state.admin.users?.push(action.user);
-    console.log('STATE___________', state.admin);
   }),
 
   immerOn(gotRoles, (state: GalleryState, action): void => {
-    console.log('ACTION_____', action);
     state.admin.roles = action.roles;
-    console.log('STATE___________', state.admin);
   }),
 
   immerOn(gotPermissionsByUser, (state: GalleryState, action) => {
-    console.log('ACTION_____', action);
     state.auth.user = { permissions: action.permissions };
     state.auth.permissionsLoaded = true;
   }),
 
   immerOn(gotPermissions, (state: GalleryState, action) => {
-    console.log('ACTION_____', action);
     state.admin.permissions = action.permissions;
   }),
 

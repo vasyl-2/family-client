@@ -43,14 +43,13 @@ export class SetHeightDirective implements AfterViewInit {
     this.present.pipe(filter(Boolean)).subscribe((p) => {
       if (!this.typeOfMedia) { return; }
 
-      // const img = this.el.nativeElement.querySelector('img');
       const img = this.el.nativeElement.querySelector(this.typeToProp[this.typeOfMedia]);
-      console.log('TYPE_______________', img);
 
       if (img) {
         const { height } = this.el.nativeElement
           .querySelector('.content')
           .getBoundingClientRect();
+
         const calculated =
           (height + this.grid!.rowGap) /
           (this.grid!.rowHeight + this.grid!.rowGap);

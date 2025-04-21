@@ -31,8 +31,6 @@ export class CheckTokenService {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const isNotExp = Date.now() / 1000 < payload.exp; // // jwt exp typically in seconds while Date.now() in milliseconds
 
-      console.log('PAYLOAD______________', payload);
-
       if (isNotExp) {
         this.store.dispatch(receiveChapters());
         this.store.dispatch(receiveVideoChapters());

@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -61,6 +60,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   previousId: string | undefined;
 
   private readonly loadedImagesCountSubject = new BehaviorSubject(0);
+  private readonly loadedVideosCountSubject = new BehaviorSubject(0);
 
   subChapter$!: Observable<Chapter>;
 
@@ -119,6 +119,14 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           this.setGalleryProps();
         }
       });
+
+    this.loadedVideosCountSubject
+      .pipe(withLatestFrom(this.videos$))
+      .subscribe(([count, videos]: [number, Video[] | undefined]) => {
+        if (videos && count === videos?.length) {
+          this.setGalleryProps();
+        }
+      });
   }
 
   toggleSideBar(state: 'open' | 'close'): void {
@@ -139,10 +147,14 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.computeGridStyleSubject.next({ rowGap, rowHeight });
   }
 
-  onImageLoad() {
+  onImageLoaded(): void {
     const loadedCount = this.loadedImagesCountSubject.value + 1;
-
     this.loadedImagesCountSubject.next(loadedCount);
+  }
+
+  onVideoLoaded(): void {
+    const loadedCount = this.loadedVideosCountSubject.value + 1;
+    this.loadedVideosCountSubject.next(loadedCount);
   }
 
   ngOnInit(): void {
@@ -358,7 +370,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(distinctUntilChanged())
       .subscribe((form) => {
         if (form.chapter) {
-          console.log('!!!!!___!!!!')
           this.selectedIdSubject.next(form.chapter);
           this.store.dispatch(receivePhotos({ chapter: form.chapter }));
           this.store.dispatch(receiveVideos({ chapter: form.chapter }));
@@ -445,7 +456,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscribeToToggleSideBar(): void {
     this.showSideBar$.pipe(skip(1)).subscribe((state: 'open' | 'close') => {
-      console.log('CHANGED_______________________________')
       this.openSubject.next(!this.openSubject.value);
     });
   }

@@ -55,13 +55,14 @@
                          typeOfMedia="img"
                          (click)="openFullSize($event, item!)"
                          (updatedPhoto)="onPhotoUpdate($event)"
-                         (imageLoaded)="onImageLoad()"
+                         (imageLoaded)="onImageLoaded()"
                          [imageSrc]="item"></app-photo>
             </ng-container>
             <ng-container *ngIf="item.type === 'video'">
               <app-video [appEnlarge]="state.sizeA"
                          typeOfMedia="video"
                          [appSetHeight]="computeGridStyle$ | async"
+                         (videoLoaded)="onVideoLoaded()"
                          (updatedVideo)="onVideoUpdate($event)"
                          [videoSrc]="item"></app-video>
             </ng-container>

@@ -64,21 +64,15 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.checkTokenService.checkToken();
-    this.ngxPermissionsService.permissions$.subscribe((x: NgxPermissionsObject) => {
-      console.log('PERM_________________________, x', x);
-    })
     // this.ngxPermissionsService.getPermissions()
 
     this.store
       .pipe(select(permissionsForUserLoaded))
       .subscribe((x) => {
-        console.log('LOADED_____!!!!', x);
         this.cdr.detectChanges();
       });
 
     this.setSubs();
-
-    this.showAlert$.subscribe(x => console.log('SHOW______', x))
 
     // this.isLoggedIn$.pipe(filter(Boolean)).subscribe((_) => {
     //   this.router.navigate(['/']).then(() => {

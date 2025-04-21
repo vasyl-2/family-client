@@ -237,7 +237,6 @@ export class GalleryEffects {
       ofType(RECEIVE_PERMISSIONS_BY_USER),
       exhaustMap(() => this.permissionsService.getPermissions()),
       map((permissions: Permission[]) => {
-        console.log('PERMISSIONS___BY___SERVICE____1', permissions);
         const permissionsNames = permissions.map(
           (perm: Permission) => perm.name,
         );

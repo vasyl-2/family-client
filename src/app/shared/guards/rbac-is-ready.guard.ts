@@ -18,10 +18,6 @@ export class RbacIsReadyGuard  {
   ): Observable<boolean> {
     return this.store.pipe(
       select(permissionsForUserLoaded),
-      tap((p) => console.log('WHAT__IS____1', p)),
-      tap((loaded) =>
-        console.log('WHAT__IS____2', loaded !== null && loaded !== undefined),
-      ),
       // filter((loaded: boolean) => loaded !== null && loaded !== undefined)
       filter((loaded: boolean) => loaded),
     );
