@@ -35,6 +35,7 @@ import { Video } from '../../../models/video';
 })
 export class CreateVideoComponent implements OnInit, OnDestroy {
   addVideoForm!: FormGroup;
+  today!: Date;
 
   get chapterControl(): FormControl {
     return this.addVideoForm!.get('chapter') as FormControl;
@@ -58,6 +59,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initForm();
+    this.today = new Date(new Date().getTime());
 
     this.photoChapters$ = this.store.pipe(
       select(chaptersHierarchySelector),
@@ -100,9 +102,9 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
       chapter = undefined,
       description = undefined,
       fullPath,
+      dateOfVideo = undefined
     } = this.addVideoForm.value;
     if (!this.fileSubject.value) {
-      alert('__________________________________');
       return;
     }
     const video: Video = {
@@ -111,8 +113,8 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
       description,
       video: this.fileSubject.value,
       fullPath,
+      date: dateOfVideo
     };
-    console.log('VIDEO________________', this.addVideoForm.value);
     this.dialogRef.close(video);
   }
 
@@ -149,6 +151,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
       chapter: '',
       description: '',
       fullPath: '',
+      dateOfVideo: ''
     });
   }
 }

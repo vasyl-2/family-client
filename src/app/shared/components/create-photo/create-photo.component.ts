@@ -24,6 +24,7 @@ import {
   chaptersSelector,
 } from '../../../store/selectors';
 import { Chapter } from '../../../models/chapter';
+import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 
 
 @Component({
@@ -36,6 +37,7 @@ import { Chapter } from '../../../models/chapter';
 export class CreatePhotoComponent implements OnInit, OnDestroy {
   addPhotoForm!: FormGroup;
   photoChapters$!: Observable<Chapter[]>;
+  today!: Date;
 
   private sub = new Subscription();
   private readonly fileSubject = new BehaviorSubject<File | undefined>(
@@ -57,9 +59,14 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+  addEvent(type: string, event: MatDatepickerInputEvent<Date>): void {
+    console.log('TYPE____', type);
+    console.log('EVENT_____', event);
+  }
 
   ngOnInit() {
     this.initForm();
+    this.today = new Date(new Date().getTime());
 
     this.photoChapters$ = this.store.pipe(select(chaptersHierarchySelector));
 
@@ -78,6 +85,8 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
           console.log('CURRENT___CHAPTER_____', currentChapter);
         }),
     );
+
+    // this.sub.add(this.dateOfPhotoControl.valueChanges.subscribe((date) => this.data.date = date))
   }
   // tslint:disable-next-line:no-any
   async uploadPhoto(event: any): Promise<void> {
@@ -91,10 +100,10 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
       chapter = undefined,
       description = undefined,
       fullPath,
+      dateOfPhoto = undefined
     } = this.addPhotoForm.value;
 
     if (this.fileSubject.value == undefined) {
-      console.log('__________________________________!!!!!');
       return;
     } else {
       const photo: Photo = {
@@ -103,6 +112,7 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
         description,
         photo: this.fileSubject.value,
         fullPath,
+        date: dateOfPhoto
       };
       this.dialogRef.close(photo);
     }
@@ -118,6 +128,7 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
       chapter: '',
       description: '',
       fullPath: '',
+      dateOfPhoto: ''
     });
   }
 

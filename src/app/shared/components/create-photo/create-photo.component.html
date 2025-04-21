@@ -29,6 +29,21 @@
       ></textarea>
     </mat-form-field>
 
+    <mat-form-field class='description' appearance="fill">
+      <mat-label>Дата фотографії</mat-label>
+      <input
+        formControlName="dateOfPhoto"
+        [max]="today"
+        matInput
+        [matDatepicker]="picker"
+        (dateInput)="addEvent('input', $event)"
+        (dateChange)="addEvent('change', $event)"
+      />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
 
     <div>
       <app-tree-chapters

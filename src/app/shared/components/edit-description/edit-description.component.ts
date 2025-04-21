@@ -100,7 +100,6 @@ export class EditDescriptionComponent implements OnInit {
 
   private subscribeToDateOfPhotoChange(): void {
     this.sub = this.dateOfPhotoControl.valueChanges
-      .pipe()
       .subscribe((val: Date) => {
         this.data.date = val;
       });

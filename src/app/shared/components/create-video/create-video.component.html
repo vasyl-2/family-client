@@ -7,7 +7,7 @@
     </mat-form-field>
 
     <mat-form-field class='description' appearance="fill">
-      <mat-label>краткое описание</mat-label>
+      <mat-label>кортокий опис</mat-label>
       <textarea  formControlName="description"
                  matInput
                  cdkTextareaAutosize
@@ -15,6 +15,19 @@
                  cdkAutosizeMinRows="1"
                  cdkAutosizeMaxRows="5"
       ></textarea>
+    </mat-form-field>
+
+    <mat-form-field class='description' appearance="fill">
+      <mat-label>Дата відео</mat-label>
+      <input
+        formControlName="dateOfVideo"
+        [max]="today"
+        matInput
+        [matDatepicker]="picker"
+      />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
 
