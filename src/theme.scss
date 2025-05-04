@@ -1,15 +1,15 @@
-@use "@angular/material" as mat;
-
-html {
-  color-scheme: light dark;
-  @include mat.theme((
-    color: mat.$violet-palette,
-    typography: Roboto,
-    density: 0
-  ));
-}
-
-body {
-  background: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-}
+//@use "@angular/material" as mat;
+//
+//html {
+//  color-scheme: light dark;
+//  @include mat.theme((
+//    color: mat.$violet-palette,
+//    typography: Roboto,
+//    density: 0
+//  ));
+//}
+//
+//body {
+//  background: var(--mat-sys-surface);
+//  color: var(--mat-sys-on-surface);
+//}
