@@ -27,7 +27,7 @@ import {
   gotPermissions,
   createdRole,
   createdUser,
-  editedVideo
+  editedVideo,
 } from './action';
 import { Chapter } from '../models/chapter';
 import { Photo } from '../models/photo';
@@ -146,7 +146,6 @@ export const mainReducer = createReducer(
     state.admin.permissions = action.permissions;
   }),
 
-
   // on(gotUsers, (state: GalleryState, action): GalleryState => {
   //
   //   const newAdmin = state.admin;
@@ -178,13 +177,16 @@ export const mainReducer = createReducer(
   }),
 );
 
-function buildHierarchyTree(chapters: Chapter[], parentId: string | undefined, parentTitle: string | undefined) {
+function buildHierarchyTree(
+  chapters: Chapter[],
+  parentId: string | undefined,
+  parentTitle: string | undefined,
+) {
   const tree: Chapter[] = [];
 
   chapters.forEach((item: Chapter) => {
     item.highlighted = false;
     if (item.parent === parentId) {
-
       if (parentTitle) {
         item.parentTitle = parentTitle;
       }

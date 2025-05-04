@@ -14,11 +14,11 @@ import { Role } from '../../../models/role';
 import { areEqualFlatArrays } from '../../../utils/arrays/are-equal';
 
 @Component({
-    selector: 'app-users',
-    templateUrl: './users.component.html',
-    styleUrls: ['./users.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class UsersComponent {
   @Input() users!: User[] | null | undefined;

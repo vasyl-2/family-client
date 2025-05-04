@@ -8,5 +8,5 @@ export interface Video {
   video: File | undefined;
   fullPath?: string;
   date?: Date;
-  type?: 'video'
+  type?: 'video';
 }

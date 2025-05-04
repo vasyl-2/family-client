@@ -21,8 +21,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatSliderModule } from '@angular/material/slider';
-import { MatButtonToggleModule } from "@angular/material/button-toggle";
-import { DragDropModule } from "@angular/cdk/drag-drop";
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const modules = [
   MatSlideToggleModule,
@@ -47,16 +47,12 @@ const modules = [
   MatTreeModule,
   MatSliderModule,
   MatButtonToggleModule,
-  DragDropModule
+  DragDropModule,
 ];
 
 @NgModule({
   declarations: [],
-  imports: [
-    ...modules
-  ],
-  exports: [
-    ...modules
-  ],
+  imports: [...modules],
+  exports: [...modules],
 })
 export class MaterialModule {}

@@ -10,7 +10,7 @@ import { permissionsForUserLoaded } from '../../store/selectors';
 @Injectable({
   providedIn: 'root',
 })
-export class RbacIsReadyGuard  {
+export class RbacIsReadyGuard {
   constructor(private store: Store<GalleryState>) {}
   canActivate(
     route: ActivatedRouteSnapshot,

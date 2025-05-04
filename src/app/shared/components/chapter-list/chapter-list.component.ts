@@ -13,15 +13,15 @@ import { select, Store } from '@ngrx/store';
 import { GalleryState } from '../../../store/reducer';
 import {
   chaptersHierarchySelector,
-  videoChaptersHierarchySelector
+  videoChaptersHierarchySelector,
 } from '../../../store/selectors';
 
 @Component({
-    selector: 'app-chapter-list',
-    templateUrl: './chapter-list.component.html',
-    styleUrls: ['./chapter-list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-chapter-list',
+  templateUrl: './chapter-list.component.html',
+  styleUrls: ['./chapter-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ChapterListComponent implements OnInit {
   @Input() type: 'photo' | 'video' = 'photo';
@@ -35,7 +35,9 @@ export class ChapterListComponent implements OnInit {
 
   ngOnInit(): void {
     const selector =
-      this.type === 'photo' ? chaptersHierarchySelector : videoChaptersHierarchySelector;
+      this.type === 'photo'
+        ? chaptersHierarchySelector
+        : videoChaptersHierarchySelector;
     this.photoChapters$ = this.store.pipe(select(selector));
 
     this.photoChapters$.subscribe((c) =>

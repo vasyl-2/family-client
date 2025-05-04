@@ -12,21 +12,24 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { UploadPhotoService } from '../../services/upload-photo.service';
 import { GalleryState } from '../../store/reducer';
 import { receivePhotos } from '../../store/action';
-import {chaptersHierarchySelector, photosSelector} from '../../store/selectors';
+import {
+  chaptersHierarchySelector,
+  photosSelector,
+} from '../../store/selectors';
 import { Photo } from '../../models/photo';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
-import {Chapter} from "../../models/chapter";
-import {distinctUntilChanged, map, shareReplay} from "rxjs/operators";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import { Chapter } from '../../models/chapter';
+import { distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
-    selector: 'app-gallery',
-    templateUrl: './gallery.component.html',
-    styleUrls: ['./gallery.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-gallery',
+  templateUrl: './gallery.component.html',
+  styleUrls: ['./gallery.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class GalleryComponent implements OnInit, OnDestroy {
   // image!: SafeUrl;
@@ -76,15 +79,21 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.initForm();
     this.subscribeToChapterChanged();
     this.photos$ = this.store.pipe(select(photosSelector)).pipe();
-    this.photoChapters$ = this.store.pipe(select(chaptersHierarchySelector)).pipe(
-      map((chapters: Chapter[]) => {
-        console.log('CURRENT____YYYY', chapters, this.route.snapshot.params['chapter']);
-        // const related = chapters.filter((c: Chapter) => c._id === this.route.snapshot.params['chapter']);
-        // return related;
-        return chapters;
-      }),
-      shareReplay(1)
-    );
+    this.photoChapters$ = this.store
+      .pipe(select(chaptersHierarchySelector))
+      .pipe(
+        map((chapters: Chapter[]) => {
+          console.log(
+            'CURRENT____YYYY',
+            chapters,
+            this.route.snapshot.params['chapter'],
+          );
+          // const related = chapters.filter((c: Chapter) => c._id === this.route.snapshot.params['chapter']);
+          // return related;
+          return chapters;
+        }),
+        shareReplay(1),
+      );
   }
 
   ngOnDestroy() {
@@ -103,10 +112,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToChapterChanged(): void {
-    this.chapterSelectedControl.valueChanges.pipe(
-      distinctUntilChanged()
-    ).subscribe((chapter: string) => {
-      console.log('VALUE__________', chapter);
-    })
+    this.chapterSelectedControl.valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe((chapter: string) => {
+        console.log('VALUE__________', chapter);
+      });
   }
 }

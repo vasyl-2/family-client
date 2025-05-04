@@ -7,18 +7,18 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-    selector: 'app-range-size',
-    templateUrl: './range-size.component.html',
-    styleUrls: ['./range-size.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => RangeSizeComponent),
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'app-range-size',
+  templateUrl: './range-size.component.html',
+  styleUrls: ['./range-size.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => RangeSizeComponent),
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class RangeSizeComponent implements ControlValueAccessor, OnInit {
   onChange!: (size: number) => any;

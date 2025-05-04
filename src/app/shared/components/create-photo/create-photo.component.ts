@@ -24,15 +24,14 @@ import {
   chaptersSelector,
 } from '../../../store/selectors';
 import { Chapter } from '../../../models/chapter';
-import {MatDatepickerInputEvent} from "@angular/material/datepicker";
-
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
-    selector: 'app-create-photo',
-    templateUrl: './create-photo.component.html',
-    styleUrls: ['./create-photo.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-create-photo',
+  templateUrl: './create-photo.component.html',
+  styleUrls: ['./create-photo.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CreatePhotoComponent implements OnInit, OnDestroy {
   addPhotoForm!: FormGroup;
@@ -41,7 +40,7 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
 
   private sub = new Subscription();
   private readonly fileSubject = new BehaviorSubject<File | undefined>(
-    undefined
+    undefined,
   );
 
   get chapterControl(): FormControl {
@@ -100,7 +99,7 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
       chapter = undefined,
       description = undefined,
       fullPath,
-      dateOfPhoto = undefined
+      dateOfPhoto = undefined,
     } = this.addPhotoForm.value;
 
     if (this.fileSubject.value == undefined) {
@@ -112,7 +111,7 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
         description,
         photo: this.fileSubject.value,
         fullPath,
-        date: dateOfPhoto
+        date: dateOfPhoto,
       };
       this.dialogRef.close(photo);
     }
@@ -128,7 +127,7 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
       chapter: '',
       description: '',
       fullPath: '',
-      dateOfPhoto: ''
+      dateOfPhoto: '',
     });
   }
 

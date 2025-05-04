@@ -17,7 +17,7 @@ export class UploadPhotoService implements IUploadPhotoService {
 
   // TODO change from any !!!!
   uploadPhoto(photo: { payload: Photo }): Observable<any> {
-    console.log('TO__SAVE____', photo.payload)
+    console.log('TO__SAVE____', photo.payload);
     const url = `${environment.apiUrl}/upload-photo/uploadfile`;
     const file = photo.payload.photo!;
 

@@ -15,11 +15,11 @@ import { rolesSelector } from '../../../store/selectors';
 import { rolesValidator } from '../../validators/roles-validator';
 
 @Component({
-    selector: 'app-create-user',
-    templateUrl: './create-user.component.html',
-    styleUrls: ['./create-user.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-create-user',
+  templateUrl: './create-user.component.html',
+  styleUrls: ['./create-user.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CreateUserComponent implements OnInit {
   user!: FormGroup;
@@ -54,7 +54,10 @@ export class CreateUserComponent implements OnInit {
     this.user = this.fB.group({
       email: this.fB.control('', [Validators.required]),
       role: this.fB.control('', [rolesValidator()]),
-      password: this.fB.control('', [Validators.required, Validators.minLength(8)]),
+      password: this.fB.control('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
     });
   }
 }

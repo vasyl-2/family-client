@@ -32,14 +32,14 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
 
 @Component({
-    selector: 'app-video-list',
-    templateUrl: './video-list.component.html',
-    styleUrls: ['./video-list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-video-list',
+  templateUrl: './video-list.component.html',
+  styleUrls: ['./video-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class VideoListComponent {
-// export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
+  // export class VideoListComponent implements OnInit, OnDestroy, AfterViewInit {
   // @ViewChild('gallery', { static: false, read: ElementRef })
   // gallery!: ElementRef;
   // videos$!: Observable<Video[] | undefined>;

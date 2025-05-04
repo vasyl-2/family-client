@@ -30,7 +30,9 @@ export class AuthorizationService {
         tap((resp: { access_token: string }) =>
           console.log('resp.access_token_________________', resp.access_token),
         ),
-        tap((resp: { access_token: string }) => localStorage.setItem('auth', resp.access_token)), // !!!!! here we set token
+        tap((resp: { access_token: string }) =>
+          localStorage.setItem('auth', resp.access_token),
+        ), // !!!!! here we set token
         tap((resp) => this.store.dispatch(authenticateAlertHide())),
         tap((resp) =>
           this.store.dispatch(authenticated({ token: resp.access_token })),

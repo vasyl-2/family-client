@@ -27,11 +27,11 @@ import { Photo } from '../../../models/photo';
 import { Video } from '../../../models/video';
 
 @Component({
-    selector: 'app-create-video',
-    templateUrl: './create-video.component.html',
-    styleUrls: ['./create-video.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-create-video',
+  templateUrl: './create-video.component.html',
+  styleUrls: ['./create-video.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CreateVideoComponent implements OnInit, OnDestroy {
   addVideoForm!: FormGroup;
@@ -61,9 +61,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
     this.initForm();
     this.today = new Date(new Date().getTime());
 
-    this.photoChapters$ = this.store.pipe(
-      select(chaptersHierarchySelector),
-    );
+    this.photoChapters$ = this.store.pipe(select(chaptersHierarchySelector));
 
     this.sub.add(
       this.chapterControl.valueChanges
@@ -91,7 +89,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
   uploadVideo(event: any): void {
     console.log('1_________________________');
     const file: File = event.target.files[0];
-    console.log('!!!!', event)
+    console.log('!!!!', event);
 
     this.fileSubject.next(file);
   }
@@ -102,7 +100,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
       chapter = undefined,
       description = undefined,
       fullPath,
-      dateOfVideo = undefined
+      dateOfVideo = undefined,
     } = this.addVideoForm.value;
     if (!this.fileSubject.value) {
       return;
@@ -113,7 +111,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
       description,
       video: this.fileSubject.value,
       fullPath,
-      date: dateOfVideo
+      date: dateOfVideo,
     };
     this.dialogRef.close(video);
   }
@@ -151,7 +149,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
       chapter: '',
       description: '',
       fullPath: '',
-      dateOfVideo: ''
+      dateOfVideo: '',
     });
   }
 }

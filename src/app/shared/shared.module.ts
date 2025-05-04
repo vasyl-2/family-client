@@ -24,8 +24,8 @@ import { SearchComponent } from './components/search/search.component';
 import { RangeSizeComponent } from './components/range-size/range-size.component';
 import { EditChapterComponent } from './components/edit-chapter/edit-chapter.component';
 import { EditChaptersComponent } from './components/edit-chapters/edit-chapters.component';
-import { VideoComponent } from "./components/video/video.component";
-import { AddClassDirective } from "./directives/add-class.directive";
+import { VideoComponent } from './components/video/video.component';
+import { AddClassDirective } from './directives/add-class.directive';
 
 const components = [
   CreatePhotoComponent,
@@ -43,7 +43,7 @@ const components = [
   SearchComponent,
   RangeSizeComponent,
   EditChapterComponent,
-  EditChaptersComponent
+  EditChaptersComponent,
 ];
 
 const directives = [
@@ -51,10 +51,10 @@ const directives = [
   HighlightDirective,
   SetHeightDirective,
   EnlargeDirective,
-  AddClassDirective
+  AddClassDirective,
 ];
 @NgModule({
-  declarations: [...components, ...directives,],
+  declarations: [...components, ...directives],
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [
     MaterialModule,

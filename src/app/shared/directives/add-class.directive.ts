@@ -1,13 +1,11 @@
-import {Directive, ElementRef, HostListener, Renderer2} from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[appAddClass]',
-  standalone: false
+  standalone: false,
 })
-export class AddClassDirective  {
-  constructor(
-    private el: ElementRef,
-  ) { }
+export class AddClassDirective {
+  constructor(private el: ElementRef) {}
 
   @HostListener('click', ['$event'])
   onClick(event: PointerEvent) {

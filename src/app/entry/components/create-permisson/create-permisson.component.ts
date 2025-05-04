@@ -9,11 +9,11 @@ import { Role } from '../../../models/role';
 import { Permission } from '../../../models/permission';
 
 @Component({
-    selector: 'app-create-permisson',
-    templateUrl: './create-permisson.component.html',
-    styleUrls: ['./create-permisson.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-create-permisson',
+  templateUrl: './create-permisson.component.html',
+  styleUrls: ['./create-permisson.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CreatePermissonComponent implements OnInit {
   permission!: FormGroup;

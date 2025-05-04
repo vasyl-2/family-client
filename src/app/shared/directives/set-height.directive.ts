@@ -9,8 +9,8 @@ import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Directive({
-    selector: '[appSetHeight]',
-    standalone: false
+  selector: '[appSetHeight]',
+  standalone: false,
 })
 export class SetHeightDirective implements AfterViewInit {
   rowSpan!: any;
@@ -22,7 +22,8 @@ export class SetHeightDirective implements AfterViewInit {
   @Input() typeOfMedia: 'video' | 'img' | undefined = undefined;
 
   typeToProp = {
-    img: 'img', video: 'video'
+    img: 'img',
+    video: 'video',
   };
 
   @Input() set appSetHeight(
@@ -41,9 +42,13 @@ export class SetHeightDirective implements AfterViewInit {
 
   ngAfterViewInit() {
     this.present.pipe(filter(Boolean)).subscribe((p) => {
-      if (!this.typeOfMedia) { return; }
+      if (!this.typeOfMedia) {
+        return;
+      }
 
-      const img = this.el.nativeElement.querySelector(this.typeToProp[this.typeOfMedia]);
+      const img = this.el.nativeElement.querySelector(
+        this.typeToProp[this.typeOfMedia],
+      );
 
       if (img) {
         const { height } = this.el.nativeElement

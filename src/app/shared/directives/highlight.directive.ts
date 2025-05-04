@@ -10,8 +10,8 @@ import { HighlightChapterService } from '../../services/highlight-chapter.servic
 import { filter } from 'rxjs/operators';
 
 @Directive({
-    selector: '[appHighlight]',
-    standalone: false
+  selector: '[appHighlight]',
+  standalone: false,
 })
 export class HighlightDirective implements OnInit {
   constructor(
@@ -39,7 +39,6 @@ export class HighlightDirective implements OnInit {
               this.renderer.addClass(a, 'highlight');
             }
           } else {
-
           }
         }
       });

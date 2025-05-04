@@ -43,6 +43,7 @@
     align-items: center;
     justify-content: center;
     font-size: 32px;
+    color: rgb(107, 113, 127);
   }
 
 
@@ -115,4 +116,11 @@ h2, h3 {
   .sub-chapters {
 
   }
+}
+
+.switch-media {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
 }

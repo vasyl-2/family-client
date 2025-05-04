@@ -1,19 +1,21 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   Inject,
   Input,
-  Output, signal,
-  ViewChild
+  Output,
+  signal,
+  ViewChild,
 } from '@angular/core';
-import {Photo} from "../../../models/photo";
-import {BehaviorSubject, Subscription} from "rxjs";
-import {MatDialog} from "@angular/material/dialog";
-import {EditDescriptionComponent} from "../edit-description/edit-description.component";
-import {environment} from "../../../../environments/environment";
-import {Video} from "../../../models/video";
+import { Photo } from '../../../models/photo';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { EditDescriptionComponent } from '../edit-description/edit-description.component';
+import { environment } from '../../../../environments/environment';
+import { Video } from '../../../models/video';
 import { DOCUMENT } from '@angular/common';
 
 @Component({
@@ -21,7 +23,7 @@ import { DOCUMENT } from '@angular/common';
   templateUrl: './video.component.html',
   styleUrls: ['./video.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false
+  standalone: false,
 })
 export class VideoComponent {
   @ViewChild('videoEl', { static: false, read: ElementRef })
@@ -45,12 +47,12 @@ export class VideoComponent {
   }
 
   @Output() updatedVideo = new EventEmitter<Partial<Video>>();
-  @Output() videoLoaded = new EventEmitter<void>();
+  @Output() videoLoaded = new EventEmitter<any>();
 
   constructor(
     private dialog: MatDialog,
     @Inject(DOCUMENT) private document: Document,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnDestroy(): void {
@@ -58,7 +60,7 @@ export class VideoComponent {
   }
 
   onLoad(e: unknown): void {
-    this.videoLoaded.emit();
+    this.videoLoaded.emit(e);
   }
 
   onChangeFullScreen(e: HTMLVideoElement) {
@@ -84,84 +86,82 @@ export class VideoComponent {
     });
 
     this.sub.add(
-      dialogRef
-        .afterClosed()
-        .subscribe(
-          (
-            result:
-              | {
-              description: string | undefined;
-              nameOfPhoto: string | undefined;
-              date: Date | undefined;
-            }
-              | undefined,
-          ) => {
-            if (result) {
-              console.log('RESULT_44444$$$$')
-              let shouldBeUpdated = false;
-              if (result.description) {
-                if (this.photoSubject.value && this.photoSubject.value?.description) {
-                  if (
-                    result.description !== this.photoSubject.value?.description
-                  ) {
-                    const currentValue = { ...this.photoSubject.value } as Video;
-                    currentValue.description = result.description;
-                    this.photoSubject.next(currentValue);
-                    shouldBeUpdated = true;
-                  }
-                } else {
-                  const currentValue = { ...this.photoSubject.value! };
+      dialogRef.afterClosed().subscribe(
+        (
+          result:
+            | {
+                description: string | undefined;
+                nameOfPhoto: string | undefined;
+                date: Date | undefined;
+              }
+            | undefined,
+        ) => {
+          if (result) {
+            console.log('RESULT_44444$$$$');
+            let shouldBeUpdated = false;
+            if (result.description) {
+              if (
+                this.photoSubject.value &&
+                this.photoSubject.value?.description
+              ) {
+                if (
+                  result.description !== this.photoSubject.value?.description
+                ) {
+                  const currentValue = { ...this.photoSubject.value } as Video;
                   currentValue.description = result.description;
                   this.photoSubject.next(currentValue);
                   shouldBeUpdated = true;
                 }
+              } else {
+                const currentValue = { ...this.photoSubject.value! };
+                currentValue.description = result.description;
+                this.photoSubject.next(currentValue);
+                shouldBeUpdated = true;
               }
+            }
 
-              if (result.nameOfPhoto) {
-                if (this.photoSubject.value?.name) {
-                  if (result.nameOfPhoto !== this.photoSubject.value?.name) {
-                    const currentValue = { ...this.photoSubject.value! };
-                    currentValue.name = result.nameOfPhoto;
-                    this.photoSubject.next(currentValue);
-
-                    // this.photoSubject.value.name = result.nameOfPhoto;
-                    shouldBeUpdated = true;
-                  }
-                } else {
+            if (result.nameOfPhoto) {
+              if (this.photoSubject.value?.name) {
+                if (result.nameOfPhoto !== this.photoSubject.value?.name) {
                   const currentValue = { ...this.photoSubject.value! };
                   currentValue.name = result.nameOfPhoto;
                   this.photoSubject.next(currentValue);
-                  // this.photoSubject.value!.name = result.nameOfPhoto;
+
+                  // this.photoSubject.value.name = result.nameOfPhoto;
                   shouldBeUpdated = true;
                 }
+              } else {
+                const currentValue = { ...this.photoSubject.value! };
+                currentValue.name = result.nameOfPhoto;
+                this.photoSubject.next(currentValue);
+                // this.photoSubject.value!.name = result.nameOfPhoto;
+                shouldBeUpdated = true;
               }
+            }
 
-              if (result.date) {
-                if (this.photoSubject.value?.date) {
-                  if (result.date !== this.photoSubject.value?.date) {
-                    const currentValue = { ...this.photoSubject.value! };
-                    currentValue.date = result.date;
-                    this.photoSubject.next(currentValue);
-                    shouldBeUpdated = true;
-                  }
-                } else {
+            if (result.date) {
+              if (this.photoSubject.value?.date) {
+                if (result.date !== this.photoSubject.value?.date) {
                   const currentValue = { ...this.photoSubject.value! };
                   currentValue.date = result.date;
                   this.photoSubject.next(currentValue);
                   shouldBeUpdated = true;
                 }
-              }
-
-              if (shouldBeUpdated) {
-                console.log(
-                  'TO___UPDATE_____________',
-                  this.photoSubject.value,
-                );
-                this.updatedVideo.emit(this.photoSubject.value);
+              } else {
+                const currentValue = { ...this.photoSubject.value! };
+                currentValue.date = result.date;
+                this.photoSubject.next(currentValue);
+                shouldBeUpdated = true;
               }
             }
-          },
-        ),
+
+            if (shouldBeUpdated) {
+              console.log('TO___UPDATE_____________', this.photoSubject.value);
+              this.updatedVideo.emit(this.photoSubject.value);
+            }
+          }
+        },
+      ),
     );
   }
 

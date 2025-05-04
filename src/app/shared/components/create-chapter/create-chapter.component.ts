@@ -13,11 +13,11 @@ import {
 import { CreateChapter } from '../../../models/dto/create-chapter';
 
 @Component({
-    selector: 'app-create-chapter',
-    templateUrl: './create-chapter.component.html',
-    styleUrls: ['./create-chapter.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-create-chapter',
+  templateUrl: './create-chapter.component.html',
+  styleUrls: ['./create-chapter.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CreateChapterComponent {
   addChapterForm!: FormGroup;
@@ -64,7 +64,7 @@ export class CreateChapterComponent {
       name: ['', Validators.required],
       latinname: ['', Validators.required],
       parentChapter: '',
-      description: ''
+      description: '',
     });
   }
 }

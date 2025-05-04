@@ -39,7 +39,12 @@ import {
   RECEIVE_PERMISSIONS_BY_USER,
   RECEIVE_PERMISSIONS,
   gotPermissionsByUser,
-  RECEIVED_PERMISSIONS_BY_USER, gotPermissions, CREATE_ROLE, createdRole, EDIT_VIDEO_ACTION, editedVideo,
+  RECEIVED_PERMISSIONS_BY_USER,
+  gotPermissions,
+  CREATE_ROLE,
+  createdRole,
+  EDIT_VIDEO_ACTION,
+  editedVideo,
 } from './action';
 
 import { CreateChapter } from '../models/dto/create-chapter';
@@ -56,7 +61,7 @@ import { Role } from '../models/role';
 import { PermissionsService } from '../services/permissions.service';
 import { Permission } from '../models/permission';
 import { NgxPermissionsService } from 'ngx-permissions';
-import {PermissionService} from "../entry/services/permission.service";
+import { PermissionService } from '../entry/services/permission.service';
 
 @Injectable()
 export class GalleryEffects {

@@ -9,7 +9,6 @@
     </ng-container>
   </div>
 
-
   <div class="content">
 <!--    <div>-->
 <!--      <app-search [formControl]="search"></app-search>-->
@@ -42,14 +41,20 @@
 
     <ng-container *ngIf="{
       sizeA: (sizeOfScale$ | async),
-      commonList: commonList$ | async
+      commonList: commonList$ | async,
+      mediaTypeA: showMediaType$ | async
     } as state;">
 <!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
+      <div class="switch-media">
+        <button mat-button color="primary" (click)="showMedia('all')">фото і відео</button>
+        <button mat-button color="primary" (click)="showMedia('photo')">вибрати фото</button>
+        <button mat-button color="primary" (click)="showMedia('video')">вибрати відео</button>
+      </div>
       <div #gallery class="gallery">
         <ng-container *ngIf="(state.commonList && !!state.commonList?.length); else empty">
           <ng-container *ngFor="let item of state.commonList">
 
-            <ng-container *ngIf="item.type === 'photo'">
+            <ng-container *ngIf="item.type === 'photo' && (state.mediaTypeA === 'photo' || state.mediaTypeA === 'all')">
               <app-photo [appEnlarge]="state.sizeA"
                          [appSetHeight]="computeGridStyle$ | async"
                          typeOfMedia="img"
@@ -58,11 +63,11 @@
                          (imageLoaded)="onImageLoaded()"
                          [imageSrc]="item"></app-photo>
             </ng-container>
-            <ng-container *ngIf="item.type === 'video'">
+            <ng-container *ngIf="(item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')">
               <app-video [appEnlarge]="state.sizeA"
                          typeOfMedia="video"
                          [appSetHeight]="computeGridStyle$ | async"
-                         (videoLoaded)="onVideoLoaded()"
+                         (videoLoaded)="onVideoLoaded($event)"
                          (updatedVideo)="onVideoUpdate($event)"
                          [videoSrc]="item"></app-video>
             </ng-container>

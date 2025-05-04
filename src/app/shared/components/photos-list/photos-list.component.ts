@@ -12,19 +12,28 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import {
-  distinctUntilChanged, filter,
+  distinctUntilChanged,
+  filter,
   map,
-  shareReplay, skip, tap,
-  withLatestFrom
+  shareReplay,
+  skip,
+  tap,
+  withLatestFrom,
 } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { GalleryState } from '../../../store/reducer';
-import {editPhoto, receivePhotos, receiveVideos, editVideo} from '../../../store/action';
+import {
+  editPhoto,
+  receivePhotos,
+  receiveVideos,
+  editVideo,
+} from '../../../store/action';
 import {
   chaptersHierarchySelector,
-  photosSelector, videosSelector,
+  photosSelector,
+  videosSelector,
 } from '../../../store/selectors';
 import { Photo } from '../../../models/photo';
 import { environment } from '../../../../environments/environment';
@@ -33,13 +42,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { FullSizePhotoComponent } from '../full-size-photo/full-size-photo.component';
 
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
-import {Video} from "../../../models/video";
+import { Video } from '../../../models/video';
 
 @Component({
-    selector: 'app-photos-list',
-    templateUrl: './photos-list.component.html',
-    styleUrls: ['./photos-list.component.scss'],
-    standalone: false
+  selector: 'app-photos-list',
+  templateUrl: './photos-list.component.html',
+  styleUrls: ['./photos-list.component.scss'],
+  standalone: false,
 })
 export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('gallery', { static: false, read: ElementRef })
@@ -101,6 +110,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private showSideBarSubject = new BehaviorSubject<'open' | 'close'>('open');
   showSideBar$ = this.showSideBarSubject.asObservable();
 
+  private readonly showMediaSubject = new BehaviorSubject<'all' | 'video' | 'photo'>('all');
+  showMediaType$ = this.showMediaSubject.asObservable();
+
   constructor(
     private route: ActivatedRoute,
     private store: Store<GalleryState>,
@@ -137,7 +149,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-
   setGalleryProps(): void {
     const computedStyles = window.getComputedStyle(this.gallery.nativeElement);
     const rowHeight = parseInt(
@@ -152,31 +163,29 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadedImagesCountSubject.next(loadedCount);
   }
 
-  onVideoLoaded(): void {
+  onVideoLoaded(e: any): void {
     const loadedCount = this.loadedVideosCountSubject.value + 1;
     this.loadedVideosCountSubject.next(loadedCount);
   }
 
   ngOnInit(): void {
-    this.allChapters$ = this.store
-      .pipe(select(chaptersHierarchySelector))
-      .pipe(
-        tap((cHs: Chapter[]) => {
-          // if (cHs.length) {
-          //   this.selectedIdSubject.next(cHs[0]._id!);
-          //   this.store.dispatch(
-          //     receivePhotos({ chapter: cHs[0]._id! }),
-          //   );
-          // }
-        }),
-        map((chapters: Chapter[]) => {
-          // console.log('CURRENT____', chapters, this.route.snapshot.params['chapter']);
-          // const related = chapters.filter((c: Chapter) => c._id === this.route.snapshot.params['chapter']);
-          // return related;
-          return chapters;
-        }),
-        shareReplay(1)
-      );
+    this.allChapters$ = this.store.pipe(select(chaptersHierarchySelector)).pipe(
+      tap((cHs: Chapter[]) => {
+        // if (cHs.length) {
+        //   this.selectedIdSubject.next(cHs[0]._id!);
+        //   this.store.dispatch(
+        //     receivePhotos({ chapter: cHs[0]._id! }),
+        //   );
+        // }
+      }),
+      map((chapters: Chapter[]) => {
+        // console.log('CURRENT____', chapters, this.route.snapshot.params['chapter']);
+        // const related = chapters.filter((c: Chapter) => c._id === this.route.snapshot.params['chapter']);
+        // return related;
+        return chapters;
+      }),
+      shareReplay(1),
+    );
 
     this.initForm();
     this.subscribeToChapterChanges();
@@ -202,39 +211,43 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     );
 
     this.subChapter$.subscribe((cH: Chapter) => {
-      console.log('SUB___CHAPTERS_____', cH)
+      console.log('SUB___CHAPTERS_____', cH);
       this.stateOfChapters = cH;
     });
 
     this.commonList$ = combineLatest([
-      this.photos$.pipe(map((photos: Photo[] | undefined) => {
-        if (photos && photos.length) {
-          return photos.map((photo: Photo) => {
-            const newPhoto = { ...photo }
-            newPhoto.type = 'photo';
-            return newPhoto;
-          });
-        }
-        return photos;
-      })),
-      this.videos$.pipe(map((videos: Video[] | undefined) => {
-        if (videos && videos.length) {
-          return videos.map((video: Video) => {
-            const newVideo = { ...video };
-            newVideo.type = 'video';
-            return newVideo;
-          })
-        }
-        return videos;
-      }))
+      this.photos$.pipe(
+        map((photos: Photo[] | undefined) => {
+          if (photos && photos.length) {
+            return photos.map((photo: Photo) => {
+              const newPhoto = { ...photo };
+              newPhoto.type = 'photo';
+              return newPhoto;
+            });
+          }
+          return photos;
+        }),
+      ),
+      this.videos$.pipe(
+        map((videos: Video[] | undefined) => {
+          if (videos && videos.length) {
+            return videos.map((video: Video) => {
+              const newVideo = { ...video };
+              newVideo.type = 'video';
+              return newVideo;
+            });
+          }
+          return videos;
+        }),
+      ),
     ]).pipe(
       map(([photos, videos]) => {
-        return [...(photos ?? []), ...(videos ?? [])].sort((a,b) => {
+        return [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
           const aTime = a.date ? new Date(a.date).getTime() : 0;
           const bTime = b.date ? new Date(b.date).getTime() : 0;
           return bTime - aTime;
         });
-      })
+      }),
     );
 
     this.subscribeToToggleSideBar();
@@ -310,6 +323,12 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectChapter.get('chapter')?.setValue(id);
   }
 
+  showMedia(media: 'photo' | 'video' | 'all') {
+    this.loadedImagesCountSubject.next(0);
+    this.loadedVideosCountSubject.next(0);
+    this.showMediaSubject.next(media);
+  }
+
   private findChapterById(
     rootChapter: Chapter,
     targetChapterId: string,
@@ -370,6 +389,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(distinctUntilChanged())
       .subscribe((form) => {
         if (form.chapter) {
+          this.loadedImagesCountSubject.next(0);
+          this.loadedVideosCountSubject.next(0);
+          console.log('CHAPTER____', form.chapter)
           this.selectedIdSubject.next(form.chapter);
           this.store.dispatch(receivePhotos({ chapter: form.chapter }));
           this.store.dispatch(receiveVideos({ chapter: form.chapter }));

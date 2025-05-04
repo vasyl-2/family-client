@@ -21,11 +21,11 @@ import { rolesSelector } from '../../../store/selectors';
 import { rolesValidator } from '../../validators/roles-validator';
 
 @Component({
-    selector: 'app-user-edit',
-    templateUrl: './user-edit.component.html',
-    styleUrls: ['./user-edit.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-user-edit',
+  templateUrl: './user-edit.component.html',
+  styleUrls: ['./user-edit.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class UserEditComponent implements OnInit {
   user!: FormGroup;
@@ -95,7 +95,10 @@ export class UserEditComponent implements OnInit {
     this.user = this.fB.group({
       email: this.fB.control('', [Validators.required]),
       role: this.fB.control(this.data?.role || [], [rolesValidator()]),
-      password: this.fB.control('', [Validators.required, Validators.minLength(8)]),
+      password: this.fB.control('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
     });
   }
 }

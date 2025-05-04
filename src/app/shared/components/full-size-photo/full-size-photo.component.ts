@@ -11,11 +11,11 @@ import { environment } from '../../../../environments/environment';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-    selector: 'app-full-size-photo',
-    templateUrl: './full-size-photo.component.html',
-    styleUrls: ['./full-size-photo.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-full-size-photo',
+  templateUrl: './full-size-photo.component.html',
+  styleUrls: ['./full-size-photo.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class FullSizePhotoComponent implements OnInit {
   // @Input() image!: Photo;

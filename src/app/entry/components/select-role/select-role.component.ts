@@ -25,18 +25,18 @@ import { filter, tap } from 'rxjs/operators';
 import { Role } from '../../../models/role';
 
 @Component({
-    selector: 'app-select-role',
-    templateUrl: './select-role.component.html',
-    styleUrls: ['./select-role.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: SelectRoleComponent,
-            multi: true,
-        },
-    ],
-    standalone: false
+  selector: 'app-select-role',
+  templateUrl: './select-role.component.html',
+  styleUrls: ['./select-role.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: SelectRoleComponent,
+      multi: true,
+    },
+  ],
+  standalone: false,
 })
 export class SelectRoleComponent
   implements OnInit, ControlValueAccessor, OnDestroy

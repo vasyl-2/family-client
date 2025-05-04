@@ -1,10 +1,24 @@
-import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
-import {FlatTreeControl, NestedTreeControl} from "@angular/cdk/tree";
-import {MatTreeFlatDataSource, MatTreeFlattener, MatTreeNestedDataSource} from "@angular/material/tree";
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Input,
+  OnInit,
+} from '@angular/core';
+import {
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
+import { FlatTreeControl, NestedTreeControl } from '@angular/cdk/tree';
+import {
+  MatTreeFlatDataSource,
+  MatTreeFlattener,
+  MatTreeNestedDataSource,
+} from '@angular/material/tree';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { Chapter } from "../../../models/chapter";
+import { Chapter } from '../../../models/chapter';
 
 interface ExampleFlatNode {
   expandable: boolean;
@@ -13,13 +27,12 @@ interface ExampleFlatNode {
 }
 
 @Component({
-    selector: 'app-edit-chapter',
-    templateUrl: './edit-chapter.component.html',
-    styleUrls: ['./edit-chapter.component.scss'],
-    standalone: false
+  selector: 'app-edit-chapter',
+  templateUrl: './edit-chapter.component.html',
+  styleUrls: ['./edit-chapter.component.scss'],
+  standalone: false,
 })
 export class EditChapterComponent implements OnInit {
-
   // private _transformer = (node: Chapter, level: number) => {
   //   return {
   //     expandable: !!node.children && node.children.length > 0,
@@ -46,8 +59,7 @@ export class EditChapterComponent implements OnInit {
   constructor(
     // private chapters: Chapter[],
     @Inject(MAT_DIALOG_DATA) public chapters: Chapter[],
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     if (this.chapters) {
@@ -57,10 +69,10 @@ export class EditChapterComponent implements OnInit {
   }
 
   // hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
-  hasChild = (_: number, node: Chapter) => !!node.children && node.children.length > 0;
+  hasChild = (_: number, node: Chapter) =>
+    !!node.children && node.children.length > 0;
 
   drop(event: CdkDragDrop<Chapter[]>) {
-
     const draggedNode = event.item.data;
 
     let updatedTree = [...this.dataSource.data];
@@ -69,7 +81,9 @@ export class EditChapterComponent implements OnInit {
     const newParentArray = event.container.data;
 
     // Since newParentArray is of type Chapter[], pick the parent node
-    const newParent = newParentArray.find(parent => parent.children) || { children: [] };  // Safeguard if no parent found
+    const newParent = newParentArray.find((parent) => parent.children) || {
+      children: [],
+    }; // Safeguard if no parent found
 
     // Add to the new parent
     updatedTree = this.addNode(updatedTree, newParent, draggedNode);
@@ -84,7 +98,7 @@ export class EditChapterComponent implements OnInit {
 
     // let previousParent = this.findParent(this.dataSource.data, draggedNode);
     // const newParent = event.container.data;
-    console.log('NRW__PARET____', newParent)
+    console.log('NRW__PARET____', newParent);
 
     // if (previousParent) {
     //   // Remove from old parent
@@ -108,30 +122,31 @@ export class EditChapterComponent implements OnInit {
   }
 
   addNode(tree: Chapter[], parentNode: Chapter, newNode: Chapter): Chapter[] {
-    return tree.map(node => {
+    return tree.map((node) => {
       if (node === parentNode) {
         return {
           ...node,
-          children: [...(node.children || []), newNode] // ✅ Add without modifying original
+          children: [...(node.children || []), newNode], // ✅ Add without modifying original
         };
       } else if (node.children) {
         return {
           ...node,
-          children: this.addNode(node.children, parentNode, newNode) // Recursive call
+          children: this.addNode(node.children, parentNode, newNode), // Recursive call
         };
       }
       return node;
     });
   }
 
-
   removeNode(tree: Chapter[], targetNode: Chapter): Chapter[] {
     return tree
-      .map(node => ({
+      .map((node) => ({
         ...node,
-        children: node.children ? this.removeNode(node.children, targetNode) : []
+        children: node.children
+          ? this.removeNode(node.children, targetNode)
+          : [],
       }))
-      .filter(node => node !== targetNode); // Remove if it's the node itself
+      .filter((node) => node !== targetNode); // Remove if it's the node itself
   }
 
   /** Recursively finds the parent of a node */

@@ -1,28 +1,37 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
-import {select, Store} from "@ngrx/store";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {distinctUntilChanged, filter, switchMap, withLatestFrom} from "rxjs/operators";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  distinctUntilChanged,
+  filter,
+  switchMap,
+  withLatestFrom,
+} from 'rxjs/operators';
 
-import {Chapter} from "../../../models/chapter";
-import {GalleryState} from "../../../store/reducer";
-import {chaptersHierarchySelector} from "../../../store/selectors";
-import {MatDialog} from "@angular/material/dialog";
-import {EditChapterComponent} from "../edit-chapter/edit-chapter.component";
+import { Chapter } from '../../../models/chapter';
+import { GalleryState } from '../../../store/reducer';
+import { chaptersHierarchySelector } from '../../../store/selectors';
+import { MatDialog } from '@angular/material/dialog';
+import { EditChapterComponent } from '../edit-chapter/edit-chapter.component';
 
 @Component({
-    selector: 'app-edit-chapters',
-    templateUrl: './edit-chapters.component.html',
-    styleUrls: ['./edit-chapters.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-edit-chapters',
+  templateUrl: './edit-chapters.component.html',
+  styleUrls: ['./edit-chapters.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
-export class EditChaptersComponent implements OnInit{
-
+export class EditChaptersComponent implements OnInit {
   photoChapters$!: Observable<Chapter[]>;
   editChapterGroup!: FormGroup;
   editChapters = new FormControl<string>('', { nonNullable: true });
-  toEditChapter = new FormControl<boolean>(false,  { nonNullable: true });
+  toEditChapter = new FormControl<boolean>(false, { nonNullable: true });
 
   toEditSelectedChapter$!: Observable<boolean>;
 
@@ -32,9 +41,8 @@ export class EditChaptersComponent implements OnInit{
   constructor(
     private store: Store<GalleryState>,
     private fromBuilder: FormBuilder,
-    private dialog: MatDialog
-  ) {
-  }
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit(): void {
     this.photoChapters$ = this.store.pipe(select(chaptersHierarchySelector));
@@ -44,7 +52,6 @@ export class EditChaptersComponent implements OnInit{
   }
 
   getNameOfChapterById(id: string): string {
-
     return '';
   }
 
@@ -57,15 +64,17 @@ export class EditChaptersComponent implements OnInit{
         filter(([toEdit, c]: [boolean, string]) => !!c),
         withLatestFrom(this.photoChapters$),
       )
-      .subscribe(([[toEdit, ch], allChapters]: [[boolean, string], Chapter[]]) => {
-        console.log('CHAPTER__TO__EDIT____!!!!', ch);
-        // this.selectedChapterToEdit.next(ch);
-        const chapter = this.findChapterById(allChapters, ch);
-        console.log('CHAPTER___TOO_PASS_____!!!,', chapter)
-        const dialogRef = this.dialog.open(EditChapterComponent, {
-          data: [chapter]
-        })
-    })
+      .subscribe(
+        ([[toEdit, ch], allChapters]: [[boolean, string], Chapter[]]) => {
+          console.log('CHAPTER__TO__EDIT____!!!!', ch);
+          // this.selectedChapterToEdit.next(ch);
+          const chapter = this.findChapterById(allChapters, ch);
+          console.log('CHAPTER___TOO_PASS_____!!!,', chapter);
+          const dialogRef = this.dialog.open(EditChapterComponent, {
+            data: [chapter],
+          });
+        },
+      );
   }
 
   private initForm(): void {
@@ -94,5 +103,4 @@ export class EditChaptersComponent implements OnInit{
 
     return undefined;
   }
-
 }

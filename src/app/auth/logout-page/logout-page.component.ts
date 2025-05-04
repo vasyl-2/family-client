@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-    selector: 'app-logout-page',
-    templateUrl: './logout-page.component.html',
-    styleUrls: ['./logout-page.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-logout-page',
+  templateUrl: './logout-page.component.html',
+  styleUrls: ['./logout-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LogoutPageComponent {
   constructor() {}

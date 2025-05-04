@@ -6,20 +6,27 @@ import {
   getUsers,
   createUser,
   editUser,
-  getRoles, getPermissions, createRole, editRole,
+  getRoles,
+  getPermissions,
+  createRole,
+  editRole,
 } from '../../../store/action';
 import { GalleryState } from '../../../store/reducer';
-import {permissionsSelector, rolesSelector, usersSelector} from '../../../store/selectors';
+import {
+  permissionsSelector,
+  rolesSelector,
+  usersSelector,
+} from '../../../store/selectors';
 import { User } from '../../../models/user';
 import { Role } from '../../../models/role';
-import {Permission} from "../../../models/permission";
+import { Permission } from '../../../models/permission';
 
 @Component({
-    selector: 'app-entry',
-    templateUrl: './entry.component.html',
-    styleUrls: ['./entry.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-entry',
+  templateUrl: './entry.component.html',
+  styleUrls: ['./entry.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class EntryComponent implements OnInit {
   users$!: Observable<User[] | undefined>;

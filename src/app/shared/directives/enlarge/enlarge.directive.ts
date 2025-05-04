@@ -1,8 +1,8 @@
 import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
 
 @Directive({
-    selector: '[appEnlarge]',
-    standalone: false
+  selector: '[appEnlarge]',
+  standalone: false,
 })
 export class EnlargeDirective {
   @Input() set appEnlarge(

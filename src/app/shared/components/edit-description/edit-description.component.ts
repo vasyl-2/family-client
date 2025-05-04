@@ -9,14 +9,14 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Subscription } from 'rxjs';
-import {MatDatepickerInputEvent} from "@angular/material/datepicker";
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
-    selector: 'app-edit-description',
-    templateUrl: './edit-description.component.html',
-    styleUrls: ['./edit-description.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-edit-description',
+  templateUrl: './edit-description.component.html',
+  styleUrls: ['./edit-description.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class EditDescriptionComponent implements OnInit {
   photoForm!: FormGroup;
@@ -99,17 +99,16 @@ export class EditDescriptionComponent implements OnInit {
   }
 
   private subscribeToDateOfPhotoChange(): void {
-    this.sub = this.dateOfPhotoControl.valueChanges
-      .subscribe((val: Date) => {
-        this.data.date = val;
-      });
+    this.sub = this.dateOfPhotoControl.valueChanges.subscribe((val: Date) => {
+      this.data.date = val;
+    });
   }
 
   private setPhotoForm(): void {
     this.photoForm = this.fB.group({
       description: '',
       nameOfPhoto: '',
-      dateOfPhoto: ''
+      dateOfPhoto: '',
     });
   }
 }

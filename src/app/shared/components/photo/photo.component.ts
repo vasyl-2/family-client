@@ -14,11 +14,11 @@ import { environment } from '../../../../environments/environment';
 import { EditDescriptionComponent } from '../edit-description/edit-description.component';
 
 @Component({
-    selector: 'app-photo',
-    templateUrl: './photo.component.html',
-    styleUrls: ['./photo.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-photo',
+  templateUrl: './photo.component.html',
+  styleUrls: ['./photo.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class PhotoComponent implements OnDestroy {
   image!: string;
@@ -64,84 +64,82 @@ export class PhotoComponent implements OnDestroy {
     });
 
     this.sub.add(
-      dialogRef
-        .afterClosed()
-        .subscribe(
-          (
-            result:
-              | {
-                  description: string | undefined;
-                  nameOfPhoto: string | undefined;
-                  date: Date | undefined;
-                }
-              | undefined,
-          ) => {
-            if (result) {
-              console.log('RES___33333', result);
-              let shouldBeUpdated = false;
-              if (result.description) {
-                if (this.photoSubject.value && this.photoSubject.value?.description) {
-                  if (
-                    result.description !== this.photoSubject.value?.description
-                  ) {
-                    const currentValue = { ...this.photoSubject.value } as Photo;
-                    currentValue.description = result.description;
-                    this.photoSubject.next(currentValue);
-                    shouldBeUpdated = true;
-                  }
-                } else {
-                  const currentValue = { ...this.photoSubject.value! };
+      dialogRef.afterClosed().subscribe(
+        (
+          result:
+            | {
+                description: string | undefined;
+                nameOfPhoto: string | undefined;
+                date: Date | undefined;
+              }
+            | undefined,
+        ) => {
+          if (result) {
+            console.log('RES___33333', result);
+            let shouldBeUpdated = false;
+            if (result.description) {
+              if (
+                this.photoSubject.value &&
+                this.photoSubject.value?.description
+              ) {
+                if (
+                  result.description !== this.photoSubject.value?.description
+                ) {
+                  const currentValue = { ...this.photoSubject.value } as Photo;
                   currentValue.description = result.description;
                   this.photoSubject.next(currentValue);
                   shouldBeUpdated = true;
                 }
+              } else {
+                const currentValue = { ...this.photoSubject.value! };
+                currentValue.description = result.description;
+                this.photoSubject.next(currentValue);
+                shouldBeUpdated = true;
               }
+            }
 
-              if (result.nameOfPhoto) {
-                if (this.photoSubject.value?.name) {
-                  if (result.nameOfPhoto !== this.photoSubject.value?.name) {
-                    const currentValue = { ...this.photoSubject.value! };
-                    currentValue.name = result.nameOfPhoto;
-                    this.photoSubject.next(currentValue);
-
-                    // this.photoSubject.value.name = result.nameOfPhoto;
-                    shouldBeUpdated = true;
-                  }
-                } else {
+            if (result.nameOfPhoto) {
+              if (this.photoSubject.value?.name) {
+                if (result.nameOfPhoto !== this.photoSubject.value?.name) {
                   const currentValue = { ...this.photoSubject.value! };
                   currentValue.name = result.nameOfPhoto;
                   this.photoSubject.next(currentValue);
-                  // this.photoSubject.value!.name = result.nameOfPhoto;
+
+                  // this.photoSubject.value.name = result.nameOfPhoto;
                   shouldBeUpdated = true;
                 }
+              } else {
+                const currentValue = { ...this.photoSubject.value! };
+                currentValue.name = result.nameOfPhoto;
+                this.photoSubject.next(currentValue);
+                // this.photoSubject.value!.name = result.nameOfPhoto;
+                shouldBeUpdated = true;
               }
+            }
 
-              if (result.date) {
-                if (this.photoSubject.value?.date) {
-                  if (result.date !== this.photoSubject.value?.date) {
-                    const currentValue = { ...this.photoSubject.value! };
-                    currentValue.date = result.date;
-                    this.photoSubject.next(currentValue);
-                    shouldBeUpdated = true;
-                  }
-                } else {
+            if (result.date) {
+              if (this.photoSubject.value?.date) {
+                if (result.date !== this.photoSubject.value?.date) {
                   const currentValue = { ...this.photoSubject.value! };
                   currentValue.date = result.date;
                   this.photoSubject.next(currentValue);
                   shouldBeUpdated = true;
                 }
-              }
-
-              if (shouldBeUpdated) {
-                console.log(
-                  'TO___UPDATE_____________',
-                  this.photoSubject.value,
-                );
-                this.updatedPhoto.emit(this.photoSubject.value);
+              } else {
+                const currentValue = { ...this.photoSubject.value! };
+                currentValue.date = result.date;
+                this.photoSubject.next(currentValue);
+                shouldBeUpdated = true;
               }
             }
-          },
-        ),
+
+            if (shouldBeUpdated) {
+              console.log('TO___UPDATE_____________', this.photoSubject.value);
+              this.updatedPhoto.emit(this.photoSubject.value);
+            }
+          }
+        },
+      ),
     );
   }
 

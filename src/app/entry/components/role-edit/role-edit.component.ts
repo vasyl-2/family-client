@@ -1,19 +1,24 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Observable} from "rxjs";
-import {Permission} from "../../../models/permission";
-import {MatDialogRef} from "@angular/material/dialog";
-import {select, Store} from "@ngrx/store";
-import {GalleryState} from "../../../store/reducer";
-import {permissionsSelector} from "../../../store/selectors";
-import {rolesValidator} from "../../validators/roles-validator";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { Observable } from 'rxjs';
+import { Permission } from '../../../models/permission';
+import { MatDialogRef } from '@angular/material/dialog';
+import { select, Store } from '@ngrx/store';
+import { GalleryState } from '../../../store/reducer';
+import { permissionsSelector } from '../../../store/selectors';
+import { rolesValidator } from '../../validators/roles-validator';
 
 @Component({
-    selector: 'app-role-edit',
-    templateUrl: './role-edit.component.html',
-    styleUrls: ['./role-edit.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-role-edit',
+  templateUrl: './role-edit.component.html',
+  styleUrls: ['./role-edit.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class RoleEditComponent {
   role!: FormGroup;

@@ -2,7 +2,8 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  OnDestroy, ChangeDetectorRef,
+  OnDestroy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
@@ -36,15 +37,15 @@ import { CreateChapter } from '../../models/dto/create-chapter';
 import { CreateVideoComponent } from '../../shared/components/create-video/create-video.component';
 import { Video } from '../../models/video';
 import { CheckTokenService } from '../../services/authorization/check-token.service';
-import {EditChaptersComponent} from "../../shared/components/edit-chapters/edit-chapters.component";
-import {NgxPermissionsObject, NgxPermissionsService} from "ngx-permissions";
+import { EditChaptersComponent } from '../../shared/components/edit-chapters/edit-chapters.component';
+import { NgxPermissionsObject, NgxPermissionsService } from 'ngx-permissions';
 
 @Component({
-    selector: 'app-header-top',
-    templateUrl: './header-top.component.html',
-    styleUrls: ['./header-top.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-header-top',
+  templateUrl: './header-top.component.html',
+  styleUrls: ['./header-top.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class HeaderTopComponent implements OnInit, OnDestroy {
   imageUrl!: string;
@@ -66,11 +67,9 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     this.checkTokenService.checkToken();
     // this.ngxPermissionsService.getPermissions()
 
-    this.store
-      .pipe(select(permissionsForUserLoaded))
-      .subscribe((x) => {
-        this.cdr.detectChanges();
-      });
+    this.store.pipe(select(permissionsForUserLoaded)).subscribe((x) => {
+      this.cdr.detectChanges();
+    });
 
     this.setSubs();
 
@@ -147,15 +146,14 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
           ),
         )
         .subscribe((video: Video) => {
-          console.log('TO___SEND_____', video)
+          console.log('TO___SEND_____', video);
           this.store.dispatch(createVideo({ payload: video }));
         }),
     );
   }
 
   editChapters(): void {
-    this.dialog
-      .open(EditChaptersComponent);
+    this.dialog.open(EditChaptersComponent);
   }
 
   addChapter(type: 'photo' | 'video' = 'photo'): void {

@@ -8,9 +8,8 @@ describe('VideoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VideoComponent]
-    })
-    .compileComponents();
+      imports: [VideoComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(VideoComponent);
     component = fixture.componentInstance;
