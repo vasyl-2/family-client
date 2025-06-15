@@ -1,15 +1,39 @@
-//@use "@angular/material" as mat;
+//@use "material" as mat;
+//@include mat.core();
 //
-//html {
-//  color-scheme: light dark;
-//  @include mat.theme((
-//    color: mat.$violet-palette,
-//    typography: Roboto,
-//    density: 0
+//
+//
+//$my-theme: mat.define-theme((
+//  color: (
+//    theme-type: light,
+//    primary: mat.$m2-pink-palette,
+//    tertiary: mat.$m2-pink-palette,
+//  ),
+//  typography: mat.define-typography(),
+//  density: 0
+//));
+//
+//:root {
+//  @include mat.tabs-overrides((
+//    active-focus-indicator-color: orange,
+//    active-focus-label-text-color: red,
+//    active-label-text-color: red,
+//    inactive-focus-label-text-color: red,
+//    background-color: red,
+//    label-text-font: 12px
 //  ));
 //}
 //
-//body {
-//  background: var(--mat-sys-surface);
-//  color: var(--mat-sys-on-surface);
-//}
+////html {
+////  color-scheme: light dark;
+////  @include mat.theme((
+////    color: mat.$violet-palette,
+////    typography: Roboto,
+////    density: 0
+////  ));
+////}
+//
+////body {
+////  background: var(--mat-sys-surface);
+////  color: var(--mat-sys-on-surface);
+////}

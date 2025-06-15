@@ -21,8 +21,14 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules/@angular"
+              ]
+            },
             "outputPath": {
-              "base": "dist/family-client"
+              "base": "dist/family-client",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [

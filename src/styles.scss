@@ -89,3 +89,17 @@ body {
   color: rgb(107, 113, 127) !important;
 }
 
+mat-card {
+  background-color:  #000000 !important;
+}
+
+.mdc-tab__text-label {
+  color: rgb(242, 242, 242) !important;
+}
+.mdc-tab--active.mdc-tab-indicator--active {
+
+  .mdc-tab__text-label {
+    color: rgb(63, 81, 181) !important;
+  }
+}
+
