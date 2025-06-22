@@ -73,11 +73,12 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
     this.setSubs();
 
-    // this.isLoggedIn$.pipe(filter(Boolean)).subscribe((_) => {
-    //   this.router.navigate(['/']).then(() => {
-    //     // location.reload();
-    //   });
-    // });
+    this.isLoggedIn$.pipe(filter(Boolean)).subscribe((_) => {
+      this.checkTokenService.checkToken(); // !!!!!! CHECK !!!!!!!!!! ****** TODO
+      // this.router.navigate(['/']).then(() => {
+      //   location.reload();
+      // });
+    });
   }
 
   ngOnDestroy() {
