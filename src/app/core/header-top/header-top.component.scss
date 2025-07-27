@@ -26,6 +26,9 @@ mat-toolbar {
   height: 90px;
 }
 
+.go-to-start {
+  cursor: pointer;
+}
 
 @include mixins.large {
   mat-toolbar {

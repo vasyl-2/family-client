@@ -39,6 +39,7 @@ import { Video } from '../../models/video';
 import { CheckTokenService } from '../../services/authorization/check-token.service';
 import { EditChaptersComponent } from '../../shared/components/edit-chapters/edit-chapters.component';
 import { NgxPermissionsObject, NgxPermissionsService } from 'ngx-permissions';
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-header-top',
@@ -61,6 +62,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     public checkTokenService: CheckTokenService,
     private cdr: ChangeDetectorRef,
     private ngxPermissionsService: NgxPermissionsService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -155,6 +157,10 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
 
   editChapters(): void {
     this.dialog.open(EditChaptersComponent);
+  }
+
+  setLang(lang: 'uk' | 'de' | 'es' | 'en'): void {
+    this.translate.setDefaultLang(lang);
   }
 
   addChapter(type: 'photo' | 'video' = 'photo'): void {

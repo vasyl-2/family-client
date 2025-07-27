@@ -23,7 +23,6 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-
 const modules = [
   MatSlideToggleModule,
   MatTabsModule,

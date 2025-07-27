@@ -46,7 +46,7 @@ export class CheckTokenService {
         };
 
         if (payload.email) {
-          if (payload.email === 'Alex') {
+          if (payload.email === 'admin2') {
             item.isAdmin = true;
           } else {
             item.isAdmin = false;

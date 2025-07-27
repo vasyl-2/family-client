@@ -1,7 +1,7 @@
 <mat-tab-group>
   <mat-tab>
     <ng-template mat-tab-label>
-      Пользователи
+      {{ 'users' | translate | uppercase  }}
     </ng-template>
     <app-users (user)="onUpdate($event)"
                (newUser)="createUser($event)"
@@ -11,7 +11,7 @@
 
   <mat-tab>
     <ng-template mat-tab-label>
-      Роли
+      {{ 'roles' | translate | uppercase  }}
     </ng-template>
     <app-roles
       [roles]="roles$ | async"
@@ -22,7 +22,7 @@
 
   <mat-tab>
     <ng-template mat-tab-label>
-      Разрешения
+      {{ 'permissions' | translate | uppercase  }}
     </ng-template>
 
     <app-permissions [permissions]="permissions$ | async"></app-permissions>

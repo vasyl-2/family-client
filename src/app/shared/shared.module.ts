@@ -26,6 +26,8 @@ import { EditChapterComponent } from './components/edit-chapter/edit-chapter.com
 import { EditChaptersComponent } from './components/edit-chapters/edit-chapters.component';
 import { VideoComponent } from './components/video/video.component';
 import { AddClassDirective } from './directives/add-class.directive';
+import {ViewSettingsComponent} from "./components/view-settings/view-settings.component";
+import {TranslateModule} from "@ngx-translate/core";
 
 const components = [
   CreatePhotoComponent,
@@ -44,6 +46,7 @@ const components = [
   RangeSizeComponent,
   EditChapterComponent,
   EditChaptersComponent,
+  ViewSettingsComponent
 ];
 
 const directives = [
@@ -55,7 +58,7 @@ const directives = [
 ];
 @NgModule({
   declarations: [...components, ...directives],
-  imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, TranslateModule],
   exports: [
     MaterialModule,
     FormsModule,

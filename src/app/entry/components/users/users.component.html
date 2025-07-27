@@ -1,7 +1,7 @@
 <div class="users">
-  <h1>список пользователей</h1>
+  <h1>{{ 'list_of_users' | translate }}</h1>
   <div class="add-user">
-    <button  mat-button (click)="addUser()">Добавить пользователя</button>
+    <button  mat-button (click)="addUser()">{{ 'to_add_user' | translate }}</button>
   </div>
   <div class="user-list">
     <ng-container *ngFor="let user of users">

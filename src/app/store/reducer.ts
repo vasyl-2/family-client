@@ -36,6 +36,7 @@ import { RouterStateUrl } from '../models/router-utils';
 import { User } from '../models/user';
 import { Role } from '../models/role';
 import { Permission } from '../models/permission';
+import {ViewSettings} from "../models/view-settings";
 
 export interface GalleryState {
   chapters: Chapter[];
@@ -60,6 +61,7 @@ export interface GalleryState {
     roles?: Role[];
     permissions?: Permission[];
   };
+  viewSettings: ViewSettings;
 }
 
 export const GALLERY_INIT_STATE: GalleryState = {
@@ -73,6 +75,10 @@ export const GALLERY_INIT_STATE: GalleryState = {
     permissionsLoaded: false,
   },
   admin: {},
+  viewSettings: {
+    sorted: 'desc',
+    paramSOrtBy: 'date'
+  }
 };
 
 export const mainReducer = createReducer(

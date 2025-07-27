@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {importProvidersFrom, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { StoreModule } from '@ngrx/store';
 import {
@@ -7,7 +7,7 @@ import {
 } from '@ngrx/router-store';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  HTTP_INTERCEPTORS,
+  HTTP_INTERCEPTORS, HttpClient,
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
@@ -28,6 +28,12 @@ import { InterceptorService } from './services/authorization/interceptor.service
 import { RouterCustomSerializer } from './services/router-custom-serializer';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { MatNativeDateModule } from '@angular/material/core';
+import {TranslateLoader, TranslateModule, TranslateService} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+
+const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) =>
+  new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+
 
 @NgModule({
   declarations: [AppComponent, StartComponent],
@@ -47,13 +53,26 @@ import { MatNativeDateModule } from '@angular/material/core';
     CoreModule,
     CommonModule,
     NgxPermissionsModule.forRoot(),
-    MatNativeDateModule
+    MatNativeDateModule,
+    TranslateModule
   ],
   providers: [
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: DIALOG_CONFIG },
     { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     { provide: RouterStateSerializer, useClass: RouterCustomSerializer },
     provideHttpClient(withInterceptorsFromDi()),
+    importProvidersFrom([TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpLoaderFactory,
+        deps: [HttpClient],
+      },
+    })])
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private translate: TranslateService) {
+    this.translate.addLangs(['de', 'en', 'uk', 'es']);
+    this.translate.setDefaultLang('uk');
+  }
+}

@@ -18,8 +18,10 @@
       <div class="header"><h2>{{ subChapter.nameForUI }}</h2></div>
 
       <ng-container *ngIf="subChapter.parent">
-        <button mat-button color="primary" (click)="goBack(subChapter.parent)">вернуться к разделу {{ subChapter.parentTitle }}</button>
+        <button mat-button color="primary" (click)="goBack(subChapter.parent)">{{ 'return_to_chapter' | translate }} {{ subChapter.parentTitle }}</button>
       </ng-container>
+
+      <app-view-settings></app-view-settings>
 
 
 <!--  if subChapters are    -->
@@ -93,6 +95,6 @@
 
 
 <ng-template #empty>
-  <div class="empty"> Здесь еще нет фото и видео :)</div>
+  <div class="empty">{{ 'no_media_yet' | translate }} :)</div>
 
 </ng-template>

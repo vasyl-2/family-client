@@ -2,7 +2,7 @@
 
   <ng-container *ngIf="showAlert$ | async; else app">
       <div class="show-alert">
-        <p>Потрібно авторизуватися</p>
+        <p>{{ 'need_for_authentication' | translate }}</p>
 
         <button mat-icon-button class="login" [routerLink]="['auth', 'login']">
           <mat-icon>login</mat-icon>
@@ -17,30 +17,37 @@
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">панель управління</button>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">
+        {{ 'control_panel' | translate }}
+      </button>
       <span class="example-spacer"></span>
       <button  *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/gallery" mat-button class="add-photo">
-        галерея *
+        {{ 'gallery' | translate }} *
       </button>
       <span class="example-spacer"></span>
 
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPhoto()" mat-button class="add-photo">
-        додати фото в галерею *
+        {{ 'to_add_photo' | translate }} *
       </button>
 
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addVideo()" mat-button class="add-photo">
-        додати відео в галерею *
+        {{ 'to_add_video' | translate }} *
       </button>
 
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
-        додати розділ в галерею *
+        {{ 'to_add_chapter' | translate }} *
       </button>
 
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="editChapters()" mat-button class="add-photo">
-        реагувати розділи *
+        {{ 'to_edit_chapters' | translate }} *
+      </button>
+
+      <span class="example-spacer"></span>
+      <button mat-button class="add-photo">
+        {{ 'choose_lang' | translate }} 8888*
       </button>
 
 
@@ -48,24 +55,26 @@
 
 
     <mat-toolbar color="primary">
-      <span>: - )</span>
+      <span class="go-to-start" routerLink="/">: - )</span>
       <span class="example-spacer"></span>
-      <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">панель управління</button>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/entry" mat-button class="add-photo">
+        {{ 'control_panel' | translate }}
+      </button>
       <span class="example-spacer"></span>
 
       <button  *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/gallery" mat-button class="add-photo">
-        галерея *
+        {{ 'gallery' | translate }} *
       </button>
 
       <span class="example-spacer"></span>
 
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPhoto()" mat-button class="add-photo">
-        додати фото в галерею *
+        {{ 'to_add_photo' | translate }} *
       </button>
 
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addVideo()" mat-button class="add-photo">
-        додати відео в галерею *
+        {{ 'to_add_video' | translate }} *
       </button>
 
 <!--      <span class="example-spacer"></span>-->
@@ -73,13 +82,24 @@
 
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
-        додати розділ в галерею *
+        {{ 'to_add_chapter' | translate }} *
       </button>
 
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="editChapters()" mat-button class="add-photo">
-        реагувати розділи *
+        {{ 'to_edit_chapters' | translate }} *
       </button>
+
+      <span class="example-spacer"></span>
+      <button [matMenuTriggerFor]="menuLang" mat-button class="add-photo">
+        {{ 'choose_lang' | translate }}
+      </button>
+      <mat-menu #menuLang="matMenu">
+        <button (click)="setLang('en')" mat-menu-item>{{ 'en' | translate }}</button>
+        <button (click)="setLang('es')" mat-menu-item>{{ 'es' | translate }}</button>
+        <button (click)="setLang('de')" mat-menu-item>{{ 'de' | translate }}</button>
+        <button (click)="setLang('uk')" mat-menu-item>{{ 'uk' | translate }}</button>
+      </mat-menu>
 
 <!--      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter('video')" mat-button class="add-photo">-->
 <!--        добавить раздел в видео-галерею *-->

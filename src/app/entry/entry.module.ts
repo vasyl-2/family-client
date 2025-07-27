@@ -15,6 +15,7 @@ import { PermissionEditComponent } from './components/permission-edit/permission
 import { CreateRoleComponent } from './components/create-role/create-role.component';
 import { CreatePermissonComponent } from './components/create-permisson/create-permisson.component';
 import { SelectPermissionComponent } from './components/select-permission/select-permission.component';
+import {TranslateModule} from "@ngx-translate/core";
 
 const components = [
   EntryComponent,
@@ -36,7 +37,7 @@ const directives = [];
     ...components,
     // ...directives
   ],
-  imports: [CommonModule, EntryRoutingModule, SharedModule],
+  imports: [CommonModule, EntryRoutingModule, SharedModule, TranslateModule],
   exports: [...components],
 })
 export class EntryModule {}

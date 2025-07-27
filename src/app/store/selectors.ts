@@ -65,3 +65,8 @@ export const getRouterState =
   createFeatureSelector<fromRouter.RouterReducerState<RouterStateUrl>>(
     'router',
   );
+
+export const viewSettingsSelector = createSelector(
+  gallerySelector,
+  (state: GalleryState) => state.viewSettings,
+);

@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
+  ElementRef, inject,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -43,12 +43,14 @@ import { FullSizePhotoComponent } from '../full-size-photo/full-size-photo.compo
 
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
 import { Video } from '../../../models/video';
+import {ViewSettingsStore} from "./view-list-store/view-list-store";
 
 @Component({
   selector: 'app-photos-list',
   templateUrl: './photos-list.component.html',
   styleUrls: ['./photos-list.component.scss'],
   standalone: false,
+  providers: [ViewSettingsStore]
 })
 export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('gallery', { static: false, read: ElementRef })
@@ -113,6 +115,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly showMediaSubject = new BehaviorSubject<'all' | 'video' | 'photo'>('all');
   showMediaType$ = this.showMediaSubject.asObservable();
 
+  private readonly viewSettingsStore = inject(ViewSettingsStore);
+
   constructor(
     private route: ActivatedRoute,
     private store: Store<GalleryState>,
@@ -161,6 +165,14 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   onImageLoaded(): void {
     const loadedCount = this.loadedImagesCountSubject.value + 1;
     this.loadedImagesCountSubject.next(loadedCount);
+  }
+
+  updateSortOrder(order: 'asc' | 'desc'): void {
+    this.viewSettingsStore.updateOrder(order);
+  }
+
+  updateParamSortBy(paramSortBy: 'date' | 'name'): void {
+    this.viewSettingsStore.updateParamSortBy(paramSortBy);
   }
 
   onVideoLoaded(e: any): void {
