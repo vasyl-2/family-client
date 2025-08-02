@@ -13,7 +13,6 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import {
   distinctUntilChanged,
-  filter,
   map,
   shareReplay,
   skip,
@@ -80,7 +79,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly computeGridStyleSubject = new BehaviorSubject<
     { rowHeight: number; rowGap: number } | undefined
   >(undefined);
-  computeGridStyle$ = this.computeGridStyleSubject.asObservable();
+  readonly computeGridStyle$ = this.computeGridStyleSubject.asObservable();
 
   private readonly sizeOfScaleSubject = new BehaviorSubject<{
     curr: number;
@@ -102,7 +101,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     { init: number; second?: number; third?: number } | undefined
   >(undefined);
 
-  private sub = new Subscription();
+  private readonly sub = new Subscription();
 
   private stepToGridColumns = new Map<number, number>();
 
@@ -118,7 +117,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly sortBySubject = new BehaviorSubject<'desc' | 'asc' | 'random'>('desc');
   readonly sortBy$ = this.sortBySubject.asObservable();
 
-  private readonly viewSubject = new BehaviorSubject<'table' | 'little' | 'big'>('big');
+  private readonly viewSubject = new BehaviorSubject<'table' | 'little' | 'big'>('table');
   readonly view$ = this.viewSubject.asObservable();
 
   private readonly viewSettingsStore = inject(ViewSettingsStore);
@@ -258,10 +257,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           return videos;
         }),
       ),
-      this.sortBy$,
-      this.view$
+      this.sortBy$
     ]).pipe(
-      map(([photos, videos, order, view]) => {
+      map(([photos, videos, order]) => {
         switch (order) {
           case 'desc':
             return [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
@@ -295,7 +293,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onViewChanged(e: 'table' | 'little' | 'big'): void {
-
+    this.viewSubject.next(e);
   }
 
   openFullSize(event: MouseEvent, photo: Photo): void {

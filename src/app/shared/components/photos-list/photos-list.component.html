@@ -25,7 +25,6 @@
         (view)="onViewChanged($event)"
         (order)="onOrderChanged($event)"></app-view-settings>
 
-
 <!--  if subChapters are    -->
       <ng-container *ngIf="subChapter.children">
         <h3>{{ subLevels }}</h3>
@@ -46,7 +45,8 @@
     <ng-container *ngIf="{
       sizeA: (sizeOfScale$ | async),
       commonList: commonList$ | async,
-      mediaTypeA: showMediaType$ | async
+      mediaTypeA: showMediaType$ | async,
+      view: view$ | async
     } as state;">
 <!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
       <div class="switch-media">
@@ -54,7 +54,7 @@
         <button mat-button color="primary" (click)="showMedia('photo')">вибрати фото</button>
         <button mat-button color="primary" (click)="showMedia('video')">вибрати відео</button>
       </div>
-      <div #gallery class="gallery">
+      <div #gallery [ngClass]="{ 'gallery': state.view === 'table', 'little': state.view === 'little', 'big': state.view === 'big' }">
         <ng-container *ngIf="(state.commonList && !!state.commonList?.length); else empty">
           <ng-container *ngFor="let item of state.commonList">
 
