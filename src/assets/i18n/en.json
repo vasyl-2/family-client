@@ -28,5 +28,9 @@
   "no_media_yet": "no media yet",
   "sort_items": "sort by",
   "close": "close",
-  "open": "open"
+  "open": "open",
+  "choose_look": "view",
+  "table": "table",
+  "little": "little",
+  "big": "big"
 }

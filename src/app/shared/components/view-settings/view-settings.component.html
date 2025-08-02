@@ -1,13 +1,13 @@
 <div class="view-settings">
   <mat-accordion>
-    <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+    <mat-expansion-panel [expanded]="panelOpenState() === 0" (opened)="panelOpenState.set(0)">
       <mat-expansion-panel-header>
         <mat-panel-title>{{ 'sort_items' | translate }}</mat-panel-title>
         <mat-panel-description>
           {{ (panelOpenState() ? 'close' : 'open') | translate }}
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <div class="settings">
+      <div>
         <mat-button-toggle-group
           name="settings"
           aria-label="settings"
@@ -17,6 +17,27 @@
           <mat-button-toggle value="desc">{{ 'desc' | translate }}</mat-button-toggle>
           <mat-button-toggle value="asc">{{ 'asc' | translate }}</mat-button-toggle>
           <mat-button-toggle value="random">{{ 'random' | translate }}</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="panelOpenState() === 1" (opened)="panelOpenState.set(1)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{ 'choose_look' | translate }}</mat-panel-title>
+        <mat-panel-description>
+          {{ (panelOpenState() ? 'close' : 'open') | translate }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <mat-button-toggle-group
+          name="view"
+          aria-label="viw"
+          [hideMultipleSelectionIndicator]="true"
+          (change)="onViewChange($event)"
+        >
+          <mat-button-toggle value="table">{{ 'table' | translate }}</mat-button-toggle>
+          <mat-button-toggle value="little">{{ 'little' | translate }}</mat-button-toggle>
+          <mat-button-toggle value="big">{{ 'big' | translate }}</mat-button-toggle>
         </mat-button-toggle-group>
       </div>
     </mat-expansion-panel>

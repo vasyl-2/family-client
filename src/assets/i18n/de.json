@@ -25,5 +25,9 @@
   "list_of_roles": "list of roles",
   "list_of_permissions": "list of permissions",
   "return_to_chapter": "return to the chapter",
-  "no_media_yet": "no media yet"
+  "no_media_yet": "no media yet",
+  "choose_look": "view",
+  "table": "table",
+  "little": "little",
+  "big": "big"
 }

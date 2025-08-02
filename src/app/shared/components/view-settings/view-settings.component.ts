@@ -1,5 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit, signal} from '@angular/core';
-import {TranslateService} from "@ngx-translate/core";
+import {ChangeDetectionStrategy, Component, output, signal} from '@angular/core';
 import {MatButtonToggleChange} from "@angular/material/button-toggle";
 
 @Component({
@@ -9,29 +8,19 @@ import {MatButtonToggleChange} from "@angular/material/button-toggle";
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class ViewSettingsComponent implements OnInit {
+export class ViewSettingsComponent {
 
-  sortOrderDict = {
-    desc: 'по-возрастанию',
-    asc: 'по-убыванию',
-    random: 'перемешать'
-  }
+  order = output<'asc' | 'desc' | 'random'>();
+  view = output<'table' | 'little' | 'big'>()
+  readonly panelOpenState = signal(0);
 
-  readonly panelOpenState = signal(false);
-
-  constructor(
-    // private translate: TranslateService
-  ) {
-    // this.translate.setDefaultLang('base');
-  }
-
-  ngOnInit(): void {
-  }
-
-  onChange(e: MatButtonToggleChange) {
+  onChange(e: MatButtonToggleChange): void {
     const { value: order } = e;
-    console.log('CHANGE_SORT____', order);
-
+    this.order.emit(order);
   }
 
+  onViewChange(e: MatButtonToggleChange): void {
+    const { value: view } = e;
+    this.view.emit(view);
+  }
 }

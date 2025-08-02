@@ -106,14 +106,20 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private stepToGridColumns = new Map<number, number>();
 
-  openSubject = new BehaviorSubject(false);
-  open$ = this.openSubject.asObservable();
+  private readonly openSubject = new BehaviorSubject(false);
+  readonly open$ = this.openSubject.asObservable();
 
-  private showSideBarSubject = new BehaviorSubject<'open' | 'close'>('open');
-  showSideBar$ = this.showSideBarSubject.asObservable();
+  private readonly showSideBarSubject = new BehaviorSubject<'open' | 'close'>('open');
+  readonly showSideBar$ = this.showSideBarSubject.asObservable();
 
   private readonly showMediaSubject = new BehaviorSubject<'all' | 'video' | 'photo'>('all');
-  showMediaType$ = this.showMediaSubject.asObservable();
+  readonly showMediaType$ = this.showMediaSubject.asObservable();
+
+  private readonly sortBySubject = new BehaviorSubject<'desc' | 'asc' | 'random'>('desc');
+  readonly sortBy$ = this.sortBySubject.asObservable();
+
+  private readonly viewSubject = new BehaviorSubject<'table' | 'little' | 'big'>('big');
+  readonly view$ = this.viewSubject.asObservable();
 
   private readonly viewSettingsStore = inject(ViewSettingsStore);
 
@@ -252,13 +258,28 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           return videos;
         }),
       ),
+      this.sortBy$,
+      this.view$
     ]).pipe(
-      map(([photos, videos]) => {
-        return [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
-          const aTime = a.date ? new Date(a.date).getTime() : 0;
-          const bTime = b.date ? new Date(b.date).getTime() : 0;
-          return bTime - aTime;
-        });
+      map(([photos, videos, order, view]) => {
+        switch (order) {
+          case 'desc':
+            return [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
+              const aTime = a.date ? new Date(a.date).getTime() : 0;
+              const bTime = b.date ? new Date(b.date).getTime() : 0;
+              return bTime - aTime;
+            });
+          case 'asc':
+            return [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
+              const aTime = a.date ? new Date(a.date).getTime() : 0;
+              const bTime = b.date ? new Date(b.date).getTime() : 0;
+              return aTime - bTime;
+            });
+          case 'random':
+            return [...(photos ?? []), ...(videos ?? [])];
+          default:
+            return [...(photos ?? []), ...(videos ?? [])];
+        }
       }),
     );
 
@@ -267,6 +288,14 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+  }
+
+  onOrderChanged(e: 'asc' | 'desc' | 'random'):void {
+    this.sortBySubject.next(e);
+  }
+
+  onViewChanged(e: 'table' | 'little' | 'big'): void {
+
   }
 
   openFullSize(event: MouseEvent, photo: Photo): void {
