@@ -3,7 +3,7 @@ import { inject, InjectionToken } from "@angular/core";
 
 export interface ViewSettingsState {
   view: 'table' | 'little' | 'big'
-  sorted: 'asc' | 'desc',
+  sorted: 'asc' | 'desc' | 'random',
   paramSortBy: 'date' | 'name'
 }
 
@@ -21,7 +21,7 @@ const VIEW_SETTINGS_STATE = new InjectionToken<ViewSettingsState>(
 export const ViewSettingsStore = signalStore(
   withState(() => inject(VIEW_SETTINGS_STATE)),
   withMethods((store) => ({
-    updateOrder(order: 'asc' | 'desc'): void {
+    updateOrder(order: 'asc' | 'desc' | 'random'): void {
       patchState(store, () => ({ sorted: order }));
     },
     updateParamSortBy(paramSortBy: 'date' | 'name'): void {

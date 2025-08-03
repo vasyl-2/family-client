@@ -10,9 +10,10 @@
   </div>
 
   <div class="content">
-<!--    <div>-->
-<!--      <app-search [formControl]="search"></app-search>-->
-<!--    </div>-->
+    <div class="search-wrapper">
+      <h3 class="search-title">{{ 'search_field' | translate }}</h3>
+      <app-search [formControl]="search"></app-search>
+    </div>
     <ng-container *ngIf="subChapter$ | async as subChapter">
 <!--      <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack(subChapter.parent)" mat-button color="primary">назад</button></div>-->
       <div class="header"><h2>{{ subChapter.nameForUI }}</h2></div>
@@ -20,6 +21,7 @@
       <ng-container *ngIf="subChapter.parent">
         <button mat-button color="primary" (click)="goBack(subChapter.parent)">{{ 'return_to_chapter' | translate }} {{ subChapter.parentTitle }}</button>
       </ng-container>
+
 
       <app-view-settings
         (view)="onViewChanged($event)"
@@ -84,7 +86,7 @@
                   <div class="media-column">
                     <img (click)="openFullSize($event, item!)" (load)="onImageLoaded()" [src]="getAsset(item)" alt="">
                   </div>
-                  <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="left" >
+                  <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="right" >
                     {{ item.description || '' }}
                   </div>
                   <div class="date-column">
@@ -97,7 +99,7 @@
                       <source [src]="getAsset(item)" type="video/mp4" >
                     </video>
                   </div>
-                  <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="left">
+                  <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="right">
                     {{ item.description || '' }}
                   </div>
                   <div class="date-column">

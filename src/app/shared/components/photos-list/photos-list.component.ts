@@ -9,13 +9,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import {BehaviorSubject, Observable, of, Subscription} from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import {
+  debounceTime,
   distinctUntilChanged,
   map,
   shareReplay,
-  skip,
+  skip, startWith, switchMap,
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
@@ -58,6 +59,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   videos$!: Observable<Video[] | undefined>;
 
   commonList$!: Observable<(Photo | Video)[]>;
+
+  search$!: Observable<string>;
 
   selectChapter!: FormGroup;
   search: FormControl = new FormControl<string>('');
@@ -156,6 +159,15 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  // private subscribeToSearch():void {
+  //   this.search.valueChanges.pipe(
+  //     distinctUntilChanged()
+  //   ).subscribe((s: string) => {
+  //     console.log('SEARCH____', s);
+  //
+  //   })
+  // }
+
   getAsset(media: Photo | Video): string {
     const { fullPath, name } = media;
     let path = fullPath ? `${fullPath}/${name}` : name;
@@ -177,7 +189,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadedImagesCountSubject.next(loadedCount);
   }
 
-  updateSortOrder(order: 'asc' | 'desc'): void {
+  updateSortOrder(order: 'asc' | 'desc' | 'random'): void {
     this.viewSettingsStore.updateOrder(order);
   }
 
@@ -191,6 +203,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.search$ = this.search.valueChanges.pipe(distinctUntilChanged(), debounceTime(500), startWith(''));
     this.allChapters$ = this.store.pipe(select(chaptersHierarchySelector)).pipe(
       tap((cHs: Chapter[]) => {
         // if (cHs.length) {
@@ -262,31 +275,61 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           return videos;
         }),
       ),
-      this.sortBy$
+      this.sortBy$,
+      this.search$
     ]).pipe(
-      map(([photos, videos, order]) => {
+      map(([photos, videos, order, search]) => {
         switch (order) {
           case 'desc':
-            return [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
+            let resDesc: (Photo | Video)[] = [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
               const aTime = a.date ? new Date(a.date).getTime() : 0;
               const bTime = b.date ? new Date(b.date).getTime() : 0;
               return bTime - aTime;
             });
+
+            if (!!search) {
+              console.log('SEARcH-----')
+              resDesc = resDesc.filter((media: Photo | Video) => {
+                return media.name.toLowerCase().includes(search.toLowerCase()) || media.description?.toLowerCase().includes(search.toLowerCase())
+              })
+            }
+
+            console.log('RES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', resDesc)
+            return resDesc;
           case 'asc':
-            return [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
+            let resAsc: (Photo | Video)[] = [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
               const aTime = a.date ? new Date(a.date).getTime() : 0;
               const bTime = b.date ? new Date(b.date).getTime() : 0;
               return aTime - bTime;
             });
+            if (!!search) {
+              resAsc = resAsc.filter((media: Photo | Video) => {
+                return media.name.toLowerCase().includes(search.toLowerCase()) || media.description?.toLowerCase().includes(search.toLowerCase())
+              })
+            }
+            return resAsc;
           case 'random':
-            return [...(photos ?? []), ...(videos ?? [])];
+            let random: (Photo | Video)[] = [...(photos ?? []), ...(videos ?? [])].filter((m: Photo | Video) => {
+              if (!search) {
+                return true;
+              }
+
+              return m.name.toLowerCase().includes(search.toLowerCase()) || m.description?.toLowerCase().includes(search.toLowerCase());
+            });
+
+            return random;
           default:
-            return [...(photos ?? []), ...(videos ?? [])];
+            let def: (Photo | Video)[] = [...(photos ?? []), ...(videos ?? [])];
+            return def;
         }
       }),
     );
 
     this.subscribeToToggleSideBar();
+
+    // this.subscribeToSearch();
+
+
   }
 
   ngOnDestroy(): void {
