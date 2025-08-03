@@ -10,10 +10,10 @@
   </div>
 
   <div class="content">
-    <div class="search-wrapper">
-      <h3 class="search-title">{{ 'search_field' | translate }}</h3>
-      <app-search [formControl]="search"></app-search>
-    </div>
+<!--    <div class="search-wrapper">-->
+<!--      <h3 class="search-title">{{ 'search_field' | translate }}</h3>-->
+<!--      <app-search [formControl]="search"></app-search>-->
+<!--    </div>-->
     <ng-container *ngIf="subChapter$ | async as subChapter">
 <!--      <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack(subChapter.parent)" mat-button color="primary">назад</button></div>-->
       <div class="header"><h2>{{ subChapter.nameForUI }}</h2></div>
@@ -50,6 +50,10 @@
       mediaTypeA: showMediaType$ | async,
       view: view$ | async
     } as state;">
+      <div class="search-wrapper" *ngIf="state.commonList?.length">
+        <h3 class="search-title">{{ 'search_field' | translate }}</h3>
+        <app-search [formControl]="search"></app-search>
+      </div>
 <!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
       <div class="switch-media">
         <button mat-button color="primary" (click)="showMedia('all')">фото і відео</button>
