@@ -27,7 +27,7 @@
 
 <!--  if subChapters are    -->
       <ng-container *ngIf="subChapter.children">
-        <h3>{{ subLevels }}</h3>
+        <h3>{{ 'sub_chapters' | translate }}</h3>
         <div class="sub-chapters">
             <ng-container *ngFor="let sC of subChapter.children">
               <button  mat-button color="primary" (click)="selectSubChapter(sC._id!)">
@@ -84,7 +84,7 @@
                   <div class="media-column">
                     <img (click)="openFullSize($event, item!)" (load)="onImageLoaded()" [src]="getAsset(item)" alt="">
                   </div>
-                  <div class="desc-column" [matTooltip]="item.description" >
+                  <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="left" >
                     {{ item.description || '' }}
                   </div>
                   <div class="date-column">
@@ -92,7 +92,17 @@
                   </div>
                 </ng-container>
                 <ng-container *ngIf="(item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')">
-
+                  <div class="media-column">
+                    <video controls>
+                      <source [src]="getAsset(item)" type="video/mp4" >
+                    </video>
+                  </div>
+                  <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="left">
+                    {{ item.description || '' }}
+                  </div>
+                  <div class="date-column">
+                    {{ (item.date | date) || ''}}
+                  </div>
                 </ng-container>
               </ng-container>
             </ng-container>

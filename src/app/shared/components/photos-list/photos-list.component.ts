@@ -59,8 +59,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   commonList$!: Observable<(Photo | Video)[]>;
 
-  subLevels = 'Подразделы';
-
   selectChapter!: FormGroup;
   search: FormControl = new FormControl<string>('');
   size: FormControl = new FormControl<number>(1);
