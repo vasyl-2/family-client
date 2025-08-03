@@ -117,7 +117,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly sortBySubject = new BehaviorSubject<'desc' | 'asc' | 'random'>('desc');
   readonly sortBy$ = this.sortBySubject.asObservable();
 
-  private readonly viewSubject = new BehaviorSubject<'table' | 'little' | 'big'>('table');
+  private readonly viewSubject = new BehaviorSubject<'table' | 'little' | 'big'>('big');
   readonly view$ = this.viewSubject.asObservable();
 
   private readonly viewSettingsStore = inject(ViewSettingsStore);
@@ -156,6 +156,13 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.showSideBarSubject.next('open');
     }
+  }
+
+  getAsset(media: Photo | Video): string {
+    const { fullPath, name } = media;
+    let path = fullPath ? `${fullPath}/${name}` : name;
+    path = `${environment.apiStaticUrl}/${path}`;
+    return path;
   }
 
   setGalleryProps(): void {
@@ -313,13 +320,13 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(editVideo({ video }));
   }
 
-  getAsset(photo: Photo): string {
-    const { fullPath, name } = photo;
-    let path = fullPath ? `${fullPath}/${name}` : name;
-    path = `${environment.apiUrl}/${path}`;
-
-    return path;
-  }
+  // getAsset(photo: Photo): string {
+  //   const { fullPath, name } = photo;
+  //   let path = fullPath ? `${fullPath}/${name}` : name;
+  //   path = `${environment.apiUrl}/${path}`;
+  //
+  //   return path;
+  // }
 
   selectSubChapter(subChapterId: string): void {
     this.previousIdSubject.next(this.selectedIdSubject.value);

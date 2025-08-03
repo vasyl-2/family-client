@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   Directive,
   ElementRef,
-  Input,
+  Input, OnDestroy,
   Renderer2,
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
@@ -12,16 +12,16 @@ import { filter } from 'rxjs/operators';
   selector: '[appSetHeight]',
   standalone: false,
 })
-export class SetHeightDirective implements AfterViewInit {
-  rowSpan!: any;
+export class SetHeightDirective implements AfterViewInit, OnDestroy {
+  private rowSpan!: number;
 
-  grid: { rowHeight: number; rowGap: number } | undefined | null;
+  private grid: { rowHeight: number; rowGap: number } | undefined | null;
 
-  present = new BehaviorSubject(false);
+  private readonly present = new BehaviorSubject(false);
 
   @Input() typeOfMedia: 'video' | 'img' | undefined = undefined;
 
-  typeToProp = {
+  private typeToProp = {
     img: 'img',
     video: 'video',
   };
@@ -46,11 +46,11 @@ export class SetHeightDirective implements AfterViewInit {
         return;
       }
 
-      const img = this.el.nativeElement.querySelector(
+      const media = this.el.nativeElement.querySelector(
         this.typeToProp[this.typeOfMedia],
       );
 
-      if (img) {
+      if (media) {
         const { height } = this.el.nativeElement
           .querySelector('.content')
           .getBoundingClientRect();
@@ -64,7 +64,7 @@ export class SetHeightDirective implements AfterViewInit {
           'gridRowEnd',
           `span ${this.rowSpan}`,
         );
-        this.renderer.listen(img, 'load', () => {
+        this.renderer.listen(media, 'load', () => {
           const { height } = this.el.nativeElement
             .querySelector('.content')
             .getBoundingClientRect();
@@ -80,5 +80,9 @@ export class SetHeightDirective implements AfterViewInit {
         });
       }
     });
+  }
+
+  ngOnDestroy() {
+
   }
 }

@@ -47,15 +47,46 @@
     color: rgb(107, 113, 127);
   }
 
-
-  app-photo {
+  app-photo, app-video {
     overflow: hidden;
   }
+}
 
-  app-video {
-    overflow: hidden;
+.table {
+  display: grid;
+  grid-template-columns: 60px minmax(200px, 1fr) 150px;
+  gap: 30px;
+  grid-auto-rows: auto;
+
+  .media-column {
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      object-fit: cover;
+    }
   }
 
+  .desc-column {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .date-column {
+
+  }
+
+  .empty {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: rgb(107, 113, 127);
+  }
 }
 
 .sub-chapters {
