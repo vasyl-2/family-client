@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 
 import { Chapter } from '../../../models/chapter';
 import { GalleryState } from '../../../store/reducer';
 import {
   chaptersHierarchySelector,
-  videoChaptersHierarchySelector,
 } from '../../../store/selectors';
 import { CreateChapter } from '../../../models/dto/create-chapter';
 
@@ -27,18 +26,12 @@ export class CreateChapterComponent {
   constructor(
     private fromBuilder: FormBuilder,
     private dialogRef: MatDialogRef<any>,
-    @Inject(MAT_DIALOG_DATA) public data: 'photo' | 'video',
     private store: Store<{ gallery: GalleryState }>,
   ) {}
 
   ngOnInit() {
     this.initForm();
-
-    const selector =
-      this.data === 'photo'
-        ? chaptersHierarchySelector
-        : videoChaptersHierarchySelector;
-    this.photoChapters$ = this.store.pipe(select(selector));
+    this.photoChapters$ = this.store.pipe(select(chaptersHierarchySelector));
   }
 
   addChapter(): void {
@@ -47,6 +40,7 @@ export class CreateChapterComponent {
       parentChapter = undefined,
       latinname = undefined,
     } = this.addChapterForm.value;
+
     const chapter: CreateChapter = {
       title: latinname,
       nameForUI: name,

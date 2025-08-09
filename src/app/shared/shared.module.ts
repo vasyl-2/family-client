@@ -12,13 +12,11 @@ import { HighlightDirective } from './directives/highlight.directive';
 import { CreatePhotoComponent } from './components/create-photo/create-photo.component';
 import { CreateChapterComponent } from './components/create-chapter/create-chapter.component';
 import { TreeChaptersComponent } from './components/tree-chapters/tree-chapters.component';
-import { ChapterListComponent } from './components/chapter-list/chapter-list.component';
 import { PhotosListComponent } from './components/photos-list/photos-list.component';
 import { PhotoComponent } from './components/photo/photo.component';
 import { EditDescriptionComponent } from './components/edit-description/edit-description.component';
 import { CreateVideoComponent } from './components/create-video/create-video.component';
 import { FullSizePhotoComponent } from './components/full-size-photo/full-size-photo.component';
-import { VideoListComponent } from './components/video-list/video-list.component';
 import { VideoElementComponent } from './components/video-element/video-element.component';
 import { SearchComponent } from './components/search/search.component';
 import { RangeSizeComponent } from './components/range-size/range-size.component';
@@ -32,7 +30,6 @@ import { CreateDocComponent } from "./components/create-doc/create-doc.component
 
 const components = [
   CreatePhotoComponent,
-  ChapterListComponent,
   CreateChapterComponent,
   TreeChaptersComponent,
   PhotosListComponent,
@@ -41,7 +38,6 @@ const components = [
   EditDescriptionComponent,
   CreateVideoComponent,
   FullSizePhotoComponent,
-  VideoListComponent,
   VideoElementComponent,
   SearchComponent,
   RangeSizeComponent,

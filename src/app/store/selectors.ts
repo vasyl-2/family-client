@@ -16,16 +16,6 @@ export const chaptersHierarchySelector = createSelector(
   gallerySelector,
   (state: GalleryState) => state.hierarchyChapters,
 );
-
-export const videoChaptersSelector = createSelector(
-  gallerySelector,
-  (state: GalleryState) => state.videoChapters,
-);
-export const videoChaptersHierarchySelector = createSelector(
-  gallerySelector,
-  (state: GalleryState) => state.videoHierarchyChapters,
-);
-
 export const photosSelector = createSelector(
   gallerySelector,
   (state: GalleryState) => state.photos,

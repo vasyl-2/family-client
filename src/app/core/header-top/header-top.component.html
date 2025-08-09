@@ -82,9 +82,6 @@
         {{ 'to_add_video' | translate }} *
       </button>
 
-<!--      <span class="example-spacer"></span>-->
-<!--      <div>is Admin:!!!! {{ checkTokenService.isAdmin$ | async }}</div>-->
-
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
         {{ 'to_add_chapter' | translate }} *
@@ -105,17 +102,6 @@
         <button (click)="setLang('de')" mat-menu-item>{{ 'de' | translate }}</button>
         <button (click)="setLang('uk')" mat-menu-item>{{ 'uk' | translate }}</button>
       </mat-menu>
-
-<!--      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter('video')" mat-button class="add-photo">-->
-<!--        добавить раздел в видео-галерею *-->
-<!--      </button>-->
-<!--      <span class="example-spacer"></span>-->
-
-
-<!--      <span class="example-spacer"></span>-->
-<!--      <button routerLink="/video" mat-button class="add-photo">-->
-<!--        видео галерея *-->
-<!--      </button>-->
 
       <ng-container *ngIf="!(isLoggedIn$ | async)">
         <button mat-icon-button class="login" [routerLink]="['/auth', 'login']">

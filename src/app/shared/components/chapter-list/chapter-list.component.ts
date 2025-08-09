@@ -13,7 +13,6 @@ import { select, Store } from '@ngrx/store';
 import { GalleryState } from '../../../store/reducer';
 import {
   chaptersHierarchySelector,
-  videoChaptersHierarchySelector,
 } from '../../../store/selectors';
 
 @Component({
@@ -34,11 +33,7 @@ export class ChapterListComponent implements OnInit {
   // constructor(private store: Store<GalleryState>) {}
 
   ngOnInit(): void {
-    const selector =
-      this.type === 'photo'
-        ? chaptersHierarchySelector
-        : videoChaptersHierarchySelector;
-    this.photoChapters$ = this.store.pipe(select(selector));
+    this.photoChapters$ = this.store.pipe(select(chaptersHierarchySelector));
 
     this.photoChapters$.subscribe((c) =>
       console.log('CHAPTERS_____________________', c),

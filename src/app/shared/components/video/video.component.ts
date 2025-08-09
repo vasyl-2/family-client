@@ -7,10 +7,8 @@ import {
   Inject,
   Input,
   Output,
-  signal,
   ViewChild,
 } from '@angular/core';
-import { Photo } from '../../../models/photo';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EditDescriptionComponent } from '../edit-description/edit-description.component';

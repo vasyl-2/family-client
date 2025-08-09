@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Inject,
   OnDestroy,
   OnInit,
 } from '@angular/core';
@@ -12,7 +11,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 
 import { GalleryState } from '../../../store/reducer';
@@ -20,10 +19,8 @@ import { extensions } from '../../../data/extensions';
 import { Chapter } from '../../../models/chapter';
 import {
   chaptersHierarchySelector,
-  videoChaptersHierarchySelector,
 } from '../../../store/selectors';
 import { withLatestFrom } from 'rxjs/operators';
-import { Photo } from '../../../models/photo';
 import { Video } from '../../../models/video';
 
 @Component({
@@ -44,7 +41,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
   photoExtensions: string[] = extensions;
   photoChapters$!: Observable<Chapter[]>;
 
-  private sub = new Subscription();
+  private readonly sub = new Subscription();
 
   private readonly fileSubject = new BehaviorSubject<File | undefined>(
     undefined,
@@ -53,7 +50,6 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
   constructor(
     private fromBuilder: FormBuilder,
     private dialogRef: MatDialogRef<any>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
     private store: Store<{ gallery: GalleryState }>,
   ) {}
 
@@ -67,7 +63,6 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
       this.chapterControl.valueChanges
         .pipe(withLatestFrom(this.photoChapters$))
         .subscribe(([chapter, allChapters]: [string, Chapter[]]) => {
-          console.log('CHAPTER___AAAAA__________', allChapters);
           const currentChapter = this.findChapterById(allChapters, chapter);
           let fullPath: string;
 
@@ -75,8 +70,6 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
             fullPath = currentChapter.fullPath;
             this.addVideoForm.get('fullPath')?.setValue(fullPath);
           }
-
-          console.log('CURRENT___CHAPTER_____', currentChapter);
         }),
     );
   }
@@ -87,10 +80,7 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-any
   uploadVideo(event: any): void {
-    console.log('1_________________________');
     const file: File = event.target.files[0];
-    console.log('!!!!', event);
-
     this.fileSubject.next(file);
   }
 

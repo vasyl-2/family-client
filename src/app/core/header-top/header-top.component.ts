@@ -29,8 +29,6 @@ import {
   chaptersSelector,
   isAuthenticated,
   permissionsForUserLoaded,
-  videoChaptersHierarchySelector,
-  videoChaptersSelector,
 } from '../../store/selectors';
 import { CreateChapterComponent } from '../../shared/components/create-chapter/create-chapter.component';
 import { CreateChapter } from '../../models/dto/create-chapter';
@@ -38,7 +36,7 @@ import { CreateVideoComponent } from '../../shared/components/create-video/creat
 import { Video } from '../../models/video';
 import { CheckTokenService } from '../../services/authorization/check-token.service';
 import { EditChaptersComponent } from '../../shared/components/edit-chapters/edit-chapters.component';
-import { NgxPermissionsObject, NgxPermissionsService } from 'ngx-permissions';
+import { NgxPermissionsService } from 'ngx-permissions';
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
@@ -136,7 +134,6 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
         .pipe(
           filter((video: Video) => !!video),
           switchMap((video) =>
-            // this.store.pipe(select(videoChaptersSelector)).pipe(
             this.store.pipe(select(chaptersSelector)).pipe(
               map((chapters: Chapter[]) => {
                 const currentChapter = chapters.find(
@@ -170,20 +167,15 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
   }
 
 
-  addChapter(type: 'photo' | 'video' = 'photo'): void {
+  addChapter(): void {
     if (!this.checkTokenService.isAdminSubject.value) {
       return;
     }
-    const selector =
-      type === 'photo'
-        ? chaptersHierarchySelector
-        : videoChaptersHierarchySelector;
+
+    const selector = chaptersHierarchySelector;
+
     this.sub.add(
-      this.dialog
-        .open(CreateChapterComponent, {
-          data: type,
-        })
-        .afterClosed()
+      this.dialog.open(CreateChapterComponent).afterClosed()
         .pipe(
           filter((chapter: CreateChapter | undefined) => !!chapter),
           switchMap((chapter: CreateChapter | undefined) =>
@@ -220,8 +212,7 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
           ),
         )
         .subscribe((chapter: Chapter | undefined) => {
-          const action = type === 'photo' ? createChapter : createVideoChapter;
-          chapter && this.store.dispatch(action({ payload: chapter }));
+          chapter && this.store.dispatch(createChapter({ payload: chapter }));
         }),
     );
   }
