@@ -28,6 +28,7 @@ import { VideoComponent } from './components/video/video.component';
 import { AddClassDirective } from './directives/add-class.directive';
 import {ViewSettingsComponent} from "./components/view-settings/view-settings.component";
 import {TranslateModule} from "@ngx-translate/core";
+import { CreateDocComponent } from "./components/create-doc/create-doc.component";
 
 const components = [
   CreatePhotoComponent,
@@ -46,7 +47,8 @@ const components = [
   RangeSizeComponent,
   EditChapterComponent,
   EditChaptersComponent,
-  ViewSettingsComponent
+  ViewSettingsComponent,
+  CreateDocComponent
 ];
 
 const directives = [

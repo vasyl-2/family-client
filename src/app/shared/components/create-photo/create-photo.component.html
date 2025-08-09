@@ -6,18 +6,6 @@
       <mat-error *ngIf="addPhotoForm?.get('name')?.hasError('required')">назву обов'язково вказати</mat-error>
     </mat-form-field>
 
-<!--    <mat-form-field appearance="fill">-->
-<!--      <mat-label>раздел</mat-label>-->
-
-<!--      <mat-select formControlName="chapter">-->
-<!--        <ng-container *ngFor="let chapterA of photoChapters$ | async; index as i">-->
-<!--          <mat-option [value]="chapterA._id">-->
-<!--            {{ chapterA.nameForUI }}-->
-<!--          </mat-option>-->
-<!--        </ng-container>-->
-<!--      </mat-select>-->
-<!--    </mat-form-field>-->
-
     <mat-form-field class='description' appearance="fill">
       <mat-label>краткий опис</mat-label>
       <textarea  formControlName="description"
@@ -36,8 +24,6 @@
         [max]="today"
         matInput
         [matDatepicker]="picker"
-        (dateInput)="addEvent('input', $event)"
-        (dateChange)="addEvent('change', $event)"
       />
       <mat-hint>MM/DD/YYYY</mat-hint>
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -54,7 +40,7 @@
     <div class="description">
       <label class="file">
         <mat-icon>attach_file</mat-icon>
-        <span>вибери файл  диска</span>
+        <span>вибери файл з диска</span>
         <input #upload class='file' id="upload-photo" type="file"  accept="image/*" (change)="uploadPhoto($event)">
       </label>
 

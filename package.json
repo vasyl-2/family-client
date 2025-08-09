@@ -36,6 +36,7 @@
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "ngrx-immer": "3.0.0",
+    "ngx-extended-pdf-viewer": "^24.3.1-alpha.1",
     "ngx-permissions": "^15.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",

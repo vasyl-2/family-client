@@ -38,7 +38,7 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
   photoChapters$!: Observable<Chapter[]>;
   today!: Date;
 
-  private sub = new Subscription();
+  private readonly sub = new Subscription();
   private readonly fileSubject = new BehaviorSubject<File | undefined>(
     undefined,
   );
@@ -56,11 +56,6 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
-  }
-
-  addEvent(type: string, event: MatDatepickerInputEvent<Date>): void {
-    console.log('TYPE____', type);
-    console.log('EVENT_____', event);
   }
 
   ngOnInit() {

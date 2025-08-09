@@ -48,7 +48,8 @@
       sizeA: (sizeOfScale$ | async),
       commonList: commonList$ | async,
       mediaTypeA: showMediaType$ | async,
-      view: view$ | async
+      view: view$ | async,
+      pdfs: pdfs$ | async
     } as state;">
       <div class="search-wrapper" *ngIf="state.commonList?.length">
         <h3 class="search-title">{{ 'search_field' | translate }}</h3>
@@ -56,67 +57,85 @@
       </div>
 <!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
       <div class="switch-media">
-        <button mat-button color="primary" (click)="showMedia('all')">фото і відео</button>
-        <button mat-button color="primary" (click)="showMedia('photo')">вибрати фото</button>
-        <button mat-button color="primary" (click)="showMedia('video')">вибрати відео</button>
+        <button mat-button color="primary" (click)="showMedia('all')">{{ 'photos_and_videos' | translate }}</button>
+        <button mat-button color="primary" (click)="showMedia('photo')">{{ 'choose_photo' | translate }}</button>
+        <button mat-button color="primary" (click)="showMedia('video')">{{ 'choose_video' | translate }}</button>
+        <button mat-button color="primary" (click)="showMedia('pdf')">{{ 'choose_pdf' | translate }}</button>
       </div>
-      <div #gallery [ngClass]="{ 'gallery': state.view === 'big', 'little': state.view === 'little', 'table': state.view === 'table' }">
-        <ng-container *ngIf="(state.commonList && !!state.commonList?.length); else empty">
-          <ng-container *ngFor="let item of state.commonList">
 
-            <ng-container [ngSwitch]="state.view">
-              <ng-container *ngSwitchCase="'big'">
-                <ng-container *ngIf="item.type === 'photo' && (state.mediaTypeA === 'photo' || state.mediaTypeA === 'all')">
-                  <app-photo [appEnlarge]="state.sizeA"
-                             [appSetHeight]="computeGridStyle$ | async"
-                             typeOfMedia="img"
-                             (click)="openFullSize($event, item!)"
-                             (updatedPhoto)="onPhotoUpdate($event)"
-                             (imageLoaded)="onImageLoaded()"
-                             [imageSrc]="item"></app-photo>
-                </ng-container>
-                <ng-container *ngIf="(item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')">
-                  <app-video [appEnlarge]="state.sizeA"
-                             typeOfMedia="video"
-                             [appSetHeight]="computeGridStyle$ | async"
-                             (videoLoaded)="onVideoLoaded($event)"
-                             (updatedVideo)="onVideoUpdate($event)"
-                             [videoSrc]="item"></app-video>
-                </ng-container>
-              </ng-container>
+      <ng-container *ngIf="state.mediaTypeA === 'pdf'; else other">
+        <ng-container *ngIf="state.pdfs && state.pdfs?.length; else emptypdf">
 
-              <ng-container *ngSwitchCase="'table'">
-                <ng-container *ngIf="item.type === 'photo' && (state.mediaTypeA === 'photo' || state.mediaTypeA === 'all')">
-                  <div class="media-column">
-                    <img (click)="openFullSize($event, item!)" (load)="onImageLoaded()" [src]="getAsset(item)" alt="">
-                  </div>
-                  <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="right" >
-                    {{ item.description || '' }}
-                  </div>
-                  <div class="date-column">
-                    {{ (item.date | date) || ''}}
-                  </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-template #emptypdf>
+        <div>
+          no pdfs so far
+        </div>
+      </ng-template>
+
+      <ng-template #other>
+        <div #gallery [ngClass]="{ 'gallery': state.view === 'big', 'little': state.view === 'little', 'table': state.view === 'table' }">
+          <ng-container *ngIf="(state.commonList && !!state.commonList?.length); else empty">
+            <ng-container *ngFor="let item of state.commonList">
+
+              <ng-container [ngSwitch]="state.view">
+                <ng-container *ngSwitchCase="'big'">
+                  <ng-container *ngIf="item.type === 'photo' && (state.mediaTypeA === 'photo' || state.mediaTypeA === 'all')">
+                    <app-photo [appEnlarge]="state.sizeA"
+                               [appSetHeight]="computeGridStyle$ | async"
+                               typeOfMedia="img"
+                               (click)="openFullSize($event, item!)"
+                               (updatedPhoto)="onPhotoUpdate($event)"
+                               (imageLoaded)="onImageLoaded()"
+                               [imageSrc]="item"></app-photo>
+                  </ng-container>
+                  <ng-container *ngIf="(item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')">
+                    <app-video [appEnlarge]="state.sizeA"
+                               typeOfMedia="video"
+                               [appSetHeight]="computeGridStyle$ | async"
+                               (videoLoaded)="onVideoLoaded($event)"
+                               (updatedVideo)="onVideoUpdate($event)"
+                               [videoSrc]="item"></app-video>
+                  </ng-container>
                 </ng-container>
-                <ng-container *ngIf="(item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')">
-                  <div class="media-column">
-                    <video controls>
-                      <source [src]="getAsset(item)" type="video/mp4" >
-                    </video>
-                  </div>
-                  <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="right">
-                    {{ item.description || '' }}
-                  </div>
-                  <div class="date-column">
-                    {{ (item.date | date) || ''}}
-                  </div>
+
+                <ng-container *ngSwitchCase="'table'">
+                  <ng-container *ngIf="item.type === 'photo' && (state.mediaTypeA === 'photo' || state.mediaTypeA === 'all')">
+                    <div class="media-column">
+                      <img (click)="openFullSize($event, item!)" (load)="onImageLoaded()" [src]="getAsset(item)" alt="">
+                    </div>
+                    <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="right" >
+                      {{ item.description || '' }}
+                    </div>
+                    <div class="date-column">
+                      {{ (item.date | date) || ''}}
+                    </div>
+                  </ng-container>
+
+                  <ng-container *ngIf="(item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')">
+                    <div class="media-column">
+                      <video controls>
+                        <source [src]="getAsset(item)" type="video/mp4" >
+                      </video>
+                    </div>
+                    <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="right">
+                      {{ item.description || '' }}
+                    </div>
+                    <div class="date-column">
+                      {{ (item.date | date) || ''}}
+                    </div>
+                  </ng-container>
+
                 </ng-container>
               </ng-container>
             </ng-container>
           </ng-container>
+        </div>
+      </ng-template>
 
-        </ng-container>
 
-      </div>
 
       <ng-container *ngIf="state.commonList && !!state.commonList?.length">
         <div class="change-size">

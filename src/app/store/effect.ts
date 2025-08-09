@@ -44,7 +44,7 @@ import {
   CREATE_ROLE,
   createdRole,
   EDIT_VIDEO_ACTION,
-  editedVideo,
+  editedVideo, CREATE_DOC_ACTION, createdPdf,
 } from './action';
 
 import { CreateChapter } from '../models/dto/create-chapter';
@@ -62,6 +62,7 @@ import { PermissionsService } from '../services/permissions.service';
 import { Permission } from '../models/permission';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { PermissionService } from '../entry/services/permission.service';
+import {Pdf} from "../models/pdf";
 
 @Injectable()
 export class GalleryEffects {
@@ -102,11 +103,9 @@ export class GalleryEffects {
   updatePhoto$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EDIT_PHOTO_ACTION),
-      tap((x) => console.log('UPDATE_________________PHOTO', x)),
       exhaustMap((photo: { photo: Partial<Photo> }) => {
         return this.uploadService.updatePhoto(photo.photo);
       }),
-      tap((p) => console.log('EDITED___PHOTO_________', p)),
       map((photo: any) => editedPhoto({ photo })),
       catchError(() => EMPTY),
     ),
@@ -115,11 +114,9 @@ export class GalleryEffects {
   updateVideo$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EDIT_VIDEO_ACTION),
-      tap((x) => console.log('UPDATE_________________VIDEO', x)),
       exhaustMap((video: { video: Partial<Video> }) => {
         return this.uploadService.updateVideo(video.video);
       }),
-      tap((p) => console.log('EDITED___VIDEO_________', p)),
       map((video: any) => editedVideo({ video })),
       catchError(() => EMPTY),
     ),
@@ -128,11 +125,22 @@ export class GalleryEffects {
   createVideo$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CREATE_VIDEO_ACTION),
-      tap((video) => console.log('CREATE__________________VIDEO', video)),
       exhaustMap((video: { payload: Video }) => {
         return this.uploadService.uploadVideo(video);
       }),
       map((video: any) => createdVideo({ video })), // TODO change from any!!!
+      catchError(() => EMPTY),
+    ),
+  );
+
+  createDoc$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CREATE_DOC_ACTION),
+      tap((x) => console.log('CREATE__________________DOC', x)),
+      exhaustMap((doc: { payload: Pdf }) => {
+        return this.uploadService.uploadDoc(doc);
+      }),
+      map((doc: any) => createdPdf({ doc })),
       catchError(() => EMPTY),
     ),
   );

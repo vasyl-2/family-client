@@ -5204,6 +5204,13 @@ ngrx-immer@3.0.0:
   dependencies:
     tslib "^2.3.0"
 
+ngx-extended-pdf-viewer@^24.3.1-alpha.1:
+  version "24.3.1-alpha.1"
+  resolved "https://registry.npmjs.org/ngx-extended-pdf-viewer/-/ngx-extended-pdf-viewer-24.3.1-alpha.1.tgz#cd9be94f71b83dc7781bc575d6545ea453b9fee3"
+  integrity sha512-YKGxaFyH/RgfUCNaM6D97X4Z9cCP9kEwt7tU42xjgFQvsH8gbriJkL5RcYgffF9quEPKr6P7SZTi4Bt3y60WMQ==
+  dependencies:
+    tslib "^2.3.0"
+
 ngx-permissions@^15.0.0:
   version "15.0.1"
   resolved "https://registry.npmjs.org/ngx-permissions/-/ngx-permissions-15.0.1.tgz#367b4d14bbdc943c1362fcd4a4f015c981d9203e"

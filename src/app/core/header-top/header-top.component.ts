@@ -163,6 +163,13 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     this.translate.setDefaultLang(lang);
   }
 
+  addPdf(): void {
+    if (!this.checkTokenService.isAdminSubject.value) {
+      return;
+    }
+  }
+
+
   addChapter(type: 'photo' | 'video' = 'photo'): void {
     if (!this.checkTokenService.isAdminSubject.value) {
       return;

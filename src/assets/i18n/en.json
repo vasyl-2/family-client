@@ -12,6 +12,7 @@
   "to_add_photo": "to add photo to the gallery",
   "to_add_video": "to add video to the gallery",
   "to_add_chapter": "to add chapter to the gallery",
+  "to_add_pdf": "to add PDF",
   "control_panel": "control panel",
   "photo_gallery": "Photo galley",
   "move_forward": "Let's start",
@@ -34,5 +35,10 @@
   "little": "little",
   "big": "big",
   "sub_chapters": "Sub chapters",
-  "search_field": "Search"
+  "search_field": "Search",
+  "photos_and_videos": "photo and video",
+  "choose_photo": "choose photo",
+  "choose_video": "choose video",
+  "choose_pdf": "choose PFD"
+
 }

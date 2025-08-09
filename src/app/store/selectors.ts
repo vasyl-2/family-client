@@ -34,6 +34,10 @@ export const videosSelector = createSelector(
   gallerySelector,
   (state: GalleryState) => state.videos,
 );
+export const docsSelector = createSelector(
+  gallerySelector,
+  (state: GalleryState) => state.docs,
+);
 export const alertSelector = createSelector(
   gallerySelector,
   (state: GalleryState) => state.auth.showAlert,

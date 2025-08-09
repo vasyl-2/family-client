@@ -44,6 +44,7 @@ import { FullSizePhotoComponent } from '../full-size-photo/full-size-photo.compo
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
 import { Video } from '../../../models/video';
 import {ViewSettingsStore} from "./view-list-store/view-list-store";
+import {Pdf} from "../../../models/pdf";
 
 @Component({
   selector: 'app-photos-list',
@@ -57,8 +58,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   gallery!: ElementRef;
   photos$!: Observable<Photo[] | undefined>;
   videos$!: Observable<Video[] | undefined>;
+  pdfs$!: Observable<Pdf[] | undefined>;
 
-  commonList$!: Observable<(Photo | Video)[]>;
+  commonList$!: Observable<(Photo | Video | Pdf)[]>;
 
   search$!: Observable<string>;
 
@@ -112,7 +114,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly showSideBarSubject = new BehaviorSubject<'open' | 'close'>('open');
   readonly showSideBar$ = this.showSideBarSubject.asObservable();
 
-  private readonly showMediaSubject = new BehaviorSubject<'all' | 'video' | 'photo'>('all');
+  private readonly showMediaSubject = new BehaviorSubject<'all' | 'video' | 'photo' | 'pdf'>('all');
   readonly showMediaType$ = this.showMediaSubject.asObservable();
 
   private readonly sortBySubject = new BehaviorSubject<'desc' | 'asc' | 'random'>('desc');
@@ -288,13 +290,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
             });
 
             if (!!search) {
-              console.log('SEARcH-----')
               resDesc = resDesc.filter((media: Photo | Video) => {
                 return media.name.toLowerCase().includes(search.toLowerCase()) || media.description?.toLowerCase().includes(search.toLowerCase())
               })
             }
 
-            console.log('RES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', resDesc)
             return resDesc;
           case 'asc':
             let resAsc: (Photo | Video)[] = [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
@@ -410,7 +410,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.selectChapter.get('chapter')?.setValue(id);
   }
 
-  showMedia(media: 'photo' | 'video' | 'all') {
+  showMedia(media: 'photo' | 'video' | 'all' | 'pdf') {
     this.loadedImagesCountSubject.next(0);
     this.loadedVideosCountSubject.next(0);
     this.showMediaSubject.next(media);

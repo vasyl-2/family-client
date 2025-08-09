@@ -12,6 +12,7 @@
   "to_add_photo": "додати фото в галерею",
   "to_add_video": "додати відео в галерею",
   "to_add_chapter": "додати розділ в галерею",
+  "to_add_pdf": "додати PDF",
   "control_panel": "панель управління",
   "photo_gallery": "Фото галерея",
   "move_forward": "Вперед",
@@ -34,5 +35,9 @@
   "little": "маленькі картинки",
   "big": "великі картинки",
   "sub_chapters": "Підрозділи",
-  "search_field": "Пошук"
+  "search_field": "Пошук",
+  "photos_and_videos": "фото і відео",
+  "choose_photo": "вибрати фото",
+  "choose_video": "вибрати відео",
+  "choose_pdf": "вибрати PFD"
 }

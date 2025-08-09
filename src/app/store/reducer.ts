@@ -37,6 +37,7 @@ import { User } from '../models/user';
 import { Role } from '../models/role';
 import { Permission } from '../models/permission';
 import {ViewSettings} from "../models/view-settings";
+import {Pdf} from "../models/pdf";
 
 export interface GalleryState {
   chapters: Chapter[];
@@ -45,6 +46,7 @@ export interface GalleryState {
   videoHierarchyChapters: Chapter[];
   photos?: Photo[];
   videos?: Video[];
+  docs?: Pdf[];
   auth: {
     authenticated: boolean;
     showAlert: boolean;

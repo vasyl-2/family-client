@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 import { Photo } from '../models/photo';
 import { Chapter } from '../models/chapter';
 import { Video } from '../models/video';
+import {Pdf} from "../models/pdf";
 
 @Injectable({ providedIn: 'root' })
 export class UploadPhotoService implements IUploadPhotoService {
@@ -17,7 +18,6 @@ export class UploadPhotoService implements IUploadPhotoService {
 
   // TODO change from any !!!!
   uploadPhoto(photo: { payload: Photo }): Observable<any> {
-    console.log('TO__SAVE____', photo.payload);
     const url = `${environment.apiUrl}/upload-photo/uploadfile`;
     const file = photo.payload.photo!;
 
@@ -69,6 +69,13 @@ export class UploadPhotoService implements IUploadPhotoService {
       responseType: 'text',
       reportProgress: true,
     });
+  }
+
+  uploadDoc(doc: { payload: Pdf }): Observable<any> {
+    const url = `${environment.apiUrl}/upload-photo/uploadpdf`;
+    const file = doc.payload.pdf!;
+
+    return of('');
   }
 
   updatePhoto(photo: Partial<Photo>) {

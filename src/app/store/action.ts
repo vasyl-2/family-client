@@ -7,6 +7,7 @@ import { Video } from '../models/video';
 import { User } from '../models/user';
 import { Role } from '../models/role';
 import { Permission } from '../models/permission';
+import {Pdf} from "../models/pdf";
 
 export const CREATE_ACTION = '[Gallery] CREATE';
 export const CREATED_ACTION = '[Gallery] CREATED';
@@ -16,6 +17,9 @@ export const CREATED_VIDEO_CHAPTER_ACTION = '[Gallery] CREATED VIDEO CHAPTER';
 
 export const CREATE_PHOTO_ACTION = '[Gallery] CREATE PHOTO';
 export const CREATED_PHOTO_ACTION = '[Gallery] CREATED PHOTO';
+
+export const CREATE_DOC_ACTION = '[Gallery] CREATE PDF';
+export const CREATED_DOC_ACTION = '[Gallery] CREATED PDF';
 
 export const EDIT_PHOTO_ACTION = '[Gallery] EDIT PHOTO';
 export const EDITED_PHOTO_ACTION = '[Gallery] EDITED PHOTO';
@@ -100,7 +104,7 @@ export const createdPhoto = createAction(
   CREATED_PHOTO_ACTION,
   props<{ photo: any }>(), // TODO change from any
 );
-// ==============END PHOTO ================================
+
 
 //=============== *** EDIT PHOTO *** ===============================
 export const editPhoto = createAction(
@@ -112,8 +116,22 @@ export const editedPhoto = createAction(
   EDITED_PHOTO_ACTION,
   props<{ photo: any }>(), // TODO change from any
 );
+// ==============END PHOTO ================================
+
 
 //================= END EDIT PHOTO========================================
+
+// ==================**** DOC PDF *** ========================
+export const createPdf = createAction(
+  CREATE_DOC_ACTION,
+  props<{ payload: Pdf }>(),
+);
+
+export const createdPdf = createAction(
+  CREATED_DOC_ACTION,
+  props<{ doc: any }>(), // TODO change from any
+);
+
 
 // =============== *** VIDEO *** ==========================
 export const createVideo = createAction(

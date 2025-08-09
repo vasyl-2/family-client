@@ -30,6 +30,7 @@ import { NgxPermissionsModule } from 'ngx-permissions';
 import { MatNativeDateModule } from '@angular/material/core';
 import {TranslateLoader, TranslateModule, TranslateService} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) =>
   new TranslateHttpLoader(http, '/assets/i18n/', '.json');
@@ -54,7 +55,8 @@ const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: Http
     CommonModule,
     NgxPermissionsModule.forRoot(),
     MatNativeDateModule,
-    TranslateModule
+    TranslateModule,
+    NgxExtendedPdfViewerModule
   ],
   providers: [
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: DIALOG_CONFIG },
