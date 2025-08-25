@@ -83,6 +83,11 @@
       </button>
 
       <span class="example-spacer"></span>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPdf()" mat-button class="add-photo">
+        {{ 'to_add_pdf' | translate }} *
+      </button>
+
+      <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
         {{ 'to_add_chapter' | translate }} *
       </button>

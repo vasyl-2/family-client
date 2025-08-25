@@ -41,7 +41,7 @@
       <label class="file">
         <mat-icon>attach_file</mat-icon>
         <span>вибери файл з диска</span>
-        <input #upload class='file' id="upload-photo" type="file"  accept="image/*" (change)="uploadPhoto($event)">
+        <input #upload class='file' id="upload-photo" type="file"  accept="image/*, application/pdf" (change)="uploadPhoto($event)">
       </label>
 
       <button mat-icon-button

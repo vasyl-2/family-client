@@ -1,11 +1,15 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
-import {Chapter} from "../../../models/chapter";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {select, Store} from "@ngrx/store";
+
 import {GalleryState} from "../../../store/reducer";
 import {chaptersHierarchySelector} from "../../../store/selectors";
+import {withLatestFrom} from "rxjs/operators";
+import {Chapter} from "../../../models/chapter";
+import {Pdf} from "../../../models/pdf";
+
 
 @Component({
   selector: 'app-create-doc',
@@ -16,8 +20,8 @@ import {chaptersHierarchySelector} from "../../../store/selectors";
 })
 export class CreateDocComponent implements OnInit {
 
-  addDocForm!: FormGroup;
-  docChapters$!: Observable<Chapter[]>;
+  addMediaForm!: FormGroup;
+  mediaChapters$!: Observable<Chapter[]>;
   today!: Date;
 
   private readonly sub = new Subscription();
@@ -26,7 +30,7 @@ export class CreateDocComponent implements OnInit {
   );
 
   get chapterControl(): FormControl {
-    return this.addDocForm!.get('chapter') as FormControl;
+    return this.addMediaForm!.get('chapter') as FormControl;
   }
 
   constructor(
@@ -44,21 +48,90 @@ export class CreateDocComponent implements OnInit {
     this.initForm();
     this.today = new Date(new Date().getTime());
 
-    this.docChapters$ = this.store.pipe(select(chaptersHierarchySelector));
+    this.mediaChapters$ = this.store.pipe(select(chaptersHierarchySelector));
+
+    this.sub.add(
+      this.chapterControl.valueChanges
+        .pipe(withLatestFrom(this.mediaChapters$))
+        .subscribe(([chapter, allChapters]: [string, Chapter[]]) => {
+          const currentChapter = this.findChapterById(allChapters, chapter);
+          let fullPath: string;
+
+          if (currentChapter && currentChapter.fullPath) {
+            fullPath = currentChapter.fullPath;
+            this.addMediaForm.get('fullPath')?.setValue(fullPath);
+          }
+
+          console.log('CURRENT___CHAPTER_____', currentChapter);
+        }),
+    );
+  }
+
+  // tslint:disable-next-line:no-any
+  async uploadMedia(event: any): Promise<void> {
+    const file: File = event.target.files[0];
+    this.fileSubject.next(file);
   }
 
   cancel(): void {
     this.dialogRef.close();
   }
 
+  addMedia(): void {
+    const {
+      name = undefined,
+      chapter = undefined,
+      description = undefined,
+      fullPath,
+      dateOfMedia = undefined,
+    } = this.addMediaForm.value;
+
+    if (this.fileSubject.value == undefined) {
+      return;
+    } else {
+      const media: Pdf = {
+        name,
+        chapter,
+        description,
+        pdf: this.fileSubject.value,
+        fullPath,
+        date: dateOfMedia,
+      };
+      this.dialogRef.close(media);
+    }
+  }
+
   private initForm(): void {
-    this.addDocForm = this.fromBuilder.group({
+    this.addMediaForm = this.fromBuilder.group({
       name: ['', Validators.required],
       chapter: '',
       description: '',
       fullPath: '',
-      dateOfDoc: '',
+      dateOfMedia: '',
     });
+  }
+
+  private findChapterById(
+    chapters: Chapter[],
+    targetId: string,
+  ): Chapter | undefined {
+    for (const chapter of chapters) {
+      if (chapter._id === targetId) {
+        return chapter;
+      }
+
+      if (chapter.children && chapter.children.length > 0) {
+        const foundInChildren = this.findChapterById(
+          chapter.children,
+          targetId,
+        );
+        if (foundInChildren) {
+          return foundInChildren;
+        }
+      }
+    }
+
+    return undefined;
   }
 
 }

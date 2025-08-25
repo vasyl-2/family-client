@@ -16,7 +16,7 @@ import { GalleryState } from '../../store/reducer';
 import { Chapter } from '../../models/chapter';
 import {
   authenticateAlert,
-  createChapter,
+  createChapter, createdPdf, createPdf,
   createPhoto,
   createVideo,
   createVideoChapter,
@@ -38,6 +38,8 @@ import { CheckTokenService } from '../../services/authorization/check-token.serv
 import { EditChaptersComponent } from '../../shared/components/edit-chapters/edit-chapters.component';
 import { NgxPermissionsService } from 'ngx-permissions';
 import {TranslateService} from "@ngx-translate/core";
+import {CreateDocComponent} from "../../shared/components/create-doc/create-doc.component";
+import {Pdf} from "../../models/pdf";
 
 @Component({
   selector: 'app-header-top',
@@ -164,6 +166,34 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     if (!this.checkTokenService.isAdminSubject.value) {
       return;
     }
+
+    const dialogRef = this.dialog.open(CreateDocComponent, {
+      panelClass: 'dialog-property',
+      // position: { top: '80px' },
+      data: {},
+    });
+
+    this.sub.add(
+      dialogRef
+        .afterClosed()
+        .pipe(
+          filter((doc: Pdf) => !!doc),
+          switchMap((doc) =>
+            this.store.pipe(select(chaptersSelector)).pipe(
+              map((chapters: Chapter[]) => {
+                const currentChapter = chapters.find(
+                  (c: Chapter) => c._id === doc.chapter,
+                );
+                doc.chapterName = currentChapter!!.title;
+                return doc;
+              }),
+            ),
+          ),
+        )
+        .subscribe((doc: Pdf) =>
+          this.store.dispatch(createPdf({ payload: doc })),
+        ),
+    );
   }
 
 

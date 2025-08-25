@@ -39,5 +39,7 @@
   "photos_and_videos": "фото і відео",
   "choose_photo": "вибрати фото",
   "choose_video": "вибрати відео",
-  "choose_pdf": "вибрати PFD"
+  "choose_pdf": "вибрати PFD",
+  "choose_file": "вибери файл",
+  "choose_file_from_disk": "вибери файл з диска"
 }

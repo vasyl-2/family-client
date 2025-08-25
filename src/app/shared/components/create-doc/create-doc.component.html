@@ -1,1 +1,70 @@
-<p>create-doc works!</p>
+<ng-container [formGroup]="addMediaForm" >
+  <div class="add-photo-wrapper">
+    <mat-form-field appearance="fill">
+      <mat-label>Назва</mat-label>
+      <input formControlName="name" matInput>
+      <mat-error *ngIf="addMediaForm?.get('name')?.hasError('required')">назву обов'язково вказати</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class='description' appearance="fill">
+      <mat-label>краткий опис</mat-label>
+      <textarea  formControlName="description"
+                 matInput
+                 cdkTextareaAutosize
+                 #autosize="cdkTextareaAutosize"
+                 cdkAutosizeMinRows="1"
+                 cdkAutosizeMaxRows="5"
+      ></textarea>
+    </mat-form-field>
+
+    <mat-form-field class='description' appearance="fill">
+      <mat-label>Дата фотографії</mat-label>
+      <input
+        formControlName="dateOfMedia"
+        [max]="today"
+        matInput
+        [matDatepicker]="picker"
+      />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+
+    <div>
+      <app-tree-chapters
+        [chapters]="mediaChapters$ | async"
+        formControlName="chapter"></app-tree-chapters>
+    </div>
+
+    <div class="description">
+      <label class="file">
+        <mat-icon>attach_file</mat-icon>
+        <span>{{ 'choose_file_from_disk' | translate }}</span>
+        <input #upload class='file' id="upload-photo" type="file" accept="application/pdf" (change)="uploadMedia($event)">
+      </label>
+
+      <button mat-icon-button
+              [color]="'default'"
+              (click)="upload.click()">
+        <mat-icon [ngClass]="'material-icons-outlined'">file_upload</mat-icon>
+      </button>
+      <span>{{ 'choose_file' | translate }}</span>
+    </div>
+
+  </div>
+
+
+
+  <div class="actions">
+    <p class="description">Чтобы активизировать кнопку, заполни все обязательные поля *</p>
+    <button mat-button color="primary" (click)="addMedia()" [disabled]="addMediaForm.invalid">
+      Добавить фото
+    </button>
+  </div>
+
+</ng-container>
+
+<button mat-button color="primary" (click)="cancel()">
+  Закрыть
+</button>

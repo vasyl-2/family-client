@@ -21,10 +21,8 @@ import { Photo } from '../../../models/photo';
 import { GalleryState } from '../../../store/reducer';
 import {
   chaptersHierarchySelector,
-  chaptersSelector,
 } from '../../../store/selectors';
 import { Chapter } from '../../../models/chapter';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-create-photo',

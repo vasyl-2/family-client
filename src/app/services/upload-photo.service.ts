@@ -71,11 +71,62 @@ export class UploadPhotoService implements IUploadPhotoService {
     });
   }
 
-  uploadDoc(doc: { payload: Pdf }): Observable<any> {
+  uploadDoc(media: { payload: Pdf }): Observable<any> {
     const url = `${environment.apiUrl}/upload-photo/uploadpdf`;
-    const file = doc.payload.pdf!;
+    const file = media.payload.pdf!;
 
-    return of('');
+    let { name } = file;
+
+    console.log('name_file_____', name)
+
+    if (media.payload.name) {
+      const extension = name.split('.').at(-1);
+      name = `${media.payload.name}.${extension}`;
+    }
+
+    console.log('res_name____', name);
+
+    const formData = new FormData();
+    formData.append('doc', file, name);
+    formData.append('name', name);
+
+    if (media.payload.description) {
+      const { description } = media.payload;
+      formData.append('description', description!);
+    }
+
+    if (media.payload.fullPath) {
+      const { fullPath } = media.payload;
+      formData.append('fullPath', fullPath!);
+    }
+
+    if (media.payload.date) {
+      const { date } = media.payload;
+      formData.append('date', date!.toISOString());
+    }
+
+    if (media.payload.chapter) {
+      const { chapter } = media.payload;
+      formData.append('chapter', chapter!);
+      let headers = new HttpHeaders();
+      let { chapterName, fullPath = undefined } = media.payload;
+
+      if (fullPath) {
+        chapterName = `${fullPath}`;
+      }
+      headers = headers.set('chapterName', chapterName!!);
+
+      return this.http.post(url, formData, {
+        responseType: 'text',
+        reportProgress: true,
+        headers,
+      });
+    }
+
+    return this.http.post(url, formData, {
+      responseType: 'text',
+      reportProgress: true,
+    });
   }
 
   updatePhoto(photo: Partial<Photo>) {

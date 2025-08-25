@@ -31,7 +31,7 @@ import {
   editVideo,
 } from '../../../store/action';
 import {
-  chaptersHierarchySelector,
+  chaptersHierarchySelector, docsSelector,
   photosSelector,
   videosSelector,
 } from '../../../store/selectors';
@@ -231,6 +231,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.photos$ = this.store.pipe(select(photosSelector));
     this.videos$ = this.store.pipe(select(videosSelector));
+    this.pdfs$ = this.store.pipe(select(docsSelector));
 
     this.subChapter$ = this.selectedId$.pipe(
       withLatestFrom(this.allChapters$),
