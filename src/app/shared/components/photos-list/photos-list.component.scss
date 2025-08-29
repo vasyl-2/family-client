@@ -50,6 +50,11 @@
   app-photo, app-video {
     overflow: hidden;
   }
+
+  app-pdf {
+    height: 200px;
+    overflow-y: scroll;
+  }
 }
 
 .table {
@@ -164,4 +169,9 @@ h2, h3 {
 .search-title {
   text-align: left;
   justify-content: flex-start;
+}
+
+.thumbnail {
+  max-width: 150px;
+  cursor: pointer;
 }

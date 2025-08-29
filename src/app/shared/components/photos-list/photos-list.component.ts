@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {BehaviorSubject, Observable, of, Subscription} from 'rxjs';
+import {BehaviorSubject, forkJoin, from, Observable, of, Subscription} from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import {
   debounceTime,
@@ -28,7 +28,7 @@ import {
   editPhoto,
   receivePhotos,
   receiveVideos,
-  editVideo,
+  editVideo, receivePdfs,
 } from '../../../store/action';
 import {
   chaptersHierarchySelector, docsSelector,
@@ -40,11 +40,16 @@ import { environment } from '../../../../environments/environment';
 import { Chapter } from '../../../models/chapter';
 import { MatDialog } from '@angular/material/dialog';
 import { FullSizePhotoComponent } from '../full-size-photo/full-size-photo.component';
-
+import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
 import { Video } from '../../../models/video';
-import {ViewSettingsStore} from "./view-list-store/view-list-store";
-import {Pdf} from "../../../models/pdf";
+import { ViewSettingsStore } from "./view-list-store/view-list-store";
+import { Pdf } from "../../../models/pdf";
+
+GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
 @Component({
   selector: 'app-photos-list',
@@ -59,6 +64,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   photos$!: Observable<Photo[] | undefined>;
   videos$!: Observable<Video[] | undefined>;
   pdfs$!: Observable<Pdf[] | undefined>;
+
+  pdfThumbnails$!: Observable<{ path: string, id: string }[] | undefined>;
 
   commonList$!: Observable<(Photo | Video | Pdf)[]>;
 
@@ -233,6 +240,28 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.videos$ = this.store.pipe(select(videosSelector));
     this.pdfs$ = this.store.pipe(select(docsSelector));
 
+    this.pdfThumbnails$ = this.pdfs$.pipe(
+      switchMap((pdfs: Pdf[] | undefined) => {
+        console.log('PDFS__BEFORE_THUMBNAILS', pdfs)
+
+        if (!pdfs) {
+          return of(undefined)
+        }
+
+        return forkJoin(pdfs.map((pdf: Pdf) =>
+          from(this.renderThumbnail(this.getPdfAsset(pdf))))).pipe(map((r) => {
+          console.log('R_____________', r)
+          return r.map((a => {
+            console.log('R1_____________', a)
+            return { path: a, id: ''}
+          }));
+        }));
+      })
+    )
+
+
+    this.pdfThumbnails$.subscribe(x => console.log('thumb!!!!!', x));
+
     this.subChapter$ = this.selectedId$.pipe(
       withLatestFrom(this.allChapters$),
       map(([id, chapters]: [string, Chapter[]]) => {
@@ -337,6 +366,10 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sub.unsubscribe();
   }
 
+  opendPdf(item: any) {
+    console.log('ITEM_PDF___', item)
+  }
+
   onOrderChanged(e: 'asc' | 'desc' | 'random'):void {
     this.sortBySubject.next(e);
   }
@@ -362,47 +395,15 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(editVideo({ video }));
   }
 
-  // getAsset(photo: Photo): string {
-  //   const { fullPath, name } = photo;
-  //   let path = fullPath ? `${fullPath}/${name}` : name;
-  //   path = `${environment.apiUrl}/${path}`;
-  //
-  //   return path;
-  // }
-
   selectSubChapter(subChapterId: string): void {
+    console.log('CLICKED___!!!')
     this.previousIdSubject.next(this.selectedIdSubject.value);
     this.selectedIdSubject.next(subChapterId);
     this.store.dispatch(receivePhotos({ chapter: subChapterId }));
     this.store.dispatch(receiveVideos({ chapter: subChapterId }));
+    this.store.dispatch(receivePdfs({ chapter: subChapterId }));
     setTimeout(() => this.setGalleryProps.bind(this), 5000);
   }
-
-  // goBackOld() {
-  //   let chapterToGoBack: string | undefined;
-  //
-  //   if (this.previousIdSubject.value) {
-  //     chapterToGoBack = this.previousIdSubject.value;
-  //     if (this.stateOfChapters) {
-  //       const parentOfChapterToGo = this.findChapterById(
-  //         this.stateOfChapters,
-  //         chapterToGoBack,
-  //       )?.parent;
-  //       if (parentOfChapterToGo) {
-  //         this.previousIdSubject.next(parentOfChapterToGo);
-  //       }
-  //     }
-  //   } else {
-  //     chapterToGoBack = this.route.snapshot.params['chapter'];
-  //   }
-  //
-  //   if (chapterToGoBack) {
-  //     this.selectedIdSubject.next(chapterToGoBack);
-  //     this.store.dispatch(receivePhotos({ chapter: chapterToGoBack }));
-  //   }
-  //
-  //   setTimeout(() => this.setGalleryProps.bind(this), 5000);
-  // }
 
   goBack(id: string | null | undefined) {
     if (id) {
@@ -483,6 +484,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           this.selectedIdSubject.next(form.chapter);
           this.store.dispatch(receivePhotos({ chapter: form.chapter }));
           this.store.dispatch(receiveVideos({ chapter: form.chapter }));
+          this.store.dispatch(receivePdfs({ chapter: form.chapter }));
           this.highlightChapterService.chapterIdSubject.next(form.chapter);
         }
       });
@@ -568,5 +570,27 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showSideBar$.pipe(skip(1)).subscribe((state: 'open' | 'close') => {
       this.openSubject.next(!this.openSubject.value);
     });
+  }
+
+  private getPdfAsset(media: Pdf): string {
+    const { fullPath, name } = media;
+    let path = fullPath ? `${fullPath}/${name}` : name;
+    path = `${environment.apiStaticUrl}/${path}`;
+    return path;
+  }
+
+  async renderThumbnail(pdfUrl: string): Promise<string> {
+    const loadingTask = getDocument(pdfUrl);
+    const pdf = await loadingTask.promise;
+    const page = await pdf.getPage(1);
+
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d')!;
+    const viewport = page.getViewport({ scale: 0.2 });
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+
+    await page.render({ canvasContext: context, viewport, canvas }).promise;
+    return canvas.toDataURL();
   }
 }

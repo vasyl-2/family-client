@@ -49,7 +49,8 @@
       commonList: commonList$ | async,
       mediaTypeA: showMediaType$ | async,
       view: view$ | async,
-      pdfs: pdfs$ | async
+      pdfs: pdfs$ | async,
+      pdfThumbnails: pdfThumbnails$ | async,
     } as state;">
       <div class="search-wrapper" *ngIf="state.commonList?.length">
         <h3 class="search-title">{{ 'search_field' | translate }}</h3>
@@ -64,8 +65,10 @@
       </div>
 
       <ng-container *ngIf="state.mediaTypeA === 'pdf'; else other">
-        <ng-container *ngIf="state.pdfs && state.pdfs?.length; else emptypdf">
-
+        <ng-container *ngIf="state.pdfThumbnails && state.pdfThumbnails?.length; else emptypdf">
+          <ng-container *ngFor="let item of state.pdfThumbnails">
+            <img class="thumbnail" [src]="item.path" alt="" (click)="opendPdf(item)"/>
+          </ng-container>
         </ng-container>
       </ng-container>
 

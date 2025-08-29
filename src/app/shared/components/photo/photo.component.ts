@@ -38,7 +38,6 @@ export class PhotoComponent implements OnDestroy {
   }
 
   @Output() updatedPhoto = new EventEmitter<Partial<Photo>>();
-  @Output() updatedVideo = new EventEmitter<Partial<Photo>>();
   @Output() imageLoaded = new EventEmitter<void>();
 
   constructor(private dialog: MatDialog) {}
@@ -53,7 +52,6 @@ export class PhotoComponent implements OnDestroy {
 
   edit(e: MouseEvent): void {
     e.stopPropagation();
-    console.log('EDIT___PHOTO___');
     const description = this.photoSubject.value?.description;
     const nameOfPhoto = this.photoSubject.value?.name;
     const date = this.photoSubject.value?.date;
@@ -75,7 +73,6 @@ export class PhotoComponent implements OnDestroy {
             | undefined,
         ) => {
           if (result) {
-            console.log('RES___33333', result);
             let shouldBeUpdated = false;
             if (result.description) {
               if (
@@ -104,15 +101,12 @@ export class PhotoComponent implements OnDestroy {
                   const currentValue = { ...this.photoSubject.value! };
                   currentValue.name = result.nameOfPhoto;
                   this.photoSubject.next(currentValue);
-
-                  // this.photoSubject.value.name = result.nameOfPhoto;
                   shouldBeUpdated = true;
                 }
               } else {
                 const currentValue = { ...this.photoSubject.value! };
                 currentValue.name = result.nameOfPhoto;
                 this.photoSubject.next(currentValue);
-                // this.photoSubject.value!.name = result.nameOfPhoto;
                 shouldBeUpdated = true;
               }
             }
@@ -134,7 +128,6 @@ export class PhotoComponent implements OnDestroy {
             }
 
             if (shouldBeUpdated) {
-              console.log('TO___UPDATE_____________', this.photoSubject.value);
               this.updatedPhoto.emit(this.photoSubject.value);
             }
           }

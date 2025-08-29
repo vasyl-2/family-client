@@ -41,6 +41,7 @@
   "choose_video": "choose video",
   "choose_pdf": "choose PFD",
   "choose_file": "choose file",
-  "choose_file_from_disk": "вибери файл з диска"
+  "choose_file_from_disk": "вибери файл з диска",
+  "edit": "Редагувати"
 
 }

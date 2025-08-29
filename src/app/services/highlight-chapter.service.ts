@@ -5,6 +5,6 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class HighlightChapterService {
-  readonly chapterIdSubject = new BehaviorSubject(undefined);
+  readonly chapterIdSubject = new BehaviorSubject<string | undefined>(undefined);
   readonly chapterId$ = this.chapterIdSubject.asObservable();
 }

@@ -1,0 +1,22 @@
+<div class="content">
+<!--  <img class="img" (load)="onLoad()" [src]="mediaName" [alt]="altText"/>-->
+  <ngx-extended-pdf-viewer [src]="mediaName"></ngx-extended-pdf-viewer>
+
+  <div class="description" *ngIf="media$ | async as ph">
+        <span class="desc">
+          {{ ph.description }}
+        </span>
+    <div class="date">
+      {{ (ph.date || '') | date: 'yyyy-MM-dd' }}
+    </div>
+  </div>
+
+  <div class="edit">
+    <button (click)="edit($event)" mat-button color="primary">
+      {{ 'edit' | translate }}
+    </button>
+  </div>
+  <div class="date">
+
+  </div>
+</div>

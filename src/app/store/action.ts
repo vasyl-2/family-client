@@ -21,6 +21,9 @@ export const CREATED_PHOTO_ACTION = '[Gallery] CREATED PHOTO';
 export const CREATE_DOC_ACTION = '[Gallery] CREATE PDF';
 export const CREATED_DOC_ACTION = '[Gallery] CREATED PDF';
 
+export const RECEIVE_ALL_PDFS = '[PHOTOS] RECEIVE DOCS';
+export const RECEIVED_ALL_PDFS = '[PHOTOS] RECEIVED DOCS';
+
 export const EDIT_PHOTO_ACTION = '[Gallery] EDIT PHOTO';
 export const EDITED_PHOTO_ACTION = '[Gallery] EDITED PHOTO';
 
@@ -132,6 +135,15 @@ export const createdPdf = createAction(
   props<{ doc: any }>(), // TODO change from any
 );
 
+export const receivePdfs = createAction(
+  RECEIVE_ALL_PDFS,
+  props<{ chapter: string }>(),
+);
+
+export const receivedPdfs = createAction(
+  RECEIVED_ALL_PDFS,
+  props<{ docs: Pdf[] }>(),
+);
 
 // =============== *** VIDEO *** ==========================
 export const createVideo = createAction(

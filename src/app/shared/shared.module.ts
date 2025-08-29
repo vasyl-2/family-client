@@ -27,6 +27,8 @@ import { AddClassDirective } from './directives/add-class.directive';
 import {ViewSettingsComponent} from "./components/view-settings/view-settings.component";
 import {TranslateModule} from "@ngx-translate/core";
 import { CreateDocComponent } from "./components/create-doc/create-doc.component";
+import { PdfComponent } from "./components/pdf/pdf.component";
+import {NgxExtendedPdfViewerModule} from "ngx-extended-pdf-viewer";
 
 const components = [
   CreatePhotoComponent,
@@ -44,7 +46,8 @@ const components = [
   EditChapterComponent,
   EditChaptersComponent,
   ViewSettingsComponent,
-  CreateDocComponent
+  CreateDocComponent,
+  PdfComponent
 ];
 
 const directives = [
@@ -56,12 +59,13 @@ const directives = [
 ];
 @NgModule({
   declarations: [...components, ...directives],
-  imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, TranslateModule, NgxExtendedPdfViewerModule],
   exports: [
     MaterialModule,
     FormsModule,
     CommonModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule, NgxExtendedPdfViewerModule,
+
     ...components,
     ...directives,
   ],

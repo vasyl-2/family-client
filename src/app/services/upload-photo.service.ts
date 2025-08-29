@@ -205,16 +205,21 @@ export class UploadPhotoService implements IUploadPhotoService {
   }
 
   getAllPhotos(chapter: string): Observable<Photo[]> {
-    // return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photos/${chapter}`);
     return this.http.get<Photo[]>(
       `${environment.apiUrl}/upload-photo/photoslist/${chapter}`,
     );
   }
 
   getAllVideos(chapter: string): Observable<Video[]> {
-    // return this.http.get<Photo[]>(`${environment.apiUrl}/upload-photo/photos/${chapter}`);
     return this.http.get<Video[]>(
       `${environment.apiUrl}/upload-photo/videolist/${chapter}`,
+    );
+  }
+
+  getAllPdfs(chapter: string): Observable<Pdf[]> {
+    console.log('REQUEST__FOR___SUBCHAPTERS___', chapter)
+    return this.http.get<Pdf[]>(
+      `${environment.apiUrl}/upload-photo/pdflist/${chapter}`,
     );
   }
 

@@ -27,7 +27,7 @@ import {
   gotPermissions,
   createdRole,
   createdUser,
-  editedVideo,
+  editedVideo, receivedPdfs,
 } from './action';
 import { Chapter } from '../models/chapter';
 import { Photo } from '../models/photo';
@@ -121,6 +121,12 @@ export const mainReducer = createReducer(
 
   on(receivedPhotos, (state: GalleryState, action): GalleryState => {
     const newState = { ...state, photos: action.photos };
+    return newState;
+  }),
+
+  on(receivedPdfs, (state: GalleryState, action): GalleryState => {
+    const newState = { ...state, docs: action.docs };
+    console.log('NEWSTATE____', newState)
     return newState;
   }),
 

@@ -44,7 +44,7 @@ import {
   CREATE_ROLE,
   createdRole,
   EDIT_VIDEO_ACTION,
-  editedVideo, CREATE_DOC_ACTION, createdPdf,
+  editedVideo, CREATE_DOC_ACTION, createdPdf, RECEIVE_ALL_PDFS, receivedPdfs,
 } from './action';
 
 import { CreateChapter } from '../models/dto/create-chapter';
@@ -63,6 +63,7 @@ import { Permission } from '../models/permission';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { PermissionService } from '../entry/services/permission.service';
 import {Pdf} from "../models/pdf";
+import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 
 @Injectable()
 export class GalleryEffects {
@@ -168,6 +169,17 @@ export class GalleryEffects {
         this.uploadService.getAllPhotos(chapter.chapter),
       ),
       map((photos) => receivedPhotos({ photos })),
+    ),
+  );
+
+  getAllPdfs$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(RECEIVE_ALL_PDFS),
+      exhaustMap((chapter: { chapter: string }) =>
+        this.uploadService.getAllPdfs(chapter.chapter),
+      ),
+      tap((docs) => console.log('PDFSSSSSS___', docs)),
+      map((docs) => receivedPdfs({ docs })),
     ),
   );
 

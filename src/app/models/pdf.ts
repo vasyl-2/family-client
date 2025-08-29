@@ -9,4 +9,5 @@ export interface Pdf {
   fullPath?: string;
   date?: Date;
   type?: 'pfd';
+  thumbnail?: string;
 }
