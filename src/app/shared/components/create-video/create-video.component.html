@@ -3,7 +3,7 @@
     <mat-form-field appearance="fill">
       <mat-label>название </mat-label>
       <input formControlName="name" matInput>
-      @if (addVideoForm?.get('name')?.hasError('required')) {
+      @if (addVideoForm.get('name')?.hasError('required')) {
         <mat-error>название обязательно указать</mat-error>
       }
     </mat-form-field>
@@ -20,7 +20,7 @@
     </mat-form-field>
 
     <mat-form-field class='description' appearance="fill">
-      <mat-label>Дата відео</mat-label>
+      <mat-label>{{ 'date_of_video' | translate }}</mat-label>
       <input
         formControlName="dateOfVideo"
         [max]="today"

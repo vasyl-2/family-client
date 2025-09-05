@@ -61,7 +61,7 @@
       <button mat-button color="primary" (click)="showMedia('pdf')">{{ 'choose_pdf' | translate }}</button>
     </div>
     @if (state.mediaTypeA === 'pdf') {
-      @if (state.pdfThumbnails && state.pdfThumbnails?.length) {
+      @if (state.pdfThumbnails && state.pdfThumbnails.length) {
         @for (item of state.pdfThumbnails; track item) {
           <img class="thumbnail" [src]="item.path" alt="" (click)="opendPdf(item)"/>
         }
@@ -72,7 +72,7 @@
       }
     } @else {
       <div #gallery [ngClass]="{ 'gallery': state.view === 'big', 'little': state.view === 'little', 'table': state.view === 'table' }">
-        @if ((state.commonList && !!state.commonList?.length)) {
+        @if ((state.commonList && !!state.commonList.length)) {
           @for (item of state.commonList; track item) {
             @switch (state.view) {
               @case ('big') {
@@ -127,7 +127,7 @@
         }
       </div>
     }
-    @if (state.commonList && !!state.commonList?.length) {
+    @if (state.commonList && !!state.commonList.length) {
       <div class="change-size">
         <app-range-size [formControl]="size"></app-range-size>
       </div>

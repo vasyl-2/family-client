@@ -3,7 +3,7 @@
     <mat-form-field appearance="fill">
       <mat-label>назва папки, тільки латинськими літерами, наприклад, LETO1990  </mat-label>
       <input formControlName="latinname" matInput>
-      @if (addChapterForm?.get('latinname')?.hasError('required')) {
+      @if (addChapterForm.get('latinname')?.hasError('required')) {
         <mat-error>назву нового розділу обов'яково вказати</mat-error>
       }
     </mat-form-field>
@@ -11,7 +11,7 @@
     <mat-form-field appearance="fill">
       <mat-label>назва для відображення в браузері </mat-label>
       <input formControlName="name" matInput>
-      @if (addChapterForm?.get('name')?.hasError('required')) {
+      @if (addChapterForm.get('name')?.hasError('required')) {
         <mat-error>назва нового раздела обязательно вказати</mat-error>
       }
     </mat-form-field>

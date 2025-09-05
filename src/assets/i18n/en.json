@@ -42,6 +42,9 @@
   "choose_pdf": "choose PFD",
   "choose_file": "choose file",
   "choose_file_from_disk": "вибери файл з диска",
-  "edit": "Редагувати"
+  "edit": "Редагувати",
+  "date_of_photo": "Дата фотографії",
+  "date_of_video": "Дата відео",
+  "date_of_pdf": "Дата документа"
 
 }

@@ -63,7 +63,6 @@ import { Permission } from '../models/permission';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { PermissionService } from '../entry/services/permission.service';
 import {Pdf} from "../models/pdf";
-import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 
 @Injectable()
 export class GalleryEffects {

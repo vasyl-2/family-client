@@ -3,7 +3,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Назва</mat-label>
       <input formControlName="name" matInput>
-      @if (addPhotoForm?.get('name')?.hasError('required')) {
+      @if (addPhotoForm.get('name')?.hasError('required')) {
         <mat-error>назву обов'язково вказати</mat-error>
       }
     </mat-form-field>
@@ -20,7 +20,7 @@
     </mat-form-field>
 
     <mat-form-field class='description' appearance="fill">
-      <mat-label>Дата фотографії</mat-label>
+      <mat-label>{{ 'date_of_photo' | translate }}</mat-label>
       <input
         formControlName="dateOfPhoto"
         [max]="today"
