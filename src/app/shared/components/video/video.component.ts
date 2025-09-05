@@ -8,13 +8,14 @@ import {
   Input,
   Output,
   ViewChild,
+  DOCUMENT
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EditDescriptionComponent } from '../edit-description/edit-description.component';
 import { environment } from '../../../../environments/environment';
 import { Video } from '../../../models/video';
-import { DOCUMENT } from '@angular/common';
+
 
 @Component({
   selector: 'app-video',

@@ -1,18 +1,13 @@
 <p>
 
-  <ng-container *ngIf="showAlert$ | async; else app">
-      <div class="show-alert">
-        <p>{{ 'need_for_authentication' | translate }}</p>
-
-        <button mat-icon-button class="login" [routerLink]="['auth', 'login']">
-          <mat-icon>login</mat-icon>
-        </button>
-
-      </div>
-
-  </ng-container>
-
-  <ng-template #app>
+  @if (showAlert$ | async) {
+    <div class="show-alert">
+      <p>{{ 'need_for_authentication' | translate }}</p>
+      <button mat-icon-button class="login" [routerLink]="['auth', 'login']">
+        <mat-icon>login</mat-icon>
+      </button>
+    </div>
+  } @else {
     <button mat-icon-button [matMenuTriggerFor]="menu" class="mobile">
       <mat-icon>menu</mat-icon>
     </button>
@@ -25,40 +20,30 @@
         {{ 'gallery' | translate }} *
       </button>
       <span class="example-spacer"></span>
-
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPhoto()" mat-button class="add-photo">
         {{ 'to_add_photo' | translate }} *
       </button>
-
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addVideo()" mat-button class="add-photo">
         {{ 'to_add_video' | translate }} *
       </button>
-
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
         {{ 'to_add_chapter' | translate }} *
       </button>
-
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPdf()" mat-button class="add-photo">
         {{ 'to_add_pdf' | translate }} *
       </button>
-
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="editChapters()" mat-button class="add-photo">
         {{ 'to_edit_chapters' | translate }} *
       </button>
-
       <span class="example-spacer"></span>
       <button mat-button class="add-photo">
         {{ 'choose_lang' | translate }} 8888*
       </button>
-
-
     </mat-menu>
-
-
     <mat-toolbar color="primary">
       <span class="go-to-start" routerLink="/">: - )</span>
       <span class="example-spacer"></span>
@@ -66,37 +51,29 @@
         {{ 'control_panel' | translate }}
       </button>
       <span class="example-spacer"></span>
-
       <button  *ngxPermissionsOnly="['create_user', 'edit_user']" routerLink="/gallery" mat-button class="add-photo">
         {{ 'gallery' | translate }} *
       </button>
-
       <span class="example-spacer"></span>
-
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPhoto()" mat-button class="add-photo">
         {{ 'to_add_photo' | translate }} *
       </button>
-
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addVideo()" mat-button class="add-photo">
         {{ 'to_add_video' | translate }} *
       </button>
-
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPdf()" mat-button class="add-photo">
         {{ 'to_add_pdf' | translate }} *
       </button>
-
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
         {{ 'to_add_chapter' | translate }} *
       </button>
-
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="editChapters()" mat-button class="add-photo">
         {{ 'to_edit_chapters' | translate }} *
       </button>
-
       <span class="example-spacer"></span>
       <button [matMenuTriggerFor]="menuLang" mat-button class="add-photo">
         {{ 'choose_lang' | translate }}
@@ -107,21 +84,18 @@
         <button (click)="setLang('de')" mat-menu-item>{{ 'de' | translate }}</button>
         <button (click)="setLang('uk')" mat-menu-item>{{ 'uk' | translate }}</button>
       </mat-menu>
-
-      <ng-container *ngIf="!(isLoggedIn$ | async)">
+      @if (!(isLoggedIn$ | async)) {
         <button mat-icon-button class="login" [routerLink]="['/auth', 'login']">
           <mat-icon>login</mat-icon>
         </button>
-      </ng-container>
-
-      <ng-container *ngIf="isLoggedIn$ | async">
+      }
+      @if (isLoggedIn$ | async) {
         <button mat-icon-button class="login" (click)="logout()">
           <mat-icon>logout!</mat-icon>
         </button>
-      </ng-container>
-
-
+      }
     </mat-toolbar>
-  </ng-template>
+  }
+
 </p>
 

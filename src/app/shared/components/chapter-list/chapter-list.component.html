@@ -1,7 +1,7 @@
 <div class="chapters">
-  <ng-container *ngFor="let chapter of photoChapters$ | async">
+  @for (chapter of photoChapters$ | async; track chapter) {
     <div class="chapter" (click)="selectChapter(chapter._id!)">
-        <span> {{ chapter.nameForUI }}</span>
+      <span> {{ chapter.nameForUI }}</span>
     </div>
-  </ng-container>
+  }
 </div>

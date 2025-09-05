@@ -1,14 +1,16 @@
-<ng-container *ngIf="show">
+@if (show) {
   <mat-form-field appearance="fill">
     <mat-label>выбор разрешений</mat-label>
     <mat-select [formControl]="control" name="" id="" multiple
-                (selectionChange)="onSelectionChange($event.value)"
-    >
-      <mat-option *ngFor="let permission of permissions" [value]="permission._id">
-        {{ permission.displayName }}
-      </mat-option>
+      (selectionChange)="onSelectionChange($event.value)"
+      >
+      @for (permission of permissions; track permission) {
+        <mat-option [value]="permission._id">
+          {{ permission.displayName }}
+        </mat-option>
+      }
     </mat-select>
-    <!--</ng-container>-->
-  </mat-form-field>
-</ng-container>
+  <!--</ng-container>-->
+</mat-form-field>
+}
 

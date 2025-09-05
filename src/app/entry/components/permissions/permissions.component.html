@@ -1,28 +1,27 @@
 <div class="users">
   <h1>{{ 'list_of_permissions' | translate }}</h1>
-<!--  <div class="add-user">-->
-<!--    <button  mat-button (click)="addPermission()">Добавить разрешение</button>-->
+  <!--  <div class="add-user">-->
+  <!--    <button  mat-button (click)="addPermission()">Добавить разрешение</button>-->
 <!--  </div>-->
-  <div class="user-list">
-    <ng-container *ngFor="let permission of permissions">
-      <div class="user">
-        <mat-card appearance="outlined">
-          <mat-card-content>
-            <div class="user-content">
-              <div class="header-user">
-                <span>{{ permission?.displayName }}</span>
-                <span>
-<!--                  <button mat-icon-button (click)="editPermission(permission?._id)">-->
-<!--                     <mat-icon>edit</mat-icon>-->
-<!--                  </button>-->
-                </span>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
-    </ng-container>
+<div class="user-list">
+  @for (permission of permissions; track permission) {
+    <div class="user">
+      <mat-card appearance="outlined">
+        <mat-card-content>
+          <div class="user-content">
+            <div class="header-user">
+              <span>{{ permission?.displayName }}</span>
+              <span>
+                <!--                  <button mat-icon-button (click)="editPermission(permission?._id)">-->
+                <!--                     <mat-icon>edit</mat-icon>-->
+              <!--                  </button>-->
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
+}
+</div>
 </div>
 

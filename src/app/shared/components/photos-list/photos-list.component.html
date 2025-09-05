@@ -1,6 +1,6 @@
-<ng-container *ngIf="showSideBar$ | async as showSideBar">
+@if (showSideBar$ | async; as showSideBar) {
   <button mat-button color="primary" (click)="toggleSideBar(showSideBar)">{{ showSideBar }}</button>
-</ng-container>
+}
 <div class="container" [class.open]="(open$ | async) === true">
 
   <div class="side-bar">
@@ -10,151 +10,132 @@
   </div>
 
   <div class="content">
-<!--    <div class="search-wrapper">-->
-<!--      <h3 class="search-title">{{ 'search_field' | translate }}</h3>-->
-<!--      <app-search [formControl]="search"></app-search>-->
-<!--    </div>-->
-    <ng-container *ngIf="subChapter$ | async as subChapter">
-<!--      <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack(subChapter.parent)" mat-button color="primary">назад</button></div>-->
-      <div class="header"><h2>{{ subChapter.nameForUI }}</h2></div>
-
-      <ng-container *ngIf="subChapter.parent">
-        <button mat-button color="primary" (click)="goBack(subChapter.parent)">{{ 'return_to_chapter' | translate }} {{ subChapter.parentTitle }}</button>
-      </ng-container>
-
-
-      <app-view-settings
-        (view)="onViewChanged($event)"
-        (order)="onOrderChanged($event)"></app-view-settings>
-
-<!--  if subChapters are    -->
-      <ng-container *ngIf="subChapter.children">
-        <h3>{{ 'sub_chapters' | translate }}</h3>
-        <div class="sub-chapters">
-            <ng-container *ngFor="let sC of subChapter.children">
-              <button  mat-button color="primary" (click)="selectSubChapter(sC._id!)">
-                {{ sC.nameForUI }}
-              </button>
-            </ng-container>
-
-        </div>
-      </ng-container>
-<!--   end of if subChapters are   -->
-
-    </ng-container>
+    <!--    <div class="search-wrapper">-->
+    <!--      <h3 class="search-title">{{ 'search_field' | translate }}</h3>-->
+    <!--      <app-search [formControl]="search"></app-search>-->
+  <!--    </div>-->
+  @if (subChapter$ | async; as subChapter) {
+    <!--      <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack(subChapter.parent)" mat-button color="primary">назад</button></div>-->
+    <div class="header"><h2>{{ subChapter.nameForUI }}</h2></div>
+    @if (subChapter.parent) {
+      <button mat-button color="primary" (click)="goBack(subChapter.parent)">{{ 'return_to_chapter' | translate }} {{ subChapter.parentTitle }}</button>
+    }
+    <app-view-settings
+      (view)="onViewChanged($event)"
+    (order)="onOrderChanged($event)"></app-view-settings>
+    <!--  if subChapters are    -->
+    @if (subChapter.children) {
+      <h3>{{ 'sub_chapters' | translate }}</h3>
+      <div class="sub-chapters">
+        @for (sC of subChapter.children; track sC) {
+          <button  mat-button color="primary" (click)="selectSubChapter(sC._id!)">
+            {{ sC.nameForUI }}
+          </button>
+        }
+      </div>
+    }
+    <!--   end of if subChapters are   -->
+  }
 
 
-    <ng-container *ngIf="{
-      sizeA: (sizeOfScale$ | async),
-      commonList: commonList$ | async,
-      mediaTypeA: showMediaType$ | async,
-      view: view$ | async,
-      pdfs: pdfs$ | async,
-      pdfThumbnails: pdfThumbnails$ | async,
-      toOpenPdf: toOpenPdf$ | async,
-    } as state;">
-      <div class="search-wrapper" *ngIf="state.commonList?.length">
+  @if ({
+    sizeA: (sizeOfScale$ | async),
+    commonList: commonList$ | async,
+    mediaTypeA: showMediaType$ | async,
+    view: view$ | async,
+    pdfs: pdfs$ | async,
+    pdfThumbnails: pdfThumbnails$ | async,
+    toOpenPdf: toOpenPdf$ | async,
+    }; as state;) {
+    @if (state.commonList?.length) {
+      <div class="search-wrapper">
         <h3 class="search-title">{{ 'search_field' | translate }}</h3>
         <app-search [formControl]="search"></app-search>
       </div>
-<!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
-      <div class="switch-media">
-        <button mat-button color="primary" (click)="showMedia('all')">{{ 'photos_and_videos' | translate }}</button>
-        <button mat-button color="primary" (click)="showMedia('photo')">{{ 'choose_photo' | translate }}</button>
-        <button mat-button color="primary" (click)="showMedia('video')">{{ 'choose_video' | translate }}</button>
-        <button mat-button color="primary" (click)="showMedia('pdf')">{{ 'choose_pdf' | translate }}</button>
-      </div>
-
-      <ng-container *ngIf="state.mediaTypeA === 'pdf'; else other">
-        <ng-container *ngIf="state.pdfThumbnails && state.pdfThumbnails?.length; else emptypdf">
-          <ng-container *ngFor="let item of state.pdfThumbnails">
-            <img class="thumbnail" [src]="item.path" alt="" (click)="opendPdf(item)"/>
-          </ng-container>
-        </ng-container>
-      </ng-container>
-
-      <ng-template #emptypdf>
+    }
+    <!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
+    <div class="switch-media">
+      <button mat-button color="primary" (click)="showMedia('all')">{{ 'photos_and_videos' | translate }}</button>
+      <button mat-button color="primary" (click)="showMedia('photo')">{{ 'choose_photo' | translate }}</button>
+      <button mat-button color="primary" (click)="showMedia('video')">{{ 'choose_video' | translate }}</button>
+      <button mat-button color="primary" (click)="showMedia('pdf')">{{ 'choose_pdf' | translate }}</button>
+    </div>
+    @if (state.mediaTypeA === 'pdf') {
+      @if (state.pdfThumbnails && state.pdfThumbnails?.length) {
+        @for (item of state.pdfThumbnails; track item) {
+          <img class="thumbnail" [src]="item.path" alt="" (click)="opendPdf(item)"/>
+        }
+      } @else {
         <div>
           no pdfs so far
         </div>
-      </ng-template>
+      }
+    } @else {
+      <div #gallery [ngClass]="{ 'gallery': state.view === 'big', 'little': state.view === 'little', 'table': state.view === 'table' }">
+        @if ((state.commonList && !!state.commonList?.length)) {
+          @for (item of state.commonList; track item) {
+            @switch (state.view) {
+              @case ('big') {
+                @if (item.type === 'photo' && (state.mediaTypeA === 'photo' || state.mediaTypeA === 'all')) {
+                  <app-photo [appEnlarge]="state.sizeA"
+                    [appSetHeight]="computeGridStyle$ | async"
+                    typeOfMedia="img"
+                    (click)="openFullSize($event, item!)"
+                    (updatedPhoto)="onPhotoUpdate($event)"
+                    (imageLoaded)="onImageLoaded()"
+                  [imageSrc]="item"></app-photo>
+                }
+                @if ((item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')) {
+                  <app-video [appEnlarge]="state.sizeA"
+                    typeOfMedia="video"
+                    [appSetHeight]="computeGridStyle$ | async"
+                    (videoLoaded)="onVideoLoaded($event)"
+                    (updatedVideo)="onVideoUpdate($event)"
+                  [videoSrc]="item"></app-video>
+                }
+              }
+              @case ('table') {
+                @if (item.type === 'photo' && (state.mediaTypeA === 'photo' || state.mediaTypeA === 'all')) {
+                  <div class="media-column">
+                    <img (click)="openFullSize($event, item!)" (load)="onImageLoaded()" [src]="getAsset(item)" alt="">
+                  </div>
+                  <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="right" >
+                    {{ item.description || '' }}
+                  </div>
+                  <div class="date-column">
+                    {{ (item.date | date) || ''}}
+                  </div>
+                }
+                @if ((item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')) {
+                  <div class="media-column">
+                    <video controls>
+                      <source [src]="getAsset(item)" type="video/mp4" >
+                    </video>
+                  </div>
+                  <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="right">
+                    {{ item.description || '' }}
+                  </div>
+                  <div class="date-column">
+                    {{ (item.date | date) || ''}}
+                  </div>
+                }
+              }
+            }
+          }
+        } @else {
+          <div class="empty">{{ 'no_media_yet' | translate }} :)</div>
+        }
+      </div>
+    }
+    @if (state.commonList && !!state.commonList?.length) {
+      <div class="change-size">
+        <app-range-size [formControl]="size"></app-range-size>
+      </div>
+    }
+  }
 
-      <ng-template #other>
-        <div #gallery [ngClass]="{ 'gallery': state.view === 'big', 'little': state.view === 'little', 'table': state.view === 'table' }">
-          <ng-container *ngIf="(state.commonList && !!state.commonList?.length); else empty">
-            <ng-container *ngFor="let item of state.commonList">
-
-              <ng-container [ngSwitch]="state.view">
-                <ng-container *ngSwitchCase="'big'">
-                  <ng-container *ngIf="item.type === 'photo' && (state.mediaTypeA === 'photo' || state.mediaTypeA === 'all')">
-                    <app-photo [appEnlarge]="state.sizeA"
-                               [appSetHeight]="computeGridStyle$ | async"
-                               typeOfMedia="img"
-                               (click)="openFullSize($event, item!)"
-                               (updatedPhoto)="onPhotoUpdate($event)"
-                               (imageLoaded)="onImageLoaded()"
-                               [imageSrc]="item"></app-photo>
-                  </ng-container>
-                  <ng-container *ngIf="(item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')">
-                    <app-video [appEnlarge]="state.sizeA"
-                               typeOfMedia="video"
-                               [appSetHeight]="computeGridStyle$ | async"
-                               (videoLoaded)="onVideoLoaded($event)"
-                               (updatedVideo)="onVideoUpdate($event)"
-                               [videoSrc]="item"></app-video>
-                  </ng-container>
-                </ng-container>
-
-                <ng-container *ngSwitchCase="'table'">
-                  <ng-container *ngIf="item.type === 'photo' && (state.mediaTypeA === 'photo' || state.mediaTypeA === 'all')">
-                    <div class="media-column">
-                      <img (click)="openFullSize($event, item!)" (load)="onImageLoaded()" [src]="getAsset(item)" alt="">
-                    </div>
-                    <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="right" >
-                      {{ item.description || '' }}
-                    </div>
-                    <div class="date-column">
-                      {{ (item.date | date) || ''}}
-                    </div>
-                  </ng-container>
-
-                  <ng-container *ngIf="(item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')">
-                    <div class="media-column">
-                      <video controls>
-                        <source [src]="getAsset(item)" type="video/mp4" >
-                      </video>
-                    </div>
-                    <div class="desc-column" [matTooltip]="item.description" matTooltipPosition="right">
-                      {{ item.description || '' }}
-                    </div>
-                    <div class="date-column">
-                      {{ (item.date | date) || ''}}
-                    </div>
-                  </ng-container>
-
-                </ng-container>
-              </ng-container>
-            </ng-container>
-          </ng-container>
-        </div>
-      </ng-template>
-
-
-
-      <ng-container *ngIf="state.commonList && !!state.commonList?.length">
-        <div class="change-size">
-          <app-range-size [formControl]="size"></app-range-size>
-        </div>
-      </ng-container>
-
-
-    </ng-container>
-
-  </div>
+</div>
 
 </div>
 
 
-<ng-template #empty>
-  <div class="empty">{{ 'no_media_yet' | translate }} :)</div>
-</ng-template>

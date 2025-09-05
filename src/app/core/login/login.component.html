@@ -3,26 +3,30 @@
   <mat-form-field class="example-full-width">
     <mat-label>Імя</mat-label>
     <input matInput [formControl]="nameControl" placeholder="введи імя" type="email">
-    <mat-error *ngIf="nameControl.hasError('required')">
-      треба <strong>ввести імя</strong>
-    </mat-error>
+    @if (nameControl.hasError('required')) {
+      <mat-error>
+        треба <strong>ввести імя</strong>
+      </mat-error>
+    }
   </mat-form-field>
   <mat-form-field class="example-full-width">
     <mat-label>Пароль</mat-label>
     <input  [type]="(hide$ | async) ? 'password' : 'text'"
-            matInput
-            [formControl]="pswdControl"
-            placeholder="введи пароль">
-    <button mat-icon-button matSuffix (click)="changeHide()">
-      <mat-icon>{{ (hide$ | async) ? 'visibility_off' : 'visibility'}}</mat-icon>
-    </button>
-    <mat-error *ngIf="pswdControl.hasError('required')">
-      треба <strong>ввести пароль</strong>
-    </mat-error>
-  </mat-form-field>
+      matInput
+      [formControl]="pswdControl"
+      placeholder="введи пароль">
+      <button mat-icon-button matSuffix (click)="changeHide()">
+        <mat-icon>{{ (hide$ | async) ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      @if (pswdControl.hasError('required')) {
+        <mat-error>
+          треба <strong>ввести пароль</strong>
+        </mat-error>
+      }
+    </mat-form-field>
 
-  <button mat-button
-          color="primary"
-          [disabled]="!loginForm.valid"
-          (click)="login()">Увійти</button>
-</form>
+    <button mat-button
+      color="primary"
+      [disabled]="!loginForm.valid"
+    (click)="login()">Увійти</button>
+  </form>

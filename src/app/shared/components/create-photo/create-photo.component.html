@@ -3,17 +3,19 @@
     <mat-form-field appearance="fill">
       <mat-label>Назва</mat-label>
       <input formControlName="name" matInput>
-      <mat-error *ngIf="addPhotoForm?.get('name')?.hasError('required')">назву обов'язково вказати</mat-error>
+      @if (addPhotoForm?.get('name')?.hasError('required')) {
+        <mat-error>назву обов'язково вказати</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field class='description' appearance="fill">
       <mat-label>краткий опис</mat-label>
       <textarea  formControlName="description"
-                 matInput
-                 cdkTextareaAutosize
-                 #autosize="cdkTextareaAutosize"
-                 cdkAutosizeMinRows="1"
-                 cdkAutosizeMaxRows="5"
+        matInput
+        cdkTextareaAutosize
+        #autosize="cdkTextareaAutosize"
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5"
       ></textarea>
     </mat-form-field>
 
@@ -24,47 +26,47 @@
         [max]="today"
         matInput
         [matDatepicker]="picker"
-      />
-      <mat-hint>MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+        />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
 
 
-    <div>
-      <app-tree-chapters
-        [chapters]="photoChapters$ | async"
+      <div>
+        <app-tree-chapters
+          [chapters]="photoChapters$ | async"
         formControlName="chapter"></app-tree-chapters>
+      </div>
+
+      <div class="description">
+        <label class="file">
+          <mat-icon>attach_file</mat-icon>
+          <span>вибери файл з диска</span>
+          <input #upload class='file' id="upload-photo" type="file"  accept="image/*, application/pdf" (change)="uploadPhoto($event)">
+        </label>
+
+        <button mat-icon-button
+          [color]="'default'"
+          (click)="upload.click()">
+          <mat-icon [ngClass]="'material-icons-outlined'">file_upload</mat-icon>
+        </button>
+        <span>вибери файл</span>
+      </div>
+
     </div>
 
-    <div class="description">
-      <label class="file">
-        <mat-icon>attach_file</mat-icon>
-        <span>вибери файл з диска</span>
-        <input #upload class='file' id="upload-photo" type="file"  accept="image/*, application/pdf" (change)="uploadPhoto($event)">
-      </label>
 
-      <button mat-icon-button
-              [color]="'default'"
-              (click)="upload.click()">
-        <mat-icon [ngClass]="'material-icons-outlined'">file_upload</mat-icon>
+
+    <div class="actions">
+      <p class="description">Чтобы активизировать кнопку, заполни все обязательные поля *</p>
+      <button mat-button color="primary" (click)="addPhoto()" [disabled]="addPhotoForm.invalid">
+        Добавить фото
       </button>
-      <span>вибери файл</span>
     </div>
 
-  </div>
+  </ng-container>
 
-
-
-  <div class="actions">
-    <p class="description">Чтобы активизировать кнопку, заполни все обязательные поля *</p>
-    <button mat-button color="primary" (click)="addPhoto()" [disabled]="addPhotoForm.invalid">
-      Добавить фото
-    </button>
-  </div>
-
-</ng-container>
-
-<button mat-button color="primary" (click)="cancel()">
-  Закрыть
-</button>
+  <button mat-button color="primary" (click)="cancel()">
+    Закрыть
+  </button>

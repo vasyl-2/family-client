@@ -1,9 +1,9 @@
 
 <div class="content">
-  <ng-container *ngIf="{
+  @if ({
     fill: isFullScreen$ | async,
     ph: video$ | async
-  } as full">
+    }; as full) {
     <video
       [ngStyle]="{'object-fit': full.fill ? 'contain' : 'cover'}"
       (fullscreenchange)="onChangeFullScreen(videoEl)"
@@ -14,17 +14,16 @@
     </video>
     <!--  <img class="img" (load)="onLoad()" [src]="v>ideoSrc" alt="image"/-->
     <div class="description">
-        <span class="desc">
-          {{ full.ph!.description }}
-        </span>
+      <span class="desc">
+        {{ full.ph!.description }}
+      </span>
     </div>
     <div class="edit">
       <button (click)="edit($event)" mat-button color="primary">
         Редагувати
       </button>
     </div>
-
-  </ng-container>
+  }
 
 </div>
 

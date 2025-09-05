@@ -3,13 +3,17 @@
     <mat-form-field appearance="fill">
       <mat-label>назва папки, тільки латинськими літерами, наприклад, LETO1990  </mat-label>
       <input formControlName="latinname" matInput>
-      <mat-error *ngIf="addChapterForm?.get('latinname')?.hasError('required')">назву нового розділу обов'яково вказати</mat-error>
+      @if (addChapterForm?.get('latinname')?.hasError('required')) {
+        <mat-error>назву нового розділу обов'яково вказати</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>назва для відображення в браузері </mat-label>
       <input formControlName="name" matInput>
-      <mat-error *ngIf="addChapterForm?.get('name')?.hasError('required')">назва нового раздела обязательно вказати</mat-error>
+      @if (addChapterForm?.get('name')?.hasError('required')) {
+        <mat-error>назва нового раздела обязательно вказати</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill">
@@ -17,34 +21,34 @@
       <input formControlName="description" matInput>
     </mat-form-field>
 
-<!--    <mat-form-field appearance="fill">-->
-<!--      <mat-label>главный раздел</mat-label>-->
-<!--      <app-tree-chapters formControlName="parentChapter"></app-tree-chapters>-->
-<!--      <mat-select formControlName="parentChapter">-->
-<!--        <ng-container *ngFor="let chapterA of photoChapters$ | async; index as i">-->
-<!--          <mat-option [value]="chapterA._id">-->
-<!--            {{ chapterA.nameForUI }}-->
-<!--          </mat-option>-->
+    <!--    <mat-form-field appearance="fill">-->
+    <!--      <mat-label>главный раздел</mat-label>-->
+    <!--      <app-tree-chapters formControlName="parentChapter"></app-tree-chapters>-->
+    <!--      <mat-select formControlName="parentChapter">-->
+    <!--        <ng-container *ngFor="let chapterA of photoChapters$ | async; index as i">-->
+    <!--          <mat-option [value]="chapterA._id">-->
+    <!--            {{ chapterA.nameForUI }}-->
+  <!--          </mat-option>-->
 <!--        </ng-container>-->
 <!--      </mat-select>-->
 <!--    </mat-form-field>-->
 
-  </div>
+</div>
 
 
-  <div class="center">Выбери каталог, если хочешь добавить подкаталог</div>
-  <div class="tree-chapters">
-    <app-tree-chapters
-      [chapters]="photoChapters$ | async"
-      formControlName="parentChapter"></app-tree-chapters>
-  </div>
+<div class="center">Выбери каталог, если хочешь добавить подкаталог</div>
+<div class="tree-chapters">
+  <app-tree-chapters
+    [chapters]="photoChapters$ | async"
+  formControlName="parentChapter"></app-tree-chapters>
+</div>
 
-  <div class="actions">
-    <p class="description">Чтобы активизировать кнопку, введи название нового каталога *</p>
-    <button mat-button color="primary" (click)="addChapter()" [disabled]="addChapterForm.invalid">
-      Добавить раздел
-    </button>
-  </div>
+<div class="actions">
+  <p class="description">Чтобы активизировать кнопку, введи название нового каталога *</p>
+  <button mat-button color="primary" (click)="addChapter()" [disabled]="addChapterForm.invalid">
+    Добавить раздел
+  </button>
+</div>
 
 </ng-container>
 

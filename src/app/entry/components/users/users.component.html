@@ -4,7 +4,7 @@
     <button  mat-button (click)="addUser()">{{ 'to_add_user' | translate }}</button>
   </div>
   <div class="user-list">
-    <ng-container *ngFor="let user of users">
+    @for (user of users; track user) {
       <div class="user">
         <mat-card appearance="outlined">
           <mat-card-content>
@@ -13,7 +13,7 @@
                 <span>{{ user?.email }}</span>
                 <span>
                   <button mat-icon-button (click)="editUser(user?._id)">
-                     <mat-icon>edit</mat-icon>
+                    <mat-icon>edit</mat-icon>
                   </button>
                 </span>
               </div>
@@ -21,7 +21,6 @@
           </mat-card-content>
         </mat-card>
       </div>
-
-    </ng-container>
+    }
   </div>
 </div>
