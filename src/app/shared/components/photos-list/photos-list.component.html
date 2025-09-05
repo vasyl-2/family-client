@@ -51,6 +51,7 @@
       view: view$ | async,
       pdfs: pdfs$ | async,
       pdfThumbnails: pdfThumbnails$ | async,
+      toOpenPdf: toOpenPdf$ | async,
     } as state;">
       <div class="search-wrapper" *ngIf="state.commonList?.length">
         <h3 class="search-title">{{ 'search_field' | translate }}</h3>

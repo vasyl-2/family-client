@@ -13,7 +13,7 @@ import {BehaviorSubject, forkJoin, from, Observable, of, Subscription} from 'rxj
 import { select, Store } from '@ngrx/store';
 import {
   debounceTime,
-  distinctUntilChanged,
+  distinctUntilChanged, filter,
   map,
   shareReplay,
   skip, startWith, switchMap,
@@ -132,6 +132,12 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private readonly viewSettingsStore = inject(ViewSettingsStore);
 
+  private readonly toOpenPdfIdSubject = new BehaviorSubject<string | undefined>(undefined);
+  readonly toOpenPdfId$ = this.toOpenPdfIdSubject.asObservable();
+
+  toOpenPdf$!: Observable<{ doc: Pdf, path: string } | undefined>;
+  // toOpenPdf$!: Observable<any | undefined>;
+
   constructor(
     private route: ActivatedRoute,
     private store: Store<GalleryState>,
@@ -140,7 +146,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     private highlightChapterService: HighlightChapterService,
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
-  ) {}
+  ) {
+
+  }
 
   ngAfterViewInit(): void {
     this.loadedImagesCountSubject
@@ -238,7 +246,31 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.photos$ = this.store.pipe(select(photosSelector));
     this.videos$ = this.store.pipe(select(videosSelector));
-    this.pdfs$ = this.store.pipe(select(docsSelector));
+    this.pdfs$ = this.store.pipe(select(docsSelector)).pipe(shareReplay(1));
+
+    this.toOpenPdf$ = this.toOpenPdfId$.pipe(withLatestFrom(this.pdfs$)).pipe(map(([id, a]: [string | undefined, Pdf[] | undefined]) => {
+
+      if (!a || !a.length || !id) return undefined;
+
+      const pdf =  a.find((c: Pdf) => {
+        return c._id === id
+      });
+
+      if (!pdf) return undefined;
+
+      const { path } = this.getPdfAsset(pdf);
+
+      return {
+        doc: pdf, path
+      }
+
+    }));
+
+    this.toOpenPdf$.pipe(
+      filter((x) => !!x),
+    ).subscribe( x => {
+      console.log('CLICKED_PDF______', x)
+    });
 
     this.pdfThumbnails$ = this.pdfs$.pipe(
       switchMap((pdfs: Pdf[] | undefined) => {
@@ -249,15 +281,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         return forkJoin(pdfs.map((pdf: Pdf) =>
-          from(this.renderThumbnail(this.getPdfAsset(pdf))))).pipe(map((r) => {
-          console.log('R_____________', r)
-          return r.map((a => {
-            console.log('R1_____________', a)
-            return { path: a, id: ''}
-          }));
-        }));
+          from(this.renderThumbnail(this.getPdfAsset(pdf)))));
       })
-    )
+    );
+
+
 
 
     this.pdfThumbnails$.subscribe(x => console.log('thumb!!!!!', x));
@@ -367,7 +395,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   opendPdf(item: any) {
-    console.log('ITEM_PDF___', item)
+    console.log('ITEM_PDF___', item);
+    this.toOpenPdfIdSubject.next(item.id)
   }
 
   onOrderChanged(e: 'asc' | 'desc' | 'random'):void {
@@ -572,15 +601,15 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  private getPdfAsset(media: Pdf): string {
+  private getPdfAsset(media: Pdf): { path: string, id: string } {
     const { fullPath, name } = media;
     let path = fullPath ? `${fullPath}/${name}` : name;
     path = `${environment.apiStaticUrl}/${path}`;
-    return path;
+    return { path , id: media._id! };
   }
 
-  async renderThumbnail(pdfUrl: string): Promise<string> {
-    const loadingTask = getDocument(pdfUrl);
+  async renderThumbnail(pdfUrl: { path: string, id: string }): Promise<{ path: string, id: string }> {
+    const loadingTask = getDocument(pdfUrl.path);
     const pdf = await loadingTask.promise;
     const page = await pdf.getPage(1);
 
@@ -591,6 +620,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     canvas.width = viewport.width;
 
     await page.render({ canvasContext: context, viewport, canvas }).promise;
-    return canvas.toDataURL();
+    return { path: canvas.toDataURL(), id: pdfUrl.id }
   }
 }
