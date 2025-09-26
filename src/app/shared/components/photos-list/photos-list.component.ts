@@ -45,6 +45,7 @@ import { HighlightChapterService } from '../../../services/highlight-chapter.ser
 import { Video } from '../../../models/video';
 import { ViewSettingsStore } from "./view-list-store/view-list-store";
 import { Pdf } from "../../../models/pdf";
+import {PdfComponent} from "../pdf/pdf.component";
 
 GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.mjs",
@@ -65,7 +66,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   videos$!: Observable<Video[] | undefined>;
   pdfs$!: Observable<Pdf[] | undefined>;
 
-  pdfThumbnails$!: Observable<{ path: string, id: string }[] | undefined>;
+  pdfThumbnails$!: Observable<{ path: string; id: string; pdf: Pdf }[] | undefined>;
 
   commonList$!: Observable<(Photo | Video | Pdf)[]>;
 
@@ -269,7 +270,16 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.toOpenPdf$.pipe(
       filter((x) => !!x),
     ).subscribe( x => {
-      console.log('CLICKED_PDF______', x)
+      console.log('CLICKED_PDF______', x);
+      const dialog = this.dialog.open(PdfComponent, {
+        data: {},
+        height: '90vh',
+        width: '90vw',
+      })
+
+      dialog.afterClosed().subscribe(() => {
+        console.log('CLICKED_DIALOG___', x);
+      })
     });
 
     this.pdfThumbnails$ = this.pdfs$.pipe(
@@ -284,9 +294,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           from(this.renderThumbnail(this.getPdfAsset(pdf)))));
       })
     );
-
-
-
 
     this.pdfThumbnails$.subscribe(x => console.log('thumb!!!!!', x));
 
@@ -601,14 +608,14 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  private getPdfAsset(media: Pdf): { path: string, id: string } {
+  private getPdfAsset(media: Pdf): { path: string, id: string, pdf: Pdf } {
     const { fullPath, name } = media;
     let path = fullPath ? `${fullPath}/${name}` : name;
     path = `${environment.apiStaticUrl}/${path}`;
-    return { path , id: media._id! };
+    return { path , id: media._id!, pdf: media };
   }
 
-  async renderThumbnail(pdfUrl: { path: string, id: string }): Promise<{ path: string, id: string }> {
+  async renderThumbnail(pdfUrl: { path: string, id: string, pdf: Pdf }): Promise<{ path: string, id: string, pdf: Pdf }> {
     const loadingTask = getDocument(pdfUrl.path);
     const pdf = await loadingTask.promise;
     const page = await pdf.getPage(1);
@@ -620,6 +627,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     canvas.width = viewport.width;
 
     await page.render({ canvasContext: context, viewport, canvas }).promise;
-    return { path: canvas.toDataURL(), id: pdfUrl.id }
+    return { path: canvas.toDataURL(), id: pdfUrl.id, pdf: pdfUrl.pdf }
   }
 }
