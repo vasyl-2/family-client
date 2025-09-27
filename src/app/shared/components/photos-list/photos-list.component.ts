@@ -66,7 +66,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   videos$!: Observable<Video[] | undefined>;
   pdfs$!: Observable<Pdf[] | undefined>;
 
-  pdfThumbnails$!: Observable<{ path: string; id: string; pdf: Pdf }[] | undefined>;
+  pdfThumbnails$!: Observable<{ path: string; id: string }[] | undefined>;
 
   commonList$!: Observable<(Photo | Video | Pdf)[]>;
 
@@ -272,7 +272,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe( x => {
       console.log('CLICKED_PDF______', x);
       const dialog = this.dialog.open(PdfComponent, {
-        data: {},
+        data: x.doc,
         height: '90vh',
         width: '90vw',
       })
@@ -608,14 +608,14 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  private getPdfAsset(media: Pdf): { path: string, id: string, pdf: Pdf } {
+  private getPdfAsset(media: Pdf): { path: string, id: string } {
     const { fullPath, name } = media;
     let path = fullPath ? `${fullPath}/${name}` : name;
     path = `${environment.apiStaticUrl}/${path}`;
-    return { path , id: media._id!, pdf: media };
+    return { path , id: media._id! };
   }
 
-  async renderThumbnail(pdfUrl: { path: string, id: string, pdf: Pdf }): Promise<{ path: string, id: string, pdf: Pdf }> {
+  async renderThumbnail(pdfUrl: { path: string, id: string }): Promise<{ path: string, id: string }> {
     const loadingTask = getDocument(pdfUrl.path);
     const pdf = await loadingTask.promise;
     const page = await pdf.getPage(1);
@@ -627,6 +627,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     canvas.width = viewport.width;
 
     await page.render({ canvasContext: context, viewport, canvas }).promise;
-    return { path: canvas.toDataURL(), id: pdfUrl.id, pdf: pdfUrl.pdf }
+    return { path: canvas.toDataURL(), id: pdfUrl.id }
   }
 }

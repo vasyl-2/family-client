@@ -1,10 +1,20 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import {BehaviorSubject, Subscription} from "rxjs";
-import {MatDialog} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 
 import {Pdf} from "../../../models/pdf";
 import {environment} from "../../../../environments/environment";
 import {EditDescriptionComponent} from "../edit-description/edit-description.component";
+
 
 @Component({
   selector: 'app-pdf',
@@ -13,7 +23,8 @@ import {EditDescriptionComponent} from "../edit-description/edit-description.com
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class PdfComponent implements OnDestroy {
+export class PdfComponent implements OnInit, OnDestroy {
+
   mediaName!: string;
   media!: Pdf;
   altText = 'pdf';
@@ -35,7 +46,19 @@ export class PdfComponent implements OnDestroy {
   @Output() updatedMedia = new EventEmitter<Partial<Pdf>>();
   @Output() mediaLoaded = new EventEmitter<void>();
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: Pdf
+  ) {}
+
+  ngOnInit(): void {
+    console.log('DATA_______PDF:', this.data);
+
+    this.media = this.data;
+    this.mediaSubject.next(this.data);
+    this.mediaName = this.getAsset(this.data);
+    console.log('MEDIA___NAME____', this.mediaName)
+  }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
