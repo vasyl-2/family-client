@@ -17,7 +17,6 @@ import {MediaCreateResponse} from "../models/dto/response-create";
 export class UploadPhotoService implements IUploadPhotoService {
   constructor(private http: HttpClient) {}
 
-  // TODO change from any !!!!
   uploadPhoto(photo: { payload: Photo }): Observable<MediaCreateResponse> {
     const url = `${environment.apiUrl}/upload-photo/uploadfile`;
     const file = photo.payload.photo!;
@@ -209,7 +208,6 @@ export class UploadPhotoService implements IUploadPhotoService {
   }
 
   getAllPdfs(chapter: string): Observable<Pdf[]> {
-    console.log('REQUEST__FOR___SUBCHAPTERS___', chapter)
     return this.http.get<Pdf[]>(
       `${environment.apiUrl}/upload-photo/pdflist/${chapter}`,
     );
