@@ -133,41 +133,41 @@ export class UploadPhotoService implements IUploadPhotoService {
     return this.http.patch(url, { video });
   }
 
-  uploadVideo(video: { payload: Video }): Observable<MediaCreateResponse> {
+  uploadVideo(media: { payload: Video }): Observable<MediaCreateResponse> {
     const url = `${environment.apiUrl}/upload-photo/uploadvideo`;
-    const file = video.payload.video!;
+    const file = media.payload.video!;
 
     let { name } = file;
 
-    if (video.payload.name) {
+    if (media.payload.name) {
       const extension = name.split('.').at(-1);
-      name = `${video.payload.name}.${extension}`;
+      name = `${media.payload.name}.${extension}`;
     }
 
     const formData = new FormData();
     formData.append('video', file, name);
     formData.append('name', name);
 
-    if (video.payload.description) {
-      const { description } = video.payload;
+    if (media.payload.description) {
+      const { description } = media.payload;
       formData.append('description', description!);
     }
 
-    if (video.payload.date) {
-      const { date } = video.payload;
+    if (media.payload.date) {
+      const { date } = media.payload;
       formData.append('date', date!.toISOString());
     }
 
-    if (video.payload.fullPath) {
-      const { fullPath } = video.payload;
+    if (media.payload.fullPath) {
+      const { fullPath } = media.payload;
       formData.append('fullPath', fullPath!);
     }
 
-    if (video.payload.chapter) {
-      const { chapter } = video.payload;
+    if (media.payload.chapter) {
+      const { chapter } = media.payload;
       formData.append('chapter', chapter!);
       let headers = new HttpHeaders();
-      let { chapterName, fullPath = undefined } = video.payload;
+      let { chapterName, fullPath = undefined } = media.payload;
 
       if (fullPath) {
         chapterName = `${fullPath}`;
