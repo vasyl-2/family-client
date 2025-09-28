@@ -11,13 +11,14 @@ import { Photo } from '../models/photo';
 import { Chapter } from '../models/chapter';
 import { Video } from '../models/video';
 import {Pdf} from "../models/pdf";
+import {MediaCreateResponse} from "../models/dto/response-create";
 
 @Injectable({ providedIn: 'root' })
 export class UploadPhotoService implements IUploadPhotoService {
   constructor(private http: HttpClient) {}
 
   // TODO change from any !!!!
-  uploadPhoto(photo: { payload: Photo }): Observable<any> {
+  uploadPhoto(photo: { payload: Photo }): Observable<MediaCreateResponse> {
     const url = `${environment.apiUrl}/upload-photo/uploadfile`;
     const file = photo.payload.photo!;
 
@@ -58,33 +59,29 @@ export class UploadPhotoService implements IUploadPhotoService {
       }
       headers = headers.set('chapterName', chapterName!!);
 
-      return this.http.post(url, formData, {
-        responseType: 'text',
+      return this.http.post<MediaCreateResponse>(url, formData, {
         reportProgress: true,
         headers,
       });
     }
 
-    return this.http.post(url, formData, {
-      responseType: 'text',
+    return this.http.post<MediaCreateResponse>(url, formData, {
       reportProgress: true,
     });
   }
 
-  uploadDoc(media: { payload: Pdf }): Observable<any> {
+  uploadDoc(media: { payload: Pdf }): Observable<MediaCreateResponse> {
     const url = `${environment.apiUrl}/upload-photo/uploadpdf`;
     const file = media.payload.pdf!;
 
     let { name } = file;
 
-    console.log('name_file_____', name)
 
     if (media.payload.name) {
       const extension = name.split('.').at(-1);
       name = `${media.payload.name}.${extension}`;
     }
 
-    console.log('res_name____', name);
 
     const formData = new FormData();
     formData.append('doc', file, name);
@@ -116,15 +113,13 @@ export class UploadPhotoService implements IUploadPhotoService {
       }
       headers = headers.set('chapterName', chapterName!!);
 
-      return this.http.post(url, formData, {
-        responseType: 'text',
+      return this.http.post<MediaCreateResponse>(url, formData, {
         reportProgress: true,
         headers,
       });
     }
 
-    return this.http.post(url, formData, {
-      responseType: 'text',
+    return this.http.post<MediaCreateResponse>(url, formData, {
       reportProgress: true,
     });
   }
@@ -139,8 +134,7 @@ export class UploadPhotoService implements IUploadPhotoService {
     return this.http.patch(url, { video });
   }
 
-  // TODO change from any !!!!
-  uploadVideo(video: { payload: Video }): Observable<any> {
+  uploadVideo(video: { payload: Video }): Observable<MediaCreateResponse> {
     const url = `${environment.apiUrl}/upload-photo/uploadvideo`;
     const file = video.payload.video!;
 
@@ -181,15 +175,13 @@ export class UploadPhotoService implements IUploadPhotoService {
       }
       headers = headers.set('chapterName', chapterName!!);
 
-      return this.http.post(url, formData, {
-        responseType: 'text',
+      return this.http.post<MediaCreateResponse>(url, formData, {
         reportProgress: true,
         headers,
       });
     }
 
-    return this.http.post(url, formData, {
-      responseType: 'text',
+    return this.http.post<MediaCreateResponse>(url, formData, {
       reportProgress: true,
     });
   }

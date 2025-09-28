@@ -86,23 +86,22 @@ export const GALLERY_INIT_STATE: GalleryState = {
 export const mainReducer = createReducer(
   GALLERY_INIT_STATE,
 
-  on(createdPhoto, (state: GalleryState, action): GalleryState => {
-    return state;
-  }),
-
-  on(createdVideo, (state: GalleryState, action): GalleryState => {
-    return state;
-  }),
+  // on(createdPhoto, (state: GalleryState, action): GalleryState => {
+  //   return state;
+  // }),
+  //
+  // on(createdVideo, (state: GalleryState, action): GalleryState => {
+  //   return state;
+  // }),
 
   immerOn(receivedChapters, (state: GalleryState, action): GalleryState => {
     const newChapters = cloneDeep(action.chapters);
     const hierarchy = buildHierarchyTree(newChapters, '', '');
-    const newState = {
+    return {
       ...state,
       chapters: action.chapters,
       hierarchyChapters: hierarchy,
     };
-    return newState;
   }),
 
   immerOn(
@@ -110,29 +109,24 @@ export const mainReducer = createReducer(
     (state: GalleryState, action): GalleryState => {
       const newChapters = cloneDeep(action.chapters);
       const hierarchy = buildHierarchyTree(newChapters, '', '');
-      const newState = {
+      return {
         ...state,
         videoChapters: action.chapters,
         videoHierarchyChapters: hierarchy,
       };
-      return newState;
     },
   ),
 
   on(receivedPhotos, (state: GalleryState, action): GalleryState => {
-    const newState = { ...state, photos: action.photos };
-    return newState;
+    return { ...state, photos: action.photos };
   }),
 
   on(receivedPdfs, (state: GalleryState, action): GalleryState => {
-    const newState = { ...state, docs: action.docs };
-    console.log('NEWSTATE____', newState)
-    return newState;
+    return { ...state, docs: action.docs };
   }),
 
   on(receivedVideos, (state: GalleryState, action): GalleryState => {
-    const newState = { ...state, videos: action.videos };
-    return newState;
+    return { ...state, videos: action.videos };
   }),
 
   immerOn(gotUsers, (state: GalleryState, action): void => {
@@ -171,18 +165,15 @@ export const mainReducer = createReducer(
   // }),
 
   on(authenticateAlert, (state: GalleryState, action): GalleryState => {
-    const s = { ...state, auth: { ...state.auth, showAlert: true } };
-    return s;
+    return { ...state, auth: { ...state.auth, showAlert: true } };
   }),
 
   on(authenticateAlertHide, (state: GalleryState, action): GalleryState => {
-    const s = { ...state, auth: { ...state.auth, showAlert: false } };
-    return s;
+    return { ...state, auth: { ...state.auth, showAlert: false } };
   }),
 
   on(authenticated, (state: GalleryState, action): GalleryState => {
-    const s = { ...state, auth: { ...state.auth, authenticated: true } };
-    return s;
+    return { ...state, auth: { ...state.auth, authenticated: true } };
   }),
 
   on(logout, (state: GalleryState, action): GalleryState => {
