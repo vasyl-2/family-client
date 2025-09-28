@@ -17,41 +17,41 @@ import {MediaCreateResponse} from "../models/dto/response-create";
 export class UploadPhotoService implements IUploadPhotoService {
   constructor(private http: HttpClient) {}
 
-  uploadPhoto(photo: { payload: Photo }): Observable<MediaCreateResponse> {
+  uploadPhoto(media: { payload: Photo }): Observable<MediaCreateResponse> {
     const url = `${environment.apiUrl}/upload-photo/uploadfile`;
-    const file = photo.payload.photo!;
+    const file = media.payload.photo!;
 
     let { name } = file;
 
-    if (photo.payload.name) {
+    if (media.payload.name) {
       const extension = name.split('.').at(-1);
-      name = `${photo.payload.name}.${extension}`;
+      name = `${media.payload.name}.${extension}`;
     }
 
     const formData = new FormData();
     formData.append('photo', file, name);
     formData.append('name', name);
 
-    if (photo.payload.description) {
-      const { description } = photo.payload;
+    if (media.payload.description) {
+      const { description } = media.payload;
       formData.append('description', description!);
     }
 
-    if (photo.payload.fullPath) {
-      const { fullPath } = photo.payload;
+    if (media.payload.fullPath) {
+      const { fullPath } = media.payload;
       formData.append('fullPath', fullPath!);
     }
 
-    if (photo.payload.date) {
-      const { date } = photo.payload;
+    if (media.payload.date) {
+      const { date } = media.payload;
       formData.append('date', date!.toISOString());
     }
 
-    if (photo.payload.chapter) {
-      const { chapter } = photo.payload;
+    if (media.payload.chapter) {
+      const { chapter } = media.payload;
       formData.append('chapter', chapter!);
       let headers = new HttpHeaders();
-      let { chapterName, fullPath = undefined } = photo.payload;
+      let { chapterName, fullPath = undefined } = media.payload;
 
       if (fullPath) {
         chapterName = `${fullPath}`;
