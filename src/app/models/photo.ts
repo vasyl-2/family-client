@@ -5,8 +5,11 @@ export interface Photo {
   chapter?: string;
   chapterName?: string;
   description?: string;
-  photo: File | undefined;
+  media: File | undefined;
   fullPath?: string;
   date?: Date;
-  type?: 'photo';
+  // type?: 'photo' | 'video' | 'pfd';
+  thumbnail?: string;
 }
+
+export type PhotoMedia = Photo & { type: 'photo' | 'video' | 'pdf' };

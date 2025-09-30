@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
@@ -8,7 +8,7 @@ import {GalleryState} from "../../../store/reducer";
 import {chaptersHierarchySelector} from "../../../store/selectors";
 import {withLatestFrom} from "rxjs/operators";
 import {Chapter} from "../../../models/chapter";
-import {Pdf} from "../../../models/pdf";
+import {Pdf, PdfMedia} from "../../../models/pdf";
 
 
 @Component({
@@ -18,7 +18,7 @@ import {Pdf} from "../../../models/pdf";
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class CreateDocComponent implements OnInit {
+export class CreateDocComponent implements OnInit, OnDestroy {
 
   addMediaForm!: FormGroup;
   mediaChapters$!: Observable<Chapter[]>;
@@ -62,7 +62,6 @@ export class CreateDocComponent implements OnInit {
             this.addMediaForm.get('fullPath')?.setValue(fullPath);
           }
 
-          console.log('CURRENT___CHAPTER_____', currentChapter);
         }),
     );
   }
@@ -89,13 +88,14 @@ export class CreateDocComponent implements OnInit {
     if (this.fileSubject.value == undefined) {
       return;
     } else {
-      const media: Pdf = {
+      const media: PdfMedia = {
         name,
         chapter,
         description,
-        pdf: this.fileSubject.value,
+        media: this.fileSubject.value,
         fullPath,
         date: dateOfMedia,
+        type: 'pdf'
       };
       this.dialogRef.close(media);
     }

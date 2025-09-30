@@ -17,7 +17,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { withLatestFrom } from 'rxjs/operators';
 
-import { Photo } from '../../../models/photo';
+import {Photo, PhotoMedia} from '../../../models/photo';
 import { GalleryState } from '../../../store/reducer';
 import {
   chaptersHierarchySelector,
@@ -98,13 +98,14 @@ export class CreatePhotoComponent implements OnInit, OnDestroy {
     if (this.fileSubject.value == undefined) {
       return;
     } else {
-      const photo: Photo = {
+      const photo: PhotoMedia = {
         name,
         chapter,
         description,
-        photo: this.fileSubject.value,
+        media: this.fileSubject.value,
         fullPath,
         date: dateOfPhoto,
+        type: 'photo'
       };
       this.dialogRef.close(photo);
     }

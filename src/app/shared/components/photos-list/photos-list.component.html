@@ -83,7 +83,7 @@
                     (click)="openFullSize($event, item!)"
                     (updatedPhoto)="onPhotoUpdate($event)"
                     (imageLoaded)="onImageLoaded()"
-                  [imageSrc]="item"></app-photo>
+                    [imageSrc]="item"></app-photo>
                 }
                 @if ((item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')) {
                   <app-video [appEnlarge]="state.sizeA"
@@ -91,7 +91,7 @@
                     [appSetHeight]="computeGridStyle$ | async"
                     (videoLoaded)="onVideoLoaded($event)"
                     (updatedVideo)="onVideoUpdate($event)"
-                  [videoSrc]="item"></app-video>
+                    [videoSrc]="item"></app-video>
                 }
               }
               @case ('table') {

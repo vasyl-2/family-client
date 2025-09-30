@@ -20,20 +20,20 @@
         {{ 'gallery' | translate }} *
       </button>
       <span class="example-spacer"></span>
-      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPhoto()" mat-button class="add-photo">
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addMedia('photo')" mat-button class="add-photo">
         {{ 'to_add_photo' | translate }} *
       </button>
       <span class="example-spacer"></span>
-      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addVideo()" mat-button class="add-photo">
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addMedia('video')" mat-button class="add-photo">
         {{ 'to_add_video' | translate }} *
+      </button>
+      <span class="example-spacer"></span>
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addMedia('pdf')" mat-button class="add-photo">
+        {{ 'to_add_pdf' | translate }} *
       </button>
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addChapter()" mat-button class="add-photo">
         {{ 'to_add_chapter' | translate }} *
-      </button>
-      <span class="example-spacer"></span>
-      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPdf()" mat-button class="add-photo">
-        {{ 'to_add_pdf' | translate }} *
       </button>
       <span class="example-spacer"></span>
       <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="editChapters()" mat-button class="add-photo">
@@ -55,15 +55,15 @@
         {{ 'gallery' | translate }} *
       </button>
       <span class="example-spacer"></span>
-      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPhoto()" mat-button class="add-photo">
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addMedia('photo')" mat-button class="add-photo">
         {{ 'to_add_photo' | translate }} *
       </button>
       <span class="example-spacer"></span>
-      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addVideo()" mat-button class="add-photo">
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addMedia('video')" mat-button class="add-photo">
         {{ 'to_add_video' | translate }} *
       </button>
       <span class="example-spacer"></span>
-      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addPdf()" mat-button class="add-photo">
+      <button *ngxPermissionsOnly="['create_user', 'edit_user']" (click)="addMedia('pdf')" mat-button class="add-photo">
         {{ 'to_add_pdf' | translate }} *
       </button>
       <span class="example-spacer"></span>

@@ -9,7 +9,7 @@ import {
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Photo } from '../../../models/photo';
+import {Photo, PhotoMedia} from '../../../models/photo';
 import { environment } from '../../../../environments/environment';
 import { EditDescriptionComponent } from '../edit-description/edit-description.component';
 
@@ -22,22 +22,22 @@ import { EditDescriptionComponent } from '../edit-description/edit-description.c
 })
 export class PhotoComponent implements OnDestroy {
   image!: string;
-  photo!: Photo;
+  photo!: PhotoMedia;
 
   private sub = new Subscription();
 
-  private readonly photoSubject = new BehaviorSubject<Photo | undefined>(
+  private readonly photoSubject = new BehaviorSubject<PhotoMedia | undefined>(
     undefined,
   );
   readonly photo$ = this.photoSubject.asObservable();
 
-  @Input() set imageSrc(photo: Photo) {
+  @Input() set imageSrc(photo: PhotoMedia) {
     this.photo = photo;
     this.photoSubject.next(photo);
     this.image = this.getAsset(photo);
   }
 
-  @Output() updatedPhoto = new EventEmitter<Partial<Photo>>();
+  @Output() updatedPhoto = new EventEmitter<Partial<PhotoMedia>>();
   @Output() imageLoaded = new EventEmitter<void>();
 
   constructor(private dialog: MatDialog) {}
@@ -82,7 +82,7 @@ export class PhotoComponent implements OnDestroy {
                 if (
                   result.description !== this.photoSubject.value?.description
                 ) {
-                  const currentValue = { ...this.photoSubject.value } as Photo;
+                  const currentValue = { ...this.photoSubject.value } as PhotoMedia;
                   currentValue.description = result.description;
                   this.photoSubject.next(currentValue);
                   shouldBeUpdated = true;
@@ -136,7 +136,7 @@ export class PhotoComponent implements OnDestroy {
     );
   }
 
-  private getAsset(photo: Photo): string {
+  private getAsset(photo: PhotoMedia): string {
     const { fullPath, name } = photo;
     let path = fullPath ? `${fullPath}/${name}` : name;
     path = `${environment.apiStaticUrl}/${path}`;

@@ -7,19 +7,29 @@ import { HttpHeaders } from '@angular/common/http';
 import { IUploadPhotoService } from '../models/services/upload-photo-service';
 import { CreateChapter } from '../models/dto/create-chapter';
 import { environment } from '../../environments/environment';
-import { Photo } from '../models/photo';
+import {Photo, PhotoMedia} from '../models/photo';
 import { Chapter } from '../models/chapter';
-import { Video } from '../models/video';
-import {Pdf} from "../models/pdf";
+import {Video, VideoMedia} from '../models/video';
+import {PdfMedia} from "../models/pdf";
 import {MediaCreateResponse} from "../models/dto/response-create";
 
 @Injectable({ providedIn: 'root' })
 export class UploadPhotoService implements IUploadPhotoService {
   constructor(private http: HttpClient) {}
 
-  uploadPhoto(media: { payload: Photo }): Observable<MediaCreateResponse> {
-    const url = `${environment.apiUrl}/upload-photo/uploadfile`;
-    const file = media.payload.photo!;
+  uploadPhoto(media: { payload: PhotoMedia }): Observable<MediaCreateResponse> {
+
+    // @TODO refactor types
+    const typeToUrl: Record<string, string> = {
+      photo: 'uploadfile',
+      video: 'uploadvideo',
+      pdf: 'uploadpdf',
+    }
+    const key = media.payload.type as string;
+    const endpoint :string = typeToUrl[key];
+    const url = `${environment.apiUrl}/upload-photo/${endpoint}`;
+
+    const file: File = media.payload.media!;
 
     let { name } = file;
 
@@ -29,7 +39,7 @@ export class UploadPhotoService implements IUploadPhotoService {
     }
 
     const formData = new FormData();
-    formData.append('photo', file, name);
+    formData.append(media.payload.type, file, name);
     formData.append('name', name);
 
     if (media.payload.description) {
@@ -69,59 +79,6 @@ export class UploadPhotoService implements IUploadPhotoService {
     });
   }
 
-  uploadDoc(media: { payload: Pdf }): Observable<MediaCreateResponse> {
-    const url = `${environment.apiUrl}/upload-photo/uploadpdf`;
-    const file = media.payload.pdf!;
-
-    let { name } = file;
-
-
-    if (media.payload.name) {
-      const extension = name.split('.').at(-1);
-      name = `${media.payload.name}.${extension}`;
-    }
-
-
-    const formData = new FormData();
-    formData.append('doc', file, name);
-    formData.append('name', name);
-
-    if (media.payload.description) {
-      const { description } = media.payload;
-      formData.append('description', description!);
-    }
-
-    if (media.payload.fullPath) {
-      const { fullPath } = media.payload;
-      formData.append('fullPath', fullPath!);
-    }
-
-    if (media.payload.date) {
-      const { date } = media.payload;
-      formData.append('date', date!.toISOString());
-    }
-
-    if (media.payload.chapter) {
-      const { chapter } = media.payload;
-      formData.append('chapter', chapter!);
-      let headers = new HttpHeaders();
-      let { chapterName, fullPath = undefined } = media.payload;
-
-      if (fullPath) {
-        chapterName = `${fullPath}`;
-      }
-      headers = headers.set('chapterName', chapterName!!);
-
-      return this.http.post<MediaCreateResponse>(url, formData, {
-        reportProgress: true,
-        headers,
-      });
-    }
-
-    return this.http.post<MediaCreateResponse>(url, formData, {
-      reportProgress: true,
-    });
-  }
 
   updatePhoto(photo: Partial<Photo>) {
     const url = `${environment.apiUrl}/upload-photo/updatephoto/${photo._id}`;
@@ -131,58 +88,6 @@ export class UploadPhotoService implements IUploadPhotoService {
   updateVideo(video: Partial<Video>) {
     const url = `${environment.apiUrl}/upload-photo/updatevideo/${video._id}`;
     return this.http.patch(url, { video });
-  }
-
-  uploadVideo(media: { payload: Video }): Observable<MediaCreateResponse> {
-    const url = `${environment.apiUrl}/upload-photo/uploadvideo`;
-    const file = media.payload.video!;
-
-    let { name } = file;
-
-    if (media.payload.name) {
-      const extension = name.split('.').at(-1);
-      name = `${media.payload.name}.${extension}`;
-    }
-
-    const formData = new FormData();
-    formData.append('video', file, name);
-    formData.append('name', name);
-
-    if (media.payload.description) {
-      const { description } = media.payload;
-      formData.append('description', description!);
-    }
-
-    if (media.payload.date) {
-      const { date } = media.payload;
-      formData.append('date', date!.toISOString());
-    }
-
-    if (media.payload.fullPath) {
-      const { fullPath } = media.payload;
-      formData.append('fullPath', fullPath!);
-    }
-
-    if (media.payload.chapter) {
-      const { chapter } = media.payload;
-      formData.append('chapter', chapter!);
-      let headers = new HttpHeaders();
-      let { chapterName, fullPath = undefined } = media.payload;
-
-      if (fullPath) {
-        chapterName = `${fullPath}`;
-      }
-      headers = headers.set('chapterName', chapterName!!);
-
-      return this.http.post<MediaCreateResponse>(url, formData, {
-        reportProgress: true,
-        headers,
-      });
-    }
-
-    return this.http.post<MediaCreateResponse>(url, formData, {
-      reportProgress: true,
-    });
   }
 
   createChapter(chapter: { payload: CreateChapter }): Observable<any> {
@@ -195,20 +100,20 @@ export class UploadPhotoService implements IUploadPhotoService {
     return this.http.post(url, chapter.payload);
   }
 
-  getAllPhotos(chapter: string): Observable<Photo[]> {
-    return this.http.get<Photo[]>(
+  getAllPhotos(chapter: string): Observable<PhotoMedia[]> {
+    return this.http.get<PhotoMedia[]>(
       `${environment.apiUrl}/upload-photo/photoslist/${chapter}`,
     );
   }
 
-  getAllVideos(chapter: string): Observable<Video[]> {
-    return this.http.get<Video[]>(
+  getAllVideos(chapter: string): Observable<VideoMedia[]> {
+    return this.http.get<VideoMedia[]>(
       `${environment.apiUrl}/upload-photo/videolist/${chapter}`,
     );
   }
 
-  getAllPdfs(chapter: string): Observable<Pdf[]> {
-    return this.http.get<Pdf[]>(
+  getAllPdfs(chapter: string): Observable<PdfMedia[]> {
+    return this.http.get<PdfMedia[]>(
       `${environment.apiUrl}/upload-photo/pdflist/${chapter}`,
     );
   }

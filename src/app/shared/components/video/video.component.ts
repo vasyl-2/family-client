@@ -14,7 +14,8 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EditDescriptionComponent } from '../edit-description/edit-description.component';
 import { environment } from '../../../../environments/environment';
-import { Video } from '../../../models/video';
+import {Video, VideoMedia} from '../../../models/video';
+import {PhotoMedia} from "../../../models/photo";
 
 
 @Component({
@@ -29,17 +30,17 @@ export class VideoComponent {
   videoRef!: ElementRef<HTMLVideoElement>;
 
   videoString!: string;
-  video!: Video;
+  video!: PhotoMedia;
   isFullScreen$ = new BehaviorSubject(false);
 
   private sub = new Subscription();
 
-  private readonly photoSubject = new BehaviorSubject<Video | undefined>(
+  private readonly photoSubject = new BehaviorSubject<PhotoMedia | undefined>(
     undefined,
   );
   readonly video$ = this.photoSubject.asObservable();
 
-  @Input() set videoSrc(video: Video) {
+  @Input() set videoSrc(video: PhotoMedia) {
     this.video = video;
     this.photoSubject.next(video);
     this.videoString = this.getAsset(video);
@@ -96,7 +97,6 @@ export class VideoComponent {
             | undefined,
         ) => {
           if (result) {
-            console.log('RESULT_44444$$$$');
             let shouldBeUpdated = false;
             if (result.description) {
               if (
@@ -106,7 +106,7 @@ export class VideoComponent {
                 if (
                   result.description !== this.photoSubject.value?.description
                 ) {
-                  const currentValue = { ...this.photoSubject.value } as Video;
+                  const currentValue = { ...this.photoSubject.value } as PhotoMedia;
                   currentValue.description = result.description;
                   this.photoSubject.next(currentValue);
                   shouldBeUpdated = true;
@@ -155,7 +155,6 @@ export class VideoComponent {
             }
 
             if (shouldBeUpdated) {
-              console.log('TO___UPDATE_____________', this.photoSubject.value);
               this.updatedVideo.emit(this.photoSubject.value);
             }
           }
@@ -164,7 +163,7 @@ export class VideoComponent {
     );
   }
 
-  private getAsset(video: Video): string {
+  private getAsset(video: PhotoMedia): string {
     const { fullPath, name } = video;
     let path = fullPath ? `${fullPath}/${name}` : name;
     path = `${environment.apiStaticUrl}/${path}`;

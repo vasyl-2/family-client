@@ -1,3 +1,5 @@
+import {Photo} from "./photo";
+
 export interface Video {
   id?: string;
   _id?: string;
@@ -8,5 +10,8 @@ export interface Video {
   video: File | undefined;
   fullPath?: string;
   date?: Date;
-  type?: 'video';
+  // type?: 'video';
 }
+
+export type VideoMedia = Photo & { type: 'video' };
+

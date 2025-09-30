@@ -21,7 +21,8 @@ import {
   chaptersHierarchySelector,
 } from '../../../store/selectors';
 import { withLatestFrom } from 'rxjs/operators';
-import { Video } from '../../../models/video';
+import {Video, VideoMedia} from '../../../models/video';
+import {PhotoMedia} from "../../../models/photo";
 
 @Component({
   selector: 'app-create-video',
@@ -95,13 +96,14 @@ export class CreateVideoComponent implements OnInit, OnDestroy {
     if (!this.fileSubject.value) {
       return;
     }
-    const video: Video = {
+    const video: PhotoMedia = {
       name,
       chapter,
       description,
-      video: this.fileSubject.value,
+      media: this.fileSubject.value,
       fullPath,
       date: dateOfVideo,
+      type: 'video'
     };
     this.dialogRef.close(video);
   }

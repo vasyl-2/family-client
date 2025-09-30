@@ -48,7 +48,7 @@ import {
 } from './action';
 
 import { CreateChapter } from '../models/dto/create-chapter';
-import { Photo } from '../models/photo';
+import {Photo, PhotoMedia} from '../models/photo';
 import { Chapter } from '../models/chapter';
 import { Video } from '../models/video';
 
@@ -91,8 +91,7 @@ export class GalleryEffects {
   createPhoto$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CREATE_PHOTO_ACTION),
-      tap((x) => console.log('CREATE__________________PHOTO', x)),
-      exhaustMap((photo: { payload: Photo }) => {
+      exhaustMap((photo: { payload: PhotoMedia }) => {
         return this.uploadService.uploadPhoto(photo);
       }),
       map((photo: any) => createdPhoto({ photo })),
@@ -125,8 +124,8 @@ export class GalleryEffects {
   createVideo$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CREATE_VIDEO_ACTION),
-      exhaustMap((video: { payload: Video }) => {
-        return this.uploadService.uploadVideo(video);
+      exhaustMap((video: { payload: PhotoMedia }) => {
+        return this.uploadService.uploadPhoto(video);
       }),
       map((video: any) => createdVideo({ video })), // TODO change from any!!!
       catchError(() => EMPTY),
@@ -136,9 +135,8 @@ export class GalleryEffects {
   createDoc$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CREATE_DOC_ACTION),
-      tap((x) => console.log('CREATE__________________DOC', x)),
-      exhaustMap((doc: { payload: Pdf }) => {
-        return this.uploadService.uploadDoc(doc);
+      exhaustMap((doc: { payload: PhotoMedia }) => {
+        return this.uploadService.uploadPhoto(doc);
       }),
       map((doc: any) => createdPdf({ doc })),
       catchError(() => EMPTY),
@@ -177,7 +175,6 @@ export class GalleryEffects {
       exhaustMap((chapter: { chapter: string }) =>
         this.uploadService.getAllPdfs(chapter.chapter),
       ),
-      tap((docs) => console.log('PDFSSSSSS___', docs)),
       map((docs) => receivedPdfs({ docs })),
     ),
   );
@@ -210,7 +207,6 @@ export class GalleryEffects {
     this.actions$.pipe(
       ofType(RECEIVE_USERS),
       exhaustMap(() => this.userService.getUsers()),
-      tap((u) => console.log('TEST__________', u)),
       map((users: User[]) => gotUsers({ users })),
     ),
   );
@@ -221,7 +217,6 @@ export class GalleryEffects {
       exhaustMap(({ user }: { user: User }) =>
         this.userService.createUser(user),
       ),
-      tap((u) => console.log('TEST__________', u)),
       map((user: User) => createdUser({ user })),
     ),
   );
@@ -232,7 +227,6 @@ export class GalleryEffects {
       exhaustMap(({ role }: { role: Role }) =>
         this.roleService.createRole(role),
       ),
-      tap((u) => console.log('ROLE__CREATED_!!__________', u)),
       map((role: Role) => createdRole({ role })),
     ),
   );
@@ -241,7 +235,6 @@ export class GalleryEffects {
     this.actions$.pipe(
       ofType(EDIT_USER),
       exhaustMap(({ user }: { user: User }) => this.userService.editUser(user)),
-      tap((u) => console.log('EDITED____USER______', u)),
       map((user: User) => createdUser({ user })),
     ),
   );
@@ -251,7 +244,6 @@ export class GalleryEffects {
     this.actions$.pipe(
       ofType(RECEIVE_ROLES),
       exhaustMap(() => this.roleService.getRoles()),
-      tap((roles) => console.log('ROLES__________', roles)),
       map((roles: Role[]) => gotRoles({ roles })),
     ),
   );

@@ -3,9 +3,9 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   OnDestroy,
-  ChangeDetectorRef,
+  ChangeDetectorRef, Type, TemplateRef,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { Observable, Subscription } from 'rxjs';
@@ -16,13 +16,11 @@ import { GalleryState } from '../../store/reducer';
 import { Chapter } from '../../models/chapter';
 import {
   authenticateAlert,
-  createChapter, createdPdf, createPdf,
+  createChapter,
   createPhoto,
-  createVideo,
-  createVideoChapter,
   logout,
 } from '../../store/action';
-import { Photo } from '../../models/photo';
+import { PhotoMedia } from '../../models/photo';
 import {
   alertSelector,
   chaptersHierarchySelector,
@@ -33,13 +31,11 @@ import {
 import { CreateChapterComponent } from '../../shared/components/create-chapter/create-chapter.component';
 import { CreateChapter } from '../../models/dto/create-chapter';
 import { CreateVideoComponent } from '../../shared/components/create-video/create-video.component';
-import { Video } from '../../models/video';
 import { CheckTokenService } from '../../services/authorization/check-token.service';
 import { EditChaptersComponent } from '../../shared/components/edit-chapters/edit-chapters.component';
 import { NgxPermissionsService } from 'ngx-permissions';
 import {TranslateService} from "@ngx-translate/core";
 import {CreateDocComponent} from "../../shared/components/create-doc/create-doc.component";
-import {Pdf} from "../../models/pdf";
 
 @Component({
   selector: 'app-header-top',
@@ -87,72 +83,84 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  addPhoto(): void {
-    if (!this.checkTokenService.isAdminSubject.value) {
-      return;
-    }
-    const dialogRef = this.dialog.open(CreatePhotoComponent, {
-      panelClass: 'dialog-property',
-      // position: { top: '80px' },
-      data: {},
-    });
+  setType() {
+    return {
+      photo: CreatePhotoComponent,
+      video: CreateVideoComponent,
+      pdf: CreateDocComponent
+    } as const;
+  }
 
+  addMedia(mediaType: 'photo' | 'video' | 'pdf'): void {
+    this.checkToken();
+
+    // const components = this.setType();
+    // type MediaMap = typeof components;
+    // type MediaType = keyof MediaMap;
+    // type ComponentClass<K extends MediaType> = MediaMap[K];
+    // type ComponentInstance<K extends MediaType> = ComponentClass<K> extends new (...args: any[]) => infer R ? R : never;
+
+    // let dialogRef: MatDialogRef<ComponentInstance<'photo'>>;
+
+    const data = { panelClass: 'dialog-property', data: {} };
+
+    // @TODO refactor
+    switch (mediaType) {
+      case 'photo':
+        const dialogRefPhoto = this.openCreateComponent(CreatePhotoComponent, data);
+        this.subscribeToCreateCLose(dialogRefPhoto);
+        break;
+      case 'video':
+        const dialogRefVideo = this.openCreateComponent(CreateVideoComponent, data);
+        this.subscribeToCreateCLose(dialogRefVideo);
+        break;
+      case 'pdf':
+        const dialogRefPdf = this.openCreateComponent(CreateDocComponent, data);
+        this.subscribeToCreateCLose(dialogRefPdf);
+        break;
+      default:
+        this.assertCannotReach(mediaType);
+    }
+  }
+
+  private assertCannotReach(type: never) {
+    throw new Error('can not reach anything!');
+  }
+
+  private openCreateComponent<T>(comp: Type<T>, data: Record<string, any>): MatDialogRef<T> {
+    return this.dialog.open<T>(comp, data);
+  }
+
+  private subscribeToCreateCLose<T>(dialogRef: MatDialogRef<T>): void {
     this.sub.add(
       dialogRef
         .afterClosed()
         .pipe(
-          filter((photo: Photo) => !!photo),
-          switchMap((photo) =>
+          filter((media: PhotoMedia) => !!media),
+          switchMap((media) =>
             this.store.pipe(select(chaptersSelector)).pipe(
               map((chapters: Chapter[]) => {
                 const currentChapter = chapters.find(
-                  (c: Chapter) => c._id === photo.chapter,
+                  (c: Chapter) => c._id === media.chapter,
                 );
-                photo.chapterName = currentChapter!!.title;
-                return photo;
+                media.chapterName = currentChapter!!.title;
+                return media;
               }),
             ),
           ),
         )
-        .subscribe((photo: Photo) =>
-          this.store.dispatch(createPhoto({ payload: photo })),
+        .subscribe((media: PhotoMedia) =>
+          this.store.dispatch(createPhoto({ payload: media })),
         ),
     );
   }
 
-  addVideo(): void {
+  private checkToken() {
     if (!this.checkTokenService.isAdminSubject.value) {
       return;
     }
-    const dialogRef = this.dialog.open(CreateVideoComponent, {
-      panelClass: 'dialog-property',
-      // position: { top: '80px' },
-      data: {},
-    });
-
-    this.sub.add(
-      dialogRef
-        .afterClosed()
-        .pipe(
-          filter((video: Video) => !!video),
-          switchMap((video) =>
-            this.store.pipe(select(chaptersSelector)).pipe(
-              map((chapters: Chapter[]) => {
-                const currentChapter = chapters.find(
-                  (c: Chapter) => c._id === video.chapter,
-                );
-                video.chapterName = currentChapter!!.title;
-                return video;
-              }),
-            ),
-          ),
-        )
-        .subscribe((video: Video) => {
-          console.log('TO___SEND_____', video);
-          this.store.dispatch(createVideo({ payload: video }));
-        }),
-    );
   }
+
 
   editChapters(): void {
     this.dialog.open(EditChaptersComponent);
@@ -161,41 +169,6 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
   setLang(lang: 'uk' | 'de' | 'es' | 'en'): void {
     this.translate.setDefaultLang(lang);
   }
-
-  addPdf(): void {
-    if (!this.checkTokenService.isAdminSubject.value) {
-      return;
-    }
-
-    const dialogRef = this.dialog.open(CreateDocComponent, {
-      panelClass: 'dialog-property',
-      // position: { top: '80px' },
-      data: {},
-    });
-
-    this.sub.add(
-      dialogRef
-        .afterClosed()
-        .pipe(
-          filter((doc: Pdf) => !!doc),
-          switchMap((doc) =>
-            this.store.pipe(select(chaptersSelector)).pipe(
-              map((chapters: Chapter[]) => {
-                const currentChapter = chapters.find(
-                  (c: Chapter) => c._id === doc.chapter,
-                );
-                doc.chapterName = currentChapter!!.title;
-                return doc;
-              }),
-            ),
-          ),
-        )
-        .subscribe((doc: Pdf) =>
-          this.store.dispatch(createPdf({ payload: doc })),
-        ),
-    );
-  }
-
 
   addChapter(): void {
     if (!this.checkTokenService.isAdminSubject.value) {
@@ -237,9 +210,6 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
           //     newChapter!.parentTitle = currentChapter!.title;
           //     return newChapter;
           //   }))),
-          tap((chapter: CreateChapter | undefined) =>
-            console.log('FILLED_CHAPTER___________', chapter),
-          ),
         )
         .subscribe((chapter: Chapter | undefined) => {
           chapter && this.store.dispatch(createChapter({ payload: chapter }));
