@@ -6,7 +6,6 @@ import * as fromRouter from '@ngrx/router-store';
 import {
   createdPhoto,
   receivedChapters,
-  receivedVideoChapters,
   receivedPhotos,
   authenticated,
   authenticateAlert,
@@ -31,22 +30,18 @@ import {
 } from './action';
 import { Chapter } from '../models/chapter';
 import {PhotoMedia} from '../models/photo';
-import {VideoMedia} from '../models/video';
 import { RouterStateUrl } from '../models/router-utils';
 import { User } from '../models/user';
 import { Role } from '../models/role';
 import { Permission } from '../models/permission';
 import {ViewSettings} from "../models/view-settings";
-import {PdfMedia} from "../models/pdf";
 
 export interface GalleryState {
   chapters: Chapter[];
   hierarchyChapters: Chapter[];
-  videoChapters: Chapter[];
-  videoHierarchyChapters: Chapter[];
   photos?: PhotoMedia[];
-  videos?: VideoMedia[];
-  docs?: PdfMedia[];
+  videos?: PhotoMedia[];
+  docs?: PhotoMedia[];
   auth: {
     authenticated: boolean;
     showAlert: boolean;
@@ -69,8 +64,6 @@ export interface GalleryState {
 export const GALLERY_INIT_STATE: GalleryState = {
   chapters: [] as Chapter[],
   hierarchyChapters: [] as Chapter[],
-  videoChapters: [] as Chapter[],
-  videoHierarchyChapters: [] as Chapter[],
   auth: {
     showAlert: true,
     authenticated: false,
@@ -103,19 +96,6 @@ export const mainReducer = createReducer(
       hierarchyChapters: hierarchy,
     };
   }),
-
-  immerOn(
-    receivedVideoChapters,
-    (state: GalleryState, action): GalleryState => {
-      const newChapters = cloneDeep(action.chapters);
-      const hierarchy = buildHierarchyTree(newChapters, '', '');
-      return {
-        ...state,
-        videoChapters: action.chapters,
-        videoHierarchyChapters: hierarchy,
-      };
-    },
-  ),
 
   on(receivedPhotos, (state: GalleryState, action): GalleryState => {
     return { ...state, photos: action.photos };

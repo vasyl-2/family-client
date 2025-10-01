@@ -2,24 +2,19 @@ import { createAction, props } from '@ngrx/store';
 
 import { Chapter } from '../models/chapter';
 import { CreateChapter } from '../models/dto/create-chapter';
-import {Photo, PhotoMedia} from '../models/photo';
-import {Video, VideoMedia} from '../models/video';
+import {PhotoMedia} from '../models/photo';
 import { User } from '../models/user';
 import { Role } from '../models/role';
 import { Permission } from '../models/permission';
-import {Pdf, PdfMedia} from "../models/pdf";
 import {MediaCreateResponse} from "../models/dto/response-create";
 
 export const CREATE_ACTION = '[Gallery] CREATE';
 export const CREATED_ACTION = '[Gallery] CREATED';
 
-export const CREATE_VIDEO_CHAPTER_ACTION = '[Gallery] CREATE VIDEO CHAPTER';
-export const CREATED_VIDEO_CHAPTER_ACTION = '[Gallery] CREATED VIDEO CHAPTER';
 
 export const CREATE_PHOTO_ACTION = '[Gallery] CREATE PHOTO';
 export const CREATED_PHOTO_ACTION = '[Gallery] CREATED PHOTO';
 
-export const CREATE_DOC_ACTION = '[Gallery] CREATE PDF';
 export const CREATED_DOC_ACTION = '[Gallery] CREATED PDF';
 
 export const RECEIVE_ALL_PDFS = '[PHOTOS] RECEIVE DOCS';
@@ -28,16 +23,12 @@ export const RECEIVED_ALL_PDFS = '[PHOTOS] RECEIVED DOCS';
 export const EDIT_PHOTO_ACTION = '[Gallery] EDIT PHOTO';
 export const EDITED_PHOTO_ACTION = '[Gallery] EDITED PHOTO';
 
-export const CREATE_VIDEO_ACTION = '[Gallery] CREATE VIDEO';
 export const CREATED_VIDEO_ACTION = '[Gallery] CREATED VIDEO';
 export const EDIT_VIDEO_ACTION = '[Gallery] EDIT VIDEO';
 export const EDITED_VIDEO_ACTION = '[Gallery] EDITED VIDEO';
 
 export const RECEIVE_CHAPTERS = '[CHAPTERS] RECEIVE CHAPTERS';
 export const RECEIVED_CHAPTERS = '[CHAPTERS] RECEIVED CHAPTERS';
-
-export const RECEIVE_VIDEO_CHAPTERS = '[CHAPTERS] RECEIVE VIDEO CHAPTERS';
-export const RECEIVED_VIDEO_CHAPTERS = '[CHAPTERS] RECEIVED VIDEO CHAPTERS';
 
 export const RECEIVE_ALL_PHOTOS = '[PHOTOS] RECEIVE PHOTOS';
 export const RECEIVED_ALL_PHOTOS = '[PHOTOS] RECEIVED PHOTOS';
@@ -83,18 +74,8 @@ export const createChapter = createAction(
   props<{ payload: CreateChapter }>(),
 );
 
-export const createVideoChapter = createAction(
-  CREATE_VIDEO_CHAPTER_ACTION,
-  props<{ payload: CreateChapter }>(),
-);
-
 export const createdChapter = createAction(
   CREATED_ACTION,
-  props<{ chapter: Chapter }>(),
-);
-
-export const createdVideoChapter = createAction(
-  CREATED_VIDEO_CHAPTER_ACTION,
   props<{ chapter: Chapter }>(),
 );
 
@@ -126,11 +107,6 @@ export const editedPhoto = createAction(
 //================= END EDIT PHOTO========================================
 
 // ==================**** DOC PDF *** ========================
-export const createPdf = createAction(
-  CREATE_DOC_ACTION,
-  props<{ payload: PhotoMedia }>(),
-);
-
 export const createdPdf = createAction(
   CREATED_DOC_ACTION,
   props<{ doc: any }>(), // TODO change from any
@@ -143,15 +119,10 @@ export const receivePdfs = createAction(
 
 export const receivedPdfs = createAction(
   RECEIVED_ALL_PDFS,
-  props<{ docs: PdfMedia[] }>(),
+  props<{ docs: PhotoMedia[] }>(),
 );
 
 // =============== *** VIDEO *** ==========================
-export const createVideo = createAction(
-  CREATE_VIDEO_ACTION,
-  props<{ payload: PhotoMedia }>(),
-);
-
 export const createdVideo = createAction(
   CREATED_VIDEO_ACTION,
   props<{ video: any }>(), // TODO change from any
@@ -159,7 +130,7 @@ export const createdVideo = createAction(
 
 export const editVideo = createAction(
   EDIT_VIDEO_ACTION,
-  props<{ video: Partial<VideoMedia> }>(),
+  props<{ video: Partial<PhotoMedia> }>(),
 );
 
 export const editedVideo = createAction(
@@ -170,15 +141,8 @@ export const editedVideo = createAction(
 // ================ END VIDEO ==========================
 export const receiveChapters = createAction(RECEIVE_CHAPTERS);
 
-export const receiveVideoChapters = createAction(RECEIVE_VIDEO_CHAPTERS);
-
 export const receivedChapters = createAction(
   RECEIVED_CHAPTERS,
-  props<{ chapters: Chapter[] }>(),
-);
-
-export const receivedVideoChapters = createAction(
-  RECEIVED_VIDEO_CHAPTERS,
   props<{ chapters: Chapter[] }>(),
 );
 
@@ -203,7 +167,7 @@ export const receiveVideos = createAction(
 
 export const receivedVideos = createAction(
   RECEIVED_ALL_VIDEOS,
-  props<{ videos: VideoMedia[] }>(),
+  props<{ videos: PhotoMedia[] }>(),
 );
 
 // END RECEIVE VIDEOS =================================

@@ -37,7 +37,6 @@ import {
 import { CreateChapter } from '../models/dto/create-chapter';
 import {Photo, PhotoMedia} from '../models/photo';
 import { Chapter } from '../models/chapter';
-import { Video } from '../models/video';
 
 import { AuthorizationService } from '../services/authorization/authorization.service';
 import { UploadPhotoService } from '../services/upload-photo.service';
@@ -89,7 +88,7 @@ export class GalleryEffects {
   updateVideo$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EDIT_VIDEO_ACTION),
-      exhaustMap((video: { video: Partial<Video> }) => {
+      exhaustMap((video: { video: Partial<PhotoMedia> }) => {
         return this.uploadService.updateVideo(video.video);
       }),
       map((video: any) => editedVideo({ video })),

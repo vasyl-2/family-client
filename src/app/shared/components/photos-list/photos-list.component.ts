@@ -42,9 +42,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { FullSizePhotoComponent } from '../full-size-photo/full-size-photo.component';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
-import {Video, VideoMedia} from '../../../models/video';
+import {Video} from '../../../models/video';
 import { ViewSettingsStore } from "./view-list-store/view-list-store";
-import {Pdf, PdfMedia} from "../../../models/pdf";
 import {PdfComponent} from "../pdf/pdf.component";
 
 GlobalWorkerOptions.workerSrc = new URL(
@@ -63,12 +62,12 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('gallery', { static: false, read: ElementRef })
   gallery!: ElementRef;
   photos$!: Observable<PhotoMedia[] | undefined>;
-  videos$!: Observable<VideoMedia[] | undefined>;
-  pdfs$!: Observable<PdfMedia[] | undefined>;
+  videos$!: Observable<PhotoMedia[] | undefined>;
+  pdfs$!: Observable<PhotoMedia[] | undefined>;
 
   pdfThumbnails$!: Observable<{ path: string; id: string }[] | undefined>;
 
-  commonList$!: Observable<(PhotoMedia | VideoMedia)[]>;
+  commonList$!: Observable<(PhotoMedia)[]>;
 
   search$!: Observable<string>;
 
@@ -136,7 +135,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly toOpenPdfIdSubject = new BehaviorSubject<string | undefined>(undefined);
   readonly toOpenPdfId$ = this.toOpenPdfIdSubject.asObservable();
 
-  toOpenPdf$!: Observable<{ doc: PdfMedia, path: string } | undefined>;
+  toOpenPdf$!: Observable<{ doc: PhotoMedia, path: string } | undefined>;
   // toOpenPdf$!: Observable<any | undefined>;
 
   constructor(
@@ -162,7 +161,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.loadedVideosCountSubject
       .pipe(withLatestFrom(this.videos$))
-      .subscribe(([count, videos]: [number, VideoMedia[] | undefined]) => {
+      .subscribe(([count, videos]: [number, PhotoMedia[] | undefined]) => {
         if (videos && count === videos?.length) {
           this.setGalleryProps();
         }
@@ -249,11 +248,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.videos$ = this.store.pipe(select(videosSelector));
     this.pdfs$ = this.store.pipe(select(docsSelector)).pipe(shareReplay(1));
 
-    this.toOpenPdf$ = this.toOpenPdfId$.pipe(withLatestFrom(this.pdfs$)).pipe(map(([id, a]: [string | undefined, PdfMedia[] | undefined]) => {
+    this.toOpenPdf$ = this.toOpenPdfId$.pipe(withLatestFrom(this.pdfs$)).pipe(map(([id, a]: [string | undefined, PhotoMedia[] | undefined]) => {
 
       if (!a || !a.length || !id) return undefined;
 
-      const pdf =  a.find((c: PdfMedia) => {
+      const pdf =  a.find((c: PhotoMedia) => {
         return c._id === id
       });
 
@@ -270,26 +269,21 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.toOpenPdf$.pipe(
       filter((x) => !!x),
     ).subscribe( x => {
-      console.log('CLICKED_PDF______', x);
       const dialog = this.dialog.open(PdfComponent, {
         data: x.doc,
         height: '90vh',
         width: '90vw',
       })
-
-      dialog.afterClosed().subscribe(() => {
-        console.log('CLICKED_DIALOG___', x);
-      })
     });
 
     this.pdfThumbnails$ = this.pdfs$.pipe(
-      switchMap((pdfs: PdfMedia[] | undefined) => {
+      switchMap((pdfs: PhotoMedia[] | undefined) => {
 
         if (!pdfs) {
           return of(undefined)
         }
 
-        return forkJoin(pdfs.map((pdf: PdfMedia) =>
+        return forkJoin(pdfs.map((pdf: PhotoMedia) =>
           from(this.renderThumbnail(this.getPdfAsset(pdf)))));
       })
     );
@@ -329,9 +323,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         }),
       ),
       this.videos$.pipe(
-        map((videos: VideoMedia[] | undefined) => {
+        map((videos: PhotoMedia[] | undefined) => {
           if (videos && videos.length) {
-            return videos.map((video: VideoMedia) => {
+            return videos.map((video: PhotoMedia) => {
               const newVideo = { ...video };
               newVideo.type = 'video';
               return newVideo;
@@ -346,7 +340,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       map(([photos, videos, order, search]) => {
         switch (order) {
           case 'desc':
-            let resDesc: (PhotoMedia | VideoMedia)[] = [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
+            let resDesc: (PhotoMedia)[] = [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
               const aTime = a.date ? new Date(a.date).getTime() : 0;
               const bTime = b.date ? new Date(b.date).getTime() : 0;
               return bTime - aTime;
@@ -360,19 +354,19 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
             return resDesc;
           case 'asc':
-            let resAsc: (PhotoMedia | VideoMedia)[] = [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
+            let resAsc: (PhotoMedia)[] = [...(photos ?? []), ...(videos ?? [])].sort((a, b) => {
               const aTime = a.date ? new Date(a.date).getTime() : 0;
               const bTime = b.date ? new Date(b.date).getTime() : 0;
               return aTime - bTime;
             });
             if (!!search) {
-              resAsc = resAsc.filter((media: PhotoMedia | VideoMedia) => {
+              resAsc = resAsc.filter((media: PhotoMedia) => {
                 return media.name.toLowerCase().includes(search.toLowerCase()) || media.description?.toLowerCase().includes(search.toLowerCase())
               })
             }
             return resAsc;
           case 'random':
-            let random: (PhotoMedia | VideoMedia)[] = [...(photos ?? []), ...(videos ?? [])].filter((m: PhotoMedia | VideoMedia) => {
+            let random: (PhotoMedia)[] = [...(photos ?? []), ...(videos ?? [])].filter((m: PhotoMedia) => {
               if (!search) {
                 return true;
               }
@@ -382,7 +376,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
             return random;
           default:
-            let def: (PhotoMedia | VideoMedia)[] = [...(photos ?? []), ...(videos ?? [])];
+            let def: (PhotoMedia)[] = [...(photos ?? []), ...(videos ?? [])];
             return def;
         }
       }),
@@ -605,7 +599,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  private getPdfAsset(media: PdfMedia): { path: string, id: string } {
+  private getPdfAsset(media: PhotoMedia): { path: string, id: string } {
     const { fullPath, name } = media;
     let path = fullPath ? `${fullPath}/${name}` : name;
     path = `${environment.apiStaticUrl}/${path}`;

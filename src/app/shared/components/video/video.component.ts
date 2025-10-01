@@ -14,7 +14,6 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EditDescriptionComponent } from '../edit-description/edit-description.component';
 import { environment } from '../../../../environments/environment';
-import {Video, VideoMedia} from '../../../models/video';
 import {PhotoMedia} from "../../../models/photo";
 
 
@@ -46,7 +45,7 @@ export class VideoComponent {
     this.videoString = this.getAsset(video);
   }
 
-  @Output() updatedVideo = new EventEmitter<Partial<Video>>();
+  @Output() updatedVideo = new EventEmitter<Partial<PhotoMedia>>();
   @Output() videoLoaded = new EventEmitter<any>();
 
   constructor(

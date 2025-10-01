@@ -11,9 +11,9 @@ import {
 import {BehaviorSubject, Subscription} from "rxjs";
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 
-import {Pdf, PdfMedia} from "../../../models/pdf";
 import {environment} from "../../../../environments/environment";
 import {EditDescriptionComponent} from "../edit-description/edit-description.component";
+import {PhotoMedia} from "../../../models/photo";
 
 
 @Component({
@@ -26,28 +26,28 @@ import {EditDescriptionComponent} from "../edit-description/edit-description.com
 export class PdfComponent implements OnInit, OnDestroy {
 
   mediaName!: string;
-  media!: PdfMedia;
+  media!: PhotoMedia;
   altText = 'pdf';
 
   private readonly sub = new Subscription();
 
-  private readonly mediaSubject = new BehaviorSubject<PdfMedia | undefined>(
+  private readonly mediaSubject = new BehaviorSubject<PhotoMedia | undefined>(
     undefined,
   );
   readonly media$ = this.mediaSubject.asObservable();
 
-  @Input() set mediaSrc(media: PdfMedia) {
+  @Input() set mediaSrc(media: PhotoMedia) {
     this.media = media;
     this.mediaSubject.next(media);
     this.mediaName = this.getAsset(media);
   }
 
-  @Output() updatedMedia = new EventEmitter<Partial<Pdf>>();
+  @Output() updatedMedia = new EventEmitter<Partial<PhotoMedia>>();
   @Output() mediaLoaded = new EventEmitter<void>();
 
   constructor(
     private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: PdfMedia
+    @Inject(MAT_DIALOG_DATA) public data: PhotoMedia
   ) {}
 
   ngOnInit(): void {
@@ -92,7 +92,7 @@ export class PdfComponent implements OnInit, OnDestroy {
                 if (
                   result.description !== this.mediaSubject.value?.description
                 ) {
-                  const currentValue = { ...this.mediaSubject.value } as PdfMedia;
+                  const currentValue = { ...this.mediaSubject.value } as PhotoMedia;
                   currentValue.description = result.description;
                   this.mediaSubject.next(currentValue);
                   shouldBeUpdated = true;
@@ -146,7 +146,7 @@ export class PdfComponent implements OnInit, OnDestroy {
     )
   }
 
-  private getAsset(media: PdfMedia): string {
+  private getAsset(media: PhotoMedia): string {
     const { fullPath, name } = media;
     let path = fullPath ? `${fullPath}/${name}` : name;
     path = `${environment.apiStaticUrl}/${path}`;

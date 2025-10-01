@@ -5,7 +5,6 @@ import {
   getPermissions,
   getPermissionsByUser,
   receiveChapters,
-  receiveVideoChapters,
 } from '../../store/action';
 import { Store } from '@ngrx/store';
 import { GalleryState } from '../../store/reducer';

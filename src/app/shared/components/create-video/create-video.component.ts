@@ -21,7 +21,6 @@ import {
   chaptersHierarchySelector,
 } from '../../../store/selectors';
 import { withLatestFrom } from 'rxjs/operators';
-import {Video, VideoMedia} from '../../../models/video';
 import {PhotoMedia} from "../../../models/photo";
 
 @Component({

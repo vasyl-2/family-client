@@ -9,8 +9,6 @@ import { CreateChapter } from '../models/dto/create-chapter';
 import { environment } from '../../environments/environment';
 import {Photo, PhotoMedia} from '../models/photo';
 import { Chapter } from '../models/chapter';
-import {Video, VideoMedia} from '../models/video';
-import {PdfMedia} from "../models/pdf";
 import {MediaCreateResponse} from "../models/dto/response-create";
 
 @Injectable({ providedIn: 'root' })
@@ -84,7 +82,7 @@ export class UploadPhotoService implements IUploadPhotoService {
     return this.http.patch(url, { photo });
   }
 
-  updateVideo(video: Partial<Video>) {
+  updateVideo(video: Partial<PhotoMedia>) {
     const url = `${environment.apiUrl}/upload-photo/updatevideo/${video._id}`;
     return this.http.patch(url, { video });
   }
@@ -105,14 +103,14 @@ export class UploadPhotoService implements IUploadPhotoService {
     );
   }
 
-  getAllVideos(chapter: string): Observable<VideoMedia[]> {
-    return this.http.get<VideoMedia[]>(
+  getAllVideos(chapter: string): Observable<PhotoMedia[]> {
+    return this.http.get<PhotoMedia[]>(
       `${environment.apiUrl}/upload-photo/videolist/${chapter}`,
     );
   }
 
-  getAllPdfs(chapter: string): Observable<PdfMedia[]> {
-    return this.http.get<PdfMedia[]>(
+  getAllPdfs(chapter: string): Observable<PhotoMedia[]> {
+    return this.http.get<PhotoMedia[]>(
       `${environment.apiUrl}/upload-photo/pdflist/${chapter}`,
     );
   }
