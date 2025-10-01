@@ -22,6 +22,7 @@ import {
 } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
 import { GalleryState } from '../../../store/reducer';
 import {
@@ -38,11 +39,9 @@ import {
 import {Photo, PhotoMedia} from '../../../models/photo';
 import { environment } from '../../../../environments/environment';
 import { Chapter } from '../../../models/chapter';
-import { MatDialog } from '@angular/material/dialog';
 import { FullSizePhotoComponent } from '../full-size-photo/full-size-photo.component';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
-import {Video} from '../../../models/video';
 import { ViewSettingsStore } from "./view-list-store/view-list-store";
 import {PdfComponent} from "../pdf/pdf.component";
 
@@ -185,7 +184,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   //   })
   // }
 
-  getAsset(media: Photo | Video): string {
+  getAsset(media: PhotoMedia): string {
     const { fullPath, name } = media;
     let path = fullPath ? `${fullPath}/${name}` : name;
     path = `${environment.apiStaticUrl}/${path}`;
@@ -347,7 +346,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
             });
 
             if (!!search) {
-              resDesc = resDesc.filter((media: Photo | Video) => {
+              resDesc = resDesc.filter((media: PhotoMedia) => {
                 return media.name.toLowerCase().includes(search.toLowerCase()) || media.description?.toLowerCase().includes(search.toLowerCase())
               })
             }
@@ -418,7 +417,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(editPhoto({ photo }));
   }
 
-  onVideoUpdate(video: Partial<Video>): void {
+  onVideoUpdate(video: Partial<PhotoMedia>): void {
     this.store.dispatch(editVideo({ video }));
   }
 

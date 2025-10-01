@@ -8,7 +8,7 @@ import {GalleryState} from "../../../store/reducer";
 import {chaptersHierarchySelector} from "../../../store/selectors";
 import {withLatestFrom} from "rxjs/operators";
 import {Chapter} from "../../../models/chapter";
-import {Pdf, PdfMedia} from "../../../models/pdf";
+import {PhotoMedia} from "../../../models/photo";
 
 
 @Component({
@@ -88,7 +88,7 @@ export class CreateDocComponent implements OnInit, OnDestroy {
     if (this.fileSubject.value == undefined) {
       return;
     } else {
-      const media: PdfMedia = {
+      const media: PhotoMedia = {
         name,
         chapter,
         description,

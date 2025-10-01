@@ -1,14 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
   OnDestroy,
 } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-
-import { Video } from '../../../models/video';
-import { Photo } from '../../../models/photo';
-import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-video-element',
