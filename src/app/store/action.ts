@@ -8,6 +8,7 @@ import { User } from '../models/user';
 import { Role } from '../models/role';
 import { Permission } from '../models/permission';
 import {Pdf, PdfMedia} from "../models/pdf";
+import {MediaCreateResponse} from "../models/dto/response-create";
 
 export const CREATE_ACTION = '[Gallery] CREATE';
 export const CREATED_ACTION = '[Gallery] CREATED';
@@ -105,7 +106,7 @@ export const createPhoto = createAction(
 
 export const createdPhoto = createAction(
   CREATED_PHOTO_ACTION,
-  props<{ photo: any }>(), // TODO change from any
+  props<{ media: MediaCreateResponse }>(), // TODO change from any
 );
 
 

@@ -1,50 +1,37 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
-import { map, exhaustMap, catchError, tap } from 'rxjs/operators';
+import { map, exhaustMap, catchError } from 'rxjs/operators';
 
 import {
   authenticated,
   CREATE_ACTION,
   CREATE_PHOTO_ACTION,
-  CREATE_VIDEO_ACTION,
-  CREATE_VIDEO_CHAPTER_ACTION,
   createdPhoto,
-  createdVideo,
   EDIT_PHOTO_ACTION,
   editedPhoto,
   RECEIVE_ALL_PHOTOS,
   RECEIVE_ALL_VIDEOS,
   RECEIVE_CHAPTERS,
-  RECEIVE_VIDEO_CHAPTERS,
   receivedChapters,
   receivedPhotos,
-  receivedVideoChapters,
   receivedVideos,
-  getUsers,
   gotUsers,
-  createUser,
-  editUser,
-  getRoles,
   gotRoles,
-  createRole,
-  editRole,
   RECEIVE_USERS,
   CREATE_USER,
   createdUser,
   RECEIVE_ROLES,
   EDIT_USER,
   LOGIN,
-  LOAD_PERMISSIONS,
   RECEIVE_PERMISSIONS_BY_USER,
   RECEIVE_PERMISSIONS,
   gotPermissionsByUser,
-  RECEIVED_PERMISSIONS_BY_USER,
   gotPermissions,
   CREATE_ROLE,
   createdRole,
   EDIT_VIDEO_ACTION,
-  editedVideo, CREATE_DOC_ACTION, createdPdf, RECEIVE_ALL_PDFS, receivedPdfs,
+  editedVideo, RECEIVE_ALL_PDFS, receivedPdfs,
 } from './action';
 
 import { CreateChapter } from '../models/dto/create-chapter';
@@ -62,7 +49,7 @@ import { PermissionsService } from '../services/permissions.service';
 import { Permission } from '../models/permission';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { PermissionService } from '../entry/services/permission.service';
-import {Pdf} from "../models/pdf";
+import { MediaCreateResponse } from "../models/dto/response-create";
 
 @Injectable()
 export class GalleryEffects {
@@ -77,24 +64,13 @@ export class GalleryEffects {
     ),
   );
 
-  createVideoChapter$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(CREATE_VIDEO_CHAPTER_ACTION),
-      exhaustMap((chapter: { payload: CreateChapter }) =>
-        this.uploadService.createVideoChapter(chapter),
-      ),
-      map((chapters: Chapter[]) => receivedVideoChapters({ chapters })),
-      catchError(() => EMPTY),
-    ),
-  );
-
-  createPhoto$ = createEffect(() =>
+  createMedia$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CREATE_PHOTO_ACTION),
-      exhaustMap((photo: { payload: PhotoMedia }) => {
-        return this.uploadService.uploadPhoto(photo);
+      exhaustMap((media: { payload: PhotoMedia }) => {
+        return this.uploadService.uploadPhoto(media);
       }),
-      map((photo: any) => createdPhoto({ photo })),
+      map((media: MediaCreateResponse) => createdPhoto({ media })),
       catchError(() => EMPTY),
     ),
   );
@@ -121,41 +97,11 @@ export class GalleryEffects {
     ),
   );
 
-  createVideo$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(CREATE_VIDEO_ACTION),
-      exhaustMap((video: { payload: PhotoMedia }) => {
-        return this.uploadService.uploadPhoto(video);
-      }),
-      map((video: any) => createdVideo({ video })), // TODO change from any!!!
-      catchError(() => EMPTY),
-    ),
-  );
-
-  createDoc$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(CREATE_DOC_ACTION),
-      exhaustMap((doc: { payload: PhotoMedia }) => {
-        return this.uploadService.uploadPhoto(doc);
-      }),
-      map((doc: any) => createdPdf({ doc })),
-      catchError(() => EMPTY),
-    ),
-  );
-
   receiveChapters$ = createEffect(() =>
     this.actions$.pipe(
       ofType(RECEIVE_CHAPTERS),
       exhaustMap((chapters) => this.uploadService.getChapters()),
       map((chapters: Chapter[]) => receivedChapters({ chapters })),
-    ),
-  );
-
-  receiveVideoChapters$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(RECEIVE_VIDEO_CHAPTERS),
-      exhaustMap((chapters) => this.uploadService.getVideoChapters()),
-      map((chapters: Chapter[]) => receivedVideoChapters({ chapters })),
     ),
   );
 
@@ -268,7 +214,6 @@ export class GalleryEffects {
       ofType(RECEIVE_PERMISSIONS),
       exhaustMap(() => this.permissionService.getPermissions()),
       map((permissions: Permission[]) => {
-        console.log('PERMISSIONS___BY___SERVICE____2', permissions);
         const permissionsNames = permissions.map(
           (perm: Permission) => perm.name,
         );

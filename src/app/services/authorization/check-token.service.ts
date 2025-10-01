@@ -33,7 +33,6 @@ export class CheckTokenService {
 
       if (isNotExp) {
         this.store.dispatch(receiveChapters());
-        this.store.dispatch(receiveVideoChapters());
 
         const { permissions = undefined } = payload;
 

@@ -30,14 +30,14 @@ import {
   editedVideo, receivedPdfs,
 } from './action';
 import { Chapter } from '../models/chapter';
-import {Photo, PhotoMedia} from '../models/photo';
-import {Video, VideoMedia} from '../models/video';
+import {PhotoMedia} from '../models/photo';
+import {VideoMedia} from '../models/video';
 import { RouterStateUrl } from '../models/router-utils';
 import { User } from '../models/user';
 import { Role } from '../models/role';
 import { Permission } from '../models/permission';
 import {ViewSettings} from "../models/view-settings";
-import {Pdf, PdfMedia} from "../models/pdf";
+import {PdfMedia} from "../models/pdf";
 
 export interface GalleryState {
   chapters: Chapter[];
