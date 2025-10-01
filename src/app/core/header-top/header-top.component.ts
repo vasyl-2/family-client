@@ -161,7 +161,6 @@ export class HeaderTopComponent implements OnInit, OnDestroy {
     }
   }
 
-
   editChapters(): void {
     this.dialog.open(EditChaptersComponent);
   }

@@ -79,7 +79,6 @@ export class UploadPhotoService implements IUploadPhotoService {
     });
   }
 
-
   updatePhoto(photo: Partial<Photo>) {
     const url = `${environment.apiUrl}/upload-photo/updatephoto/${photo._id}`;
     return this.http.patch(url, { photo });
@@ -115,12 +114,6 @@ export class UploadPhotoService implements IUploadPhotoService {
   getAllPdfs(chapter: string): Observable<PdfMedia[]> {
     return this.http.get<PdfMedia[]>(
       `${environment.apiUrl}/upload-photo/pdflist/${chapter}`,
-    );
-  }
-
-  getAllPhotosList(chapter: string): Observable<Photo[]> {
-    return this.http.get<Photo[]>(
-      `${environment.apiUrl}/upload-photo/photos/${chapter}`,
     );
   }
 
