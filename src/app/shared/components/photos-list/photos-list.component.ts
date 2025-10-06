@@ -46,7 +46,7 @@ import { ViewSettingsStore } from "./view-list-store/view-list-store";
 import {PdfComponent} from "../pdf/pdf.component";
 
 GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
+  "/assets/pdf.worker.min.mjs",
   import.meta.url
 ).toString();
 
