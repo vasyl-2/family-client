@@ -62,16 +62,19 @@
     </div>
     @if (state.mediaTypeA === 'pdf') {
       @if (state.pdfThumbnails && state.pdfThumbnails.length) {
-        @for (item of state.pdfThumbnails; track item) {
-          <img class="thumbnail" [src]="item.path" alt="" (click)="opendPdf(item)"/>
-        }
+        <div class="pdf-container">
+          @for (item of state.pdfThumbnails; track item) {
+            <img class="thumbnail" [src]="item.path" alt="" (click)="opendPdf(item)"/>
+          }
+        </div>
+
       } @else {
         <div>
           No pdfs so far
         </div>
       }
     } @else {
-      <div #gallery [ngClass]="{ 'gallery': state.view === 'big', 'little': state.view === 'little', 'table': state.view === 'table' }">
+      <div #gallery [ngClass]="{ 'gallery': state.view === 'big' && size.value !== '3', 'little': state.view === 'little', 'table': state.view === 'table' }">
         @if ((state.commonList && !!state.commonList.length)) {
           @for (item of state.commonList; track item) {
             @switch (state.view) {
