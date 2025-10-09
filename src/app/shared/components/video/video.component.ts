@@ -39,6 +39,12 @@ export class VideoComponent {
   );
   readonly video$ = this.photoSubject.asObservable();
 
+  @Input() set scale(val: number) {
+    if (val === 3) {
+      this.isFullScreen$.next(true);
+    }
+  };
+
   @Input() set videoSrc(video: PhotoMedia) {
     this.video = video;
     this.photoSubject.next(video);
@@ -66,12 +72,17 @@ export class VideoComponent {
     const fullScreenedEl = this.document.fullscreenElement;
 
     if (fullScreenedEl) {
-      this.isFullScreen$.next(true);
       const isEl = this.videoRef.nativeElement === e;
-      this.cdr.markForCheck();
+      const isVideoFull = fullScreenedEl?.nodeName === "VIDEO";
+
+      if (isEl && isVideoFull) {
+        this.isFullScreen$.next(true);
+      }
     } else {
       this.isFullScreen$.next(false);
     }
+
+    this.cdr.markForCheck();
   }
 
   edit(e: MouseEvent): void {

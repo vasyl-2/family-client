@@ -94,6 +94,7 @@
                     [appSetHeight]="computeGridStyle$ | async"
                     (videoLoaded)="onVideoLoaded($event)"
                     (updatedVideo)="onVideoUpdate($event)"
+                    [scale]="state.sizeA?.curr || 1"
                     [videoSrc]="item"></app-video>
                 }
               }
