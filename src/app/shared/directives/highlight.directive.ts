@@ -44,18 +44,23 @@ export class HighlightDirective implements OnInit {
       });
   }
 
-  @HostListener('click', ['$event.target'])
-  onClick(a: HTMLElement) {
+  @HostListener('click', ['$event'])
+  onClick(event: MouseEvent) {
+    const target = event.target as HTMLElement | null;
+
+    if (!target) return;
+
+
     this.el.nativeElement
       .querySelectorAll('.mat-tree-node')
       .forEach((c: Node) => {
         this.renderer.removeClass(c, 'highlight');
       });
-    if (a.localName === 'span') {
-      const parent = a.parentNode;
+    if (target.localName === 'span') {
+      const parent = target.parentNode;
       this.renderer.addClass(parent, 'highlight');
-    } else if (a.localName === 'div') {
-      this.renderer.addClass(a, 'highlight');
+    } else if (target.localName === 'div') {
+      this.renderer.addClass(target, 'highlight');
     }
   }
 
