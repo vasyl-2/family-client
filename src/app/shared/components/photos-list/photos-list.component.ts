@@ -192,6 +192,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setGalleryProps(): void {
+    if (!this.gallery) {
+      return;
+    }
     const computedStyles = window.getComputedStyle(this.gallery.nativeElement);
     const rowHeight = parseInt(
       computedStyles.getPropertyValue('grid-auto-rows'),
