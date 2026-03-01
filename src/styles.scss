@@ -103,3 +103,17 @@ mat-card {
   }
 }
 
+.mat-accordion {
+  background-color: #000000 !important;
+}
+.mat-expansion-panel mat-expanded mat-expansion-panel-spacing {
+  background-color: #1a1a1a !important;
+}
+
+.mat-expansion-panel-content-wrapper {
+  background-color: #1a1a1a !important;
+}
+
+mat-expansion-panel-header.mat-expansion-panel-header mat-focus-indicator mat-expansion-toggle-indicator-after {
+  background-color: #1a1a1a !important;
+}

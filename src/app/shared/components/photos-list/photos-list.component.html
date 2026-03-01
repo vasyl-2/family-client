@@ -1,5 +1,5 @@
 @if (showSideBar$ | async; as showSideBar) {
-  <button mat-button color="primary" (click)="toggleSideBar(showSideBar)">{{ showSideBar }}</button>
+  <button mat-button color="primary" (click)="toggleSideBar(showSideBar)">{{ showSideBar | translate }}</button>
 }
 <div class="container" [class.open]="(open$ | async) === true">
 
@@ -10,20 +10,14 @@
   </div>
 
   <div class="content">
-    <!--    <div class="search-wrapper">-->
-    <!--      <h3 class="search-title">{{ 'search_field' | translate }}</h3>-->
-    <!--      <app-search [formControl]="search"></app-search>-->
-  <!--    </div>-->
+
   @if (subChapter$ | async; as subChapter) {
     <!--      <div class="header"><h2>{{ subChapter.nameForUI }}</h2><button (click)="goBack(subChapter.parent)" mat-button color="primary">назад</button></div>-->
     <div class="header"><h2>{{ subChapter.nameForUI }}</h2></div>
     @if (subChapter.parent) {
       <button mat-button color="primary" (click)="goBack(subChapter.parent)">{{ 'return_to_chapter' | translate }} {{ subChapter.parentTitle }}</button>
     }
-    <app-view-settings
-      (view)="onViewChanged($event)"
-    (order)="onOrderChanged($event)"></app-view-settings>
-    <!--  if subChapters are    -->
+
     @if (subChapter.children) {
       <h3>{{ 'sub_chapters' | translate }}</h3>
       <div class="sub-chapters">
@@ -34,9 +28,7 @@
         }
       </div>
     }
-    <!--   end of if subChapters are   -->
   }
-
 
   @if ({
     sizeA: (sizeOfScale$ | async),
@@ -46,19 +38,30 @@
     pdfs: pdfs$ | async,
     pdfThumbnails: pdfThumbnails$ | async,
     toOpenPdf: toOpenPdf$ | async,
+    search: search$ | async,
+    selectedId: selectedId$ | async
     }; as state;) {
     @if (state.commonList?.length) {
-      <div class="search-wrapper">
-        <h3 class="search-title">{{ 'search_field' | translate }}</h3>
-        <app-search [formControl]="search"></app-search>
-      </div>
+<!--      <div class="search-wrapper">-->
+<!--        <h3 class="search-title">{{ 'search_field' | translate }}</h3>-->
+<!--        <app-search [formControl]="search"></app-search>-->
+<!--      </div>-->
     }
     <!--      <div #gallery [ngClass]="{ gallery: state.sizeA === 1, flex: state.sizeA === 2 }">-->
-    <div class="switch-media">
-      <button mat-button color="primary" (click)="showMedia('all')">{{ 'photos_and_videos' | translate }}</button>
-      <button mat-button color="primary" (click)="showMedia('photo')">{{ 'choose_photo' | translate }}</button>
-      <button mat-button color="primary" (click)="showMedia('video')">{{ 'choose_video' | translate }}</button>
-      <button mat-button color="primary" (click)="showMedia('pdf')">{{ 'choose_pdf' | translate }}</button>
+    @if (state.selectedId) {
+      <app-view-settings (view)="onViewChanged($event)" (order)="onOrderChanged($event)"></app-view-settings>
+
+      <div class="switch-media">
+        <button mat-button color="primary" (click)="showMedia('all')">{{ 'photos_and_videos' | translate }}</button>
+        <button mat-button color="primary" (click)="showMedia('photo')">{{ 'choose_photo' | translate }}</button>
+        <button mat-button color="primary" (click)="showMedia('video')">{{ 'choose_video' | translate }}</button>
+        <button mat-button color="primary" (click)="showMedia('pdf')">{{ 'choose_pdf' | translate }}</button>
+      </div>
+    }
+
+    <div class="search-wrapper">
+      <!--      <h3 class="search-title">{{ 'search_field' | translate }}</h3>-->
+      <app-search [hidden]="!state.selectedId && !state.commonList?.length" [formControl]="search"></app-search>
     </div>
     @if (state.mediaTypeA === 'pdf') {
       @if (state.pdfThumbnails && state.pdfThumbnails.length) {
@@ -67,10 +70,9 @@
             <img class="thumbnail" [src]="item.path" alt="" (click)="opendPdf(item)"/>
           }
         </div>
-
       } @else {
         <div>
-          No pdfs so far
+          {{ 'no_pdf' | translate | uppercase }}
         </div>
       }
     } @else {
@@ -126,8 +128,10 @@
               }
             }
           }
-        } @else {
+        } @else if(!state.search?.length) {
           <div class="empty">{{ 'no_media_yet' | translate }} :)</div>
+        } @else if (state.search?.length) {
+          {{ 'no_by_search' | translate }}
         }
       </div>
     }

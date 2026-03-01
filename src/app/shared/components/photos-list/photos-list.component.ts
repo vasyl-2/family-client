@@ -21,7 +21,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { GalleryState } from '../../../store/reducer';
@@ -72,6 +72,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   selectChapter!: FormGroup;
   search: FormControl = new FormControl<string>('');
+
+  // search: FormControl = new FormControl<string>('', [
+  //   Validators.minLength(2),
+  //   Validators.maxLength(100),
+  // ]);
   size: FormControl = new FormControl<number>(1);
 
   private stateOfChapters: Chapter | undefined;
@@ -98,7 +103,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly sizeOfScale$ = this.sizeOfScaleSubject.asObservable();
 
   private readonly selectedIdSubject = new BehaviorSubject<string>('');
-  private readonly selectedId$ = this.selectedIdSubject
+  readonly selectedId$ = this.selectedIdSubject
     .asObservable()
     .pipe(shareReplay(1));
 
@@ -293,6 +298,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.pdfThumbnails$.subscribe(x => console.log('thumb!!!!!', x));
 
     this.subChapter$ = this.selectedId$.pipe(
+      tap(chapter => {
+        if (this.gallery) {
+          this.size.setValue(1);
+        }
+      }),
       withLatestFrom(this.allChapters$),
       map(([id, chapters]: [string, Chapter[]]) => {
         const chapter = this.findChapterByIdInArray(chapters, id);
@@ -337,7 +347,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         }),
       ),
       this.sortBy$,
-      this.search$
+      this.search$.pipe(distinctUntilChanged(), debounceTime(500))
     ]).pipe(
       map(([photos, videos, order, search]) => {
         switch (order) {
@@ -387,8 +397,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscribeToToggleSideBar();
 
     // this.subscribeToSearch();
-
-
   }
 
   ngOnDestroy(): void {

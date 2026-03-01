@@ -42,5 +42,7 @@
   "edit": "Редагувати",
   "date_of_photo": "Дата фотографії",
   "date_of_video": "Дата відео",
-  "date_of_pdf": "Дата документа"
+  "date_of_pdf": "Дата документа",
+  "no_pdf": "No pdf so far \uD83D\uDE03",
+  "no_by_search": "по пошуку нічого не знайдено \uD83D\uDE03"
 }
