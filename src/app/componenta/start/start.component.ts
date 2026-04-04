@@ -1,4 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import {Component, ChangeDetectionStrategy, OnInit} from '@angular/core';
+import {CustomSocketService, SocketEvent} from "../../services/custom-socket/custom-socket.service";
 
 @Component({
   selector: 'app-start',
@@ -7,4 +8,17 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class StartComponent {}
+export class StartComponent implements OnInit {
+
+  constructor(
+    private customSocketService: CustomSocketService
+  ) {
+  }
+
+  ngOnInit(): void {
+
+    this.customSocketService.onEvent(this.customSocketService.socketUrl, SocketEvent.FROM_UI).subscribe((d: any) => {
+      console.log(`onEvent !!!!!!!!!!!! ${d}`);
+    })
+  }
+}

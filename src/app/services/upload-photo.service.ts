@@ -77,7 +77,7 @@ export class UploadPhotoService implements IUploadPhotoService {
     });
   }
 
-  updatePhoto(photo: Partial<Photo>) {
+  updatePhoto(photo: Partial<PhotoMedia>) {
     const url = `${environment.apiUrl}/upload-photo/updatephoto/${photo._id}`;
     return this.http.patch(url, { photo });
   }
