@@ -23,7 +23,7 @@ export class EnlargeDirective {
 
       let newSpan;
 
-      let multiPly: number = 2;
+      let multiPly: number;
 
       if (!prev || curr > prev) {
         if (!prev) {

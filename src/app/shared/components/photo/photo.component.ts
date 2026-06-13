@@ -4,12 +4,13 @@ import {
   Input,
   OnDestroy,
   Output,
-  EventEmitter,
+  EventEmitter, DestroyRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import {Photo, PhotoMedia} from '../../../models/photo';
+import { PhotoMedia } from '../../../models/photo';
 import { environment } from '../../../../environments/environment';
 import { EditDescriptionComponent } from '../edit-description/edit-description.component';
 
@@ -40,7 +41,10 @@ export class PhotoComponent implements OnDestroy {
   @Output() updatedPhoto = new EventEmitter<Partial<PhotoMedia>>();
   @Output() imageLoaded = new EventEmitter<void>();
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private destroyRef: DestroyRef
+  ) {}
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
@@ -62,7 +66,7 @@ export class PhotoComponent implements OnDestroy {
     });
 
     this.sub.add(
-      dialogRef.afterClosed().subscribe(
+      dialogRef.afterClosed().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(
         (
           result:
             | {

@@ -39,7 +39,8 @@
     pdfThumbnails: pdfThumbnails$ | async,
     toOpenPdf: toOpenPdf$ | async,
     search: search$ | async,
-    selectedId: selectedId$ | async
+    selectedId: selectedId$ | async,
+    computeGridStyle: computeGridStyle$ | async
     }; as state;) {
     @if (state.commonList?.length) {
 <!--      <div class="search-wrapper">-->
@@ -83,7 +84,7 @@
               @case ('big') {
                 @if (item.type === 'photo' && (state.mediaTypeA === 'photo' || state.mediaTypeA === 'all')) {
                   <app-photo [appEnlarge]="state.sizeA"
-                    [appSetHeight]="computeGridStyle$ | async"
+                    [appSetHeight]="state.computeGridStyle"
                     typeOfMedia="img"
                     (click)="openFullSize($event, item!)"
                     (updatedPhoto)="onPhotoUpdate($event)"
@@ -93,7 +94,7 @@
                 @if ((item.type === 'video') && (state.mediaTypeA === 'video' || state.mediaTypeA === 'all')) {
                   <app-video [appEnlarge]="state.sizeA"
                     typeOfMedia="video"
-                    [appSetHeight]="computeGridStyle$ | async"
+                    [appSetHeight]="state.computeGridStyle"
                     (videoLoaded)="onVideoLoaded($event)"
                     (updatedVideo)="onVideoUpdate($event)"
                     [scale]="state.sizeA?.curr || 1"

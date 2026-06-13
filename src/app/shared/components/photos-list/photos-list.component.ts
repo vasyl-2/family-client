@@ -1,7 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectorRef,
-  Component,
+  Component, DestroyRef,
   ElementRef, inject,
   OnDestroy,
   OnInit,
@@ -21,7 +21,7 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { GalleryState } from '../../../store/reducer';
@@ -44,6 +44,7 @@ import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
 import { ViewSettingsStore } from "./view-list-store/view-list-store";
 import {PdfComponent} from "../pdf/pdf.component";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 GlobalWorkerOptions.workerSrc = new URL(
   "/assets/pdf.worker.min.mjs",
@@ -72,6 +73,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   selectChapter!: FormGroup;
   search: FormControl = new FormControl<string>('');
+  computedStyles!: CSSStyleDeclaration;
 
   // search: FormControl = new FormControl<string>('', [
   //   Validators.minLength(2),
@@ -150,26 +152,31 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     private highlightChapterService: HighlightChapterService,
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
+    private destroyRef: DestroyRef
   ) {
 
   }
 
   ngAfterViewInit(): void {
     this.loadedImagesCountSubject
-      .pipe(withLatestFrom(this.photos$))
+      .pipe(withLatestFrom(this.photos$), takeUntilDestroyed(this.destroyRef))
       .subscribe(([count, photos]: [number, PhotoMedia[] | undefined]) => {
-        if (photos && count === photos?.length) {
+        if (photos && count === photos?.length) { // all hotos from photos array emitted then set gallery props
           this.setGalleryProps();
         }
       });
 
     this.loadedVideosCountSubject
-      .pipe(withLatestFrom(this.videos$))
+      .pipe(withLatestFrom(this.videos$), takeUntilDestroyed(this.destroyRef))
       .subscribe(([count, videos]: [number, PhotoMedia[] | undefined]) => {
         if (videos && count === videos?.length) {
           this.setGalleryProps();
         }
       });
+
+    this.computeGridStyle$.subscribe(x => {
+      console.log('computeGridStyle$_______________', x)
+    })
   }
 
   toggleSideBar(state: 'open' | 'close'): void {
@@ -201,8 +208,12 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     const computedStyles = window.getComputedStyle(this.gallery.nativeElement);
+
+    this.computedStyles = computedStyles;
+
+    console.log('computedStyles____', computedStyles.getPropertyValue('grid-auto-rows'), computedStyles.getPropertyValue('grid-row-gap'));
     const rowHeight = parseInt(
-      computedStyles.getPropertyValue('grid-auto-rows'),
+      computedStyles.getPropertyValue('grid-auto-rows'), 10 // !!!!!!!!!!! to check
     );
     const rowGap = parseInt(computedStyles.getPropertyValue('grid-row-gap'));
     this.computeGridStyleSubject.next({ rowGap, rowHeight });
@@ -397,6 +408,10 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscribeToToggleSideBar();
 
     // this.subscribeToSearch();
+
+    window.addEventListener('resize', () => {
+      this.setGalleryProps();
+    });
   }
 
   ngOnDestroy(): void {
@@ -433,13 +448,16 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   selectSubChapter(subChapterId: string): void {
-    console.log('CLICKED___!!!')
     this.previousIdSubject.next(this.selectedIdSubject.value);
     this.selectedIdSubject.next(subChapterId);
-    this.store.dispatch(receivePhotos({ chapter: subChapterId }));
-    this.store.dispatch(receiveVideos({ chapter: subChapterId }));
-    this.store.dispatch(receivePdfs({ chapter: subChapterId }));
+    this.dispatchToStore(subChapterId);
     setTimeout(() => this.setGalleryProps.bind(this), 5000);
+  }
+
+  private dispatchToStore(chapter: string ): void {
+    [receivePhotos, receiveVideos, receivePdfs].forEach((action) => {
+      this.store.dispatch(action({ chapter }));
+    })
   }
 
   goBack(id: string | null | undefined) {
@@ -512,12 +530,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscribeToChapterChanges(): void {
     this.selectChapter.valueChanges
-      .pipe(distinctUntilChanged())
+      .pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe((form) => {
         if (form.chapter) {
           this.loadedImagesCountSubject.next(0);
           this.loadedVideosCountSubject.next(0);
-          console.log('CHAPTER____', form.chapter)
           this.selectedIdSubject.next(form.chapter);
           this.store.dispatch(receivePhotos({ chapter: form.chapter }));
           this.store.dispatch(receiveVideos({ chapter: form.chapter }));
@@ -528,10 +545,9 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private subscribeToSizeChange(): void {
-    this.size.valueChanges.subscribe((size: string) => {
+    this.size.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((size: string) => {
       const numberSize = +size;
 
-      console.log('NUMBER_SIZE_____', numberSize);
       let { curr, prev, step } = this.sizeOfScaleSubject.value;
       const computedStyle = window.getComputedStyle(this.gallery.nativeElement);
       const isMore =
@@ -546,7 +562,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       let newGridTemplateColumns: number;
-      console.log('COLUMNS_____________', currentGridColumns);
 
       let multiPly: number;
 
@@ -568,14 +583,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         newGridTemplateColumns = currentGridColumns * multiPly;
       } else {
         if (!this.stepToGridColumns.has(numberSize)) {
-          console.log('LESS_________________', numberSize);
           const divider = Math.abs(numberSize - step) > 1 ? 4 : 2.3;
-          console.log('DIVIDER_________', divider);
           newGridTemplateColumns = currentGridColumns / divider;
-          console.log(
-            'newGridTemplateColumns_________',
-            newGridTemplateColumns,
-          );
         } else {
           newGridTemplateColumns = this.stepToGridColumns.get(numberSize)!;
         }
