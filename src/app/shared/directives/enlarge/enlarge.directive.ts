@@ -8,49 +8,63 @@ export class EnlargeDirective {
   @Input() set appEnlarge(
     scale: { curr: number; prev: number | undefined; step: number } | null,
   ) {
-    if (scale) {
-      const gridRowEnd = window
-        .getComputedStyle(this.el.nativeElement)
-        .getPropertyValue('grid-row-end');
-      const currentSpan = parseInt(gridRowEnd.split(' ')[1]);
 
-      if (gridRowEnd === 'auto') {
-        // from start, here works different directive appSetHeight
-        return;
-      }
+    if (!scale) {
+      return;
+    }
 
-      const { prev, curr } = scale;
+    const gridRowEnd = window
+      .getComputedStyle(this.el.nativeElement)
+      .getPropertyValue('grid-row-end');
 
-      let newSpan;
+    if (gridRowEnd === 'auto') {
+      // from start, here works different directive appSetHeight
+      return;
+    }
 
-      let multiPly: number;
+    const currentSpan = parseInt(gridRowEnd.split(' ')[1]);
 
-      if (!prev || curr > prev) {
-        if (!prev) {
-          multiPly = 2;
-        } else {
-          if (Math.abs(prev - curr) > 1) {
-            multiPly = 4;
-          } else {
-            multiPly = 2;
-          }
-        }
-        newSpan = currentSpan * multiPly;
+    const { prev, curr } = scale;
+
+    let newSpan;
+
+    let multiPly: number;
+
+    if (!prev || curr > prev) {
+      if (!prev) {
+        multiPly = 2;
       } else {
         if (Math.abs(prev - curr) > 1) {
           multiPly = 4;
         } else {
           multiPly = 2;
         }
-        newSpan = currentSpan / multiPly;
       }
-
-      this.renderer.setStyle(
-        this.el.nativeElement,
-        'gridRowEnd',
-        `span ${newSpan}`,
-      );
+      newSpan = currentSpan * multiPly;
+    } else {
+      if (Math.abs(prev - curr) > 1) {
+        multiPly = 4;
+      } else {
+        multiPly = 2;
+      }
+      newSpan = currentSpan / multiPly;
     }
+
+    if (!Number.isFinite(newSpan)) {
+      console.error('Invalid newSpan', {
+        gridRowEnd,
+        currentSpan,
+        newSpan,
+        scale,
+      });
+      return;
+    }
+
+    this.renderer.setStyle(
+      this.el.nativeElement,
+      'gridRowEnd',
+      `span ${newSpan}`,
+    );
   }
 
   constructor(

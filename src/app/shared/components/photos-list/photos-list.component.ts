@@ -36,15 +36,15 @@ import {
   photosSelector,
   videosSelector,
 } from '../../../store/selectors';
-import {Photo, PhotoMedia} from '../../../models/photo';
+import { Photo, PhotoMedia } from '../../../models/photo';
 import { environment } from '../../../../environments/environment';
 import { Chapter } from '../../../models/chapter';
 import { FullSizePhotoComponent } from '../full-size-photo/full-size-photo.component';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 import { HighlightChapterService } from '../../../services/highlight-chapter.service';
 import { ViewSettingsStore } from "./view-list-store/view-list-store";
-import {PdfComponent} from "../pdf/pdf.component";
-import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import { PdfComponent } from "../pdf/pdf.component";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 GlobalWorkerOptions.workerSrc = new URL(
   "/assets/pdf.worker.min.mjs",
@@ -173,10 +173,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           this.setGalleryProps();
         }
       });
-
-    this.computeGridStyle$.subscribe(x => {
-      console.log('computeGridStyle$_______________', x)
-    })
   }
 
   toggleSideBar(state: 'open' | 'close'): void {
@@ -211,7 +207,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.computedStyles = computedStyles;
 
-    console.log('computedStyles____', computedStyles.getPropertyValue('grid-auto-rows'), computedStyles.getPropertyValue('grid-row-gap'));
     const rowHeight = parseInt(
       computedStyles.getPropertyValue('grid-auto-rows'), 10 // !!!!!!!!!!! to check
     );
@@ -238,7 +233,12 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.search$ = this.search.valueChanges.pipe(distinctUntilChanged(), debounceTime(500), startWith(''));
+    this.search$ = this.search.valueChanges.pipe(
+      distinctUntilChanged(),
+      debounceTime(500),
+      startWith('')
+    );
+
     this.allChapters$ = this.store.pipe(select(chaptersHierarchySelector)).pipe(
       tap((cHs: Chapter[]) => {
         // if (cHs.length) {
@@ -249,7 +249,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         // }
       }),
       map((chapters: Chapter[]) => {
-        // console.log('CURRENT____', chapters, this.route.snapshot.params['chapter']);
         // const related = chapters.filter((c: Chapter) => c._id === this.route.snapshot.params['chapter']);
         // return related;
         return chapters;
@@ -266,22 +265,23 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.videos$ = this.store.pipe(select(videosSelector));
     this.pdfs$ = this.store.pipe(select(docsSelector)).pipe(shareReplay(1));
 
-    this.toOpenPdf$ = this.toOpenPdfId$.pipe(withLatestFrom(this.pdfs$)).pipe(map(([id, a]: [string | undefined, PhotoMedia[] | undefined]) => {
+    this.toOpenPdf$ = this.toOpenPdfId$.pipe(
+      withLatestFrom(this.pdfs$)).pipe(
+        map(([id, a]: [string | undefined, PhotoMedia[] | undefined]) => {
 
-      if (!a || !a.length || !id) return undefined;
+        if (!a || !a.length || !id) return undefined;
 
-      const pdf =  a.find((c: PhotoMedia) => {
-        return c._id === id
-      });
+        const pdf =  a.find((c: PhotoMedia) => {
+          return c._id === id
+        });
 
-      if (!pdf) return undefined;
+        if (!pdf) return undefined;
 
-      const { path } = this.getPdfAsset(pdf);
+        const { path } = this.getPdfAsset(pdf);
 
-      return {
-        doc: pdf, path
-      }
-
+        return {
+          doc: pdf, path
+        }
     }));
 
     this.toOpenPdf$.pipe(
@@ -305,8 +305,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
           from(this.renderThumbnail(this.getPdfAsset(pdf)))));
       })
     );
-
-    this.pdfThumbnails$.subscribe(x => console.log('thumb!!!!!', x));
 
     this.subChapter$ = this.selectedId$.pipe(
       tap(chapter => {
@@ -409,9 +407,11 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // this.subscribeToSearch();
 
-    window.addEventListener('resize', () => {
-      this.setGalleryProps();
-    });
+    // window.addEventListener('resize', () => {
+    //   this.setGalleryProps();
+    // });
+
+    window.addEventListener('resize', this.setGalleryProps.bind(this));
   }
 
   ngOnDestroy(): void {

@@ -38,7 +38,6 @@ export class RangeSizeComponent implements ControlValueAccessor, OnInit {
   writeValue(obj: any): void {}
 
   onInputChange(e: any) {
-    console.log('VALUE_________________________', e);
     this.onChange(e.target.value);
   }
 }
