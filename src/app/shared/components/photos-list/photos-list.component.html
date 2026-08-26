@@ -1,7 +1,14 @@
-@if (showSideBar$ | async; as showSideBar) {
-  <button mat-button color="primary" (click)="toggleSideBar(showSideBar)">{{ showSideBar | translate }}</button>
-}
-<div class="container" [class.open]="(open$ | async) === true">
+@if ({ showSideBar: open$ | async }; as show) {
+  @if (show.showSideBar === true || show.showSideBar === false) {
+    <button
+      class="open-side-bar"
+      mat-button
+      (click)="toggleSideBar(!show.showSideBar)">
+      {{ (show.showSideBar ? 'close' : 'open') | translate }}
+    </button>
+  }
+
+<div class="container" [class.open]="(show.showSideBar === true)">
 
   <div class="side-bar">
     <ng-container  [formGroup]="selectChapter">
@@ -53,10 +60,10 @@
       <app-view-settings (view)="onViewChanged($event)" (order)="onOrderChanged($event)"></app-view-settings>
 
       <div class="switch-media">
-        <button mat-button color="primary" (click)="showMedia('all')">{{ 'photos_and_videos' | translate }}</button>
-        <button mat-button color="primary" (click)="showMedia('photo')">{{ 'choose_photo' | translate }}</button>
-        <button mat-button color="primary" (click)="showMedia('video')">{{ 'choose_video' | translate }}</button>
-        <button mat-button color="primary" (click)="showMedia('pdf')">{{ 'choose_pdf' | translate }}</button>
+        <button mat-button (click)="showMedia('all')">{{ 'photos_and_videos' | translate }}</button>
+        <button mat-button (click)="showMedia('photo')">{{ 'choose_photo' | translate }}</button>
+        <button mat-button (click)="showMedia('video')">{{ 'choose_video' | translate }}</button>
+        <button mat-button (click)="showMedia('pdf')">{{ 'choose_pdf' | translate }}</button>
       </div>
     }
 
@@ -147,4 +154,4 @@
 
 </div>
 
-
+}

@@ -63,11 +63,28 @@ export const RECEIVED_PERMISSIONS = '[ADMIN] RECEIVED PERMISSIONS';
 export const CREATE_PERMISSION = '[ADMIN] CREATE PERMISSION';
 export const EDIT_PERMISSION = '[ADMIN] EDIT PERMISSION';
 
+export const CLOSE_SIDE_BAR = '[Gallery] CLOSE SIDE BAR';
+export const OPEN_SIDE_BAR = '[Gallery] OPEN SIDE BAR';
+
+export const SELECTED_CHAPTER = '[Gallery] SELECT CHAPTER';
+
 export const RECEIVE_PERMISSIONS_BY_USER =
   '[ADMIN] RECEIVE PERMISSIONS BY USER';
 export const RECEIVED_PERMISSIONS_BY_USER =
   '[ADMIN] RECEIVED PERMISSIONS BY USER';
 
+export const openSideBar = createAction(
+  OPEN_SIDE_BAR
+);
+
+export const closeSideBar = createAction(
+  CLOSE_SIDE_BAR
+);
+
+export const selectChapter = createAction(
+  SELECTED_CHAPTER,
+  props<{ chapter: string }>()
+);
 
 export const createChapter = createAction(
   CREATE_ACTION,

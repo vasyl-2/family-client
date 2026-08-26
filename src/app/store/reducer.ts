@@ -4,37 +4,28 @@ import { cloneDeep } from 'lodash';
 import * as fromRouter from '@ngrx/router-store';
 
 import {
-  createdPhoto,
   receivedChapters,
   receivedPhotos,
   authenticated,
   authenticateAlert,
   authenticateAlertHide,
   logout,
-  createdVideo,
   receivedVideos,
-  getUsers,
   gotUsers,
-  createUser,
-  editUser,
-  getRoles,
   gotRoles,
-  createRole,
-  editRole,
-  RECEIVE_USERS,
   gotPermissionsByUser,
   gotPermissions,
   createdRole,
   createdUser,
-  editedVideo, receivedPdfs,
+  editedVideo, receivedPdfs, openSideBar, closeSideBar, selectChapter,
 } from './action';
 import { Chapter } from '../models/chapter';
-import {PhotoMedia} from '../models/photo';
+import { PhotoMedia } from '../models/photo';
 import { RouterStateUrl } from '../models/router-utils';
 import { User } from '../models/user';
 import { Role } from '../models/role';
 import { Permission } from '../models/permission';
-import {ViewSettings} from "../models/view-settings";
+import { ViewSettings } from "../models/view-settings";
 
 export interface GalleryState {
   chapters: Chapter[];
@@ -59,6 +50,10 @@ export interface GalleryState {
     permissions?: Permission[];
   };
   viewSettings: ViewSettings;
+  ui: {
+    sideBarOpened: boolean;
+    selectedChapter?: string | undefined;
+  }
 }
 
 export const GALLERY_INIT_STATE: GalleryState = {
@@ -73,6 +68,9 @@ export const GALLERY_INIT_STATE: GalleryState = {
   viewSettings: {
     sorted: 'desc',
     paramSOrtBy: 'date'
+  },
+  ui: {
+    sideBarOpened: false,
   }
 };
 
@@ -95,6 +93,18 @@ export const mainReducer = createReducer(
       chapters: action.chapters,
       hierarchyChapters: hierarchy,
     };
+  }),
+
+  immerOn(openSideBar, (state: GalleryState, action): void => {
+    state.ui.sideBarOpened = true;
+  }),
+
+  immerOn(closeSideBar, (state: GalleryState, action): void => {
+    state.ui.sideBarOpened = false;
+  }),
+
+  immerOn(selectChapter, (state: GalleryState, action): void => {
+    state.ui.selectedChapter = action.chapter;
   }),
 
   on(receivedPhotos, (state: GalleryState, action): GalleryState => {

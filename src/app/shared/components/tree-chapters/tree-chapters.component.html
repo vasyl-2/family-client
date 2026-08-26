@@ -1,4 +1,11 @@
-<mat-tree appHighlight [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+<mat-tree
+  appExpandPath
+  appHighlight
+  [appExpandPathTreeControl]="treeControl"
+  [appExpandPathChapters]="chapters"
+  [dataSource]="dataSource"
+  [treeControl]="treeControl"
+  class="example-tree">
   <!-- This is the tree node template for leaf nodes -->
   <!-- There is inline padding applied to this node using styles.
     This padding value depends on the mat-icon-button width. -->

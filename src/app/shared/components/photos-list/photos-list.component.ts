@@ -9,14 +9,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {BehaviorSubject, forkJoin, from, Observable, of, Subscription} from 'rxjs';
+import { BehaviorSubject, forkJoin, from, Observable, of, Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import {
   debounceTime,
   distinctUntilChanged, filter,
   map,
   shareReplay,
-  skip, startWith, switchMap,
+  startWith, switchMap,
   tap,
   withLatestFrom,
 } from 'rxjs/operators';
@@ -29,11 +29,11 @@ import {
   editPhoto,
   receivePhotos,
   receiveVideos,
-  editVideo, receivePdfs,
+  editVideo, receivePdfs, closeSideBar, openSideBar, selectChapter,
 } from '../../../store/action';
 import {
   chaptersHierarchySelector, docsSelector,
-  photosSelector,
+  photosSelector, selectedChapterSelector, sideBarOpenedSelector,
   videosSelector,
 } from '../../../store/selectors';
 import { Photo, PhotoMedia } from '../../../models/photo';
@@ -83,8 +83,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private stateOfChapters: Chapter | undefined;
 
-  previousId: string | undefined;
-
   private readonly loadedImagesCountSubject = new BehaviorSubject(0);
   private readonly loadedVideosCountSubject = new BehaviorSubject(0);
 
@@ -109,6 +107,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     .asObservable()
     .pipe(shareReplay(1));
 
+  selectedIdChapter$!: Observable<string | undefined>;
+
   private readonly previousIdSubject = new BehaviorSubject<string | undefined>(
     '',
   );
@@ -121,11 +121,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private stepToGridColumns = new Map<number, number>();
 
-  private readonly openSubject = new BehaviorSubject(false);
-  readonly open$ = this.openSubject.asObservable();
-
-  private readonly showSideBarSubject = new BehaviorSubject<'open' | 'close'>('open');
-  readonly showSideBar$ = this.showSideBarSubject.asObservable();
+  open$!: Observable<boolean | null>;
 
   private readonly showMediaSubject = new BehaviorSubject<'all' | 'video' | 'photo' | 'pdf'>('all');
   readonly showMediaType$ = this.showMediaSubject.asObservable();
@@ -175,11 +171,12 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
-  toggleSideBar(state: 'open' | 'close'): void {
-    if (state === 'open') {
-      this.showSideBarSubject.next('close');
+
+  toggleSideBar(state: boolean): void {
+    if (state) {
+      this.store.dispatch(openSideBar());
     } else {
-      this.showSideBarSubject.next('open');
+      this.store.dispatch(closeSideBar());
     }
   }
 
@@ -264,6 +261,8 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.photos$ = this.store.pipe(select(photosSelector));
     this.videos$ = this.store.pipe(select(videosSelector));
     this.pdfs$ = this.store.pipe(select(docsSelector)).pipe(shareReplay(1));
+    this.open$ = this.store.pipe(select(sideBarOpenedSelector));
+    this.selectedIdChapter$ = this.store.pipe(select(selectedChapterSelector));
 
     this.toOpenPdf$ = this.toOpenPdfId$.pipe(
       withLatestFrom(this.pdfs$)).pipe(
@@ -403,13 +402,17 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       }),
     );
 
-    this.subscribeToToggleSideBar();
-
     // this.subscribeToSearch();
 
     // window.addEventListener('resize', () => {
     //   this.setGalleryProps();
     // });
+
+    this.selectedIdChapter$.subscribe((chapter) => {
+      if (chapter && !this.selectChapter.get('chapter')?.value) {
+        this.selectChapter.get('chapter')?.setValue(chapter);
+      }
+    })
 
     window.addEventListener('resize', this.setGalleryProps.bind(this));
   }
@@ -455,7 +458,7 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private dispatchToStore(chapter: string ): void {
-    [receivePhotos, receiveVideos, receivePdfs].forEach((action) => {
+    [receivePhotos, receiveVideos, receivePdfs, selectChapter].forEach((action) => {
       this.store.dispatch(action({ chapter }));
     })
   }
@@ -533,12 +536,17 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe((form) => {
         if (form.chapter) {
+
           this.loadedImagesCountSubject.next(0);
           this.loadedVideosCountSubject.next(0);
+
           this.selectedIdSubject.next(form.chapter);
-          this.store.dispatch(receivePhotos({ chapter: form.chapter }));
-          this.store.dispatch(receiveVideos({ chapter: form.chapter }));
-          this.store.dispatch(receivePdfs({ chapter: form.chapter }));
+          const payload = { chapter: form.chapter };
+
+          [receivePhotos, receiveVideos, receivePdfs, selectChapter].forEach((action) => {
+            this.store.dispatch(action(payload));
+          })
+
           this.highlightChapterService.chapterIdSubject.next(form.chapter);
         }
       });
@@ -609,12 +617,6 @@ export class PhotosListComponent implements OnInit, OnDestroy, AfterViewInit {
         prev: curr,
         step: numberSize,
       });
-    });
-  }
-
-  private subscribeToToggleSideBar(): void {
-    this.showSideBar$.pipe(skip(1)).subscribe((state: 'open' | 'close') => {
-      this.openSubject.next(!this.openSubject.value);
     });
   }
 

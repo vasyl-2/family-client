@@ -61,7 +61,6 @@ export class CustomSocketService {
   }
 
   onEvent(socketId: string, eventName: SocketEvent): Observable<any> {
-    console.log(`onEvent !! ${eventName}, ${eventName}`);
 
     return new Observable<any>((subscriber) => {
       const socketData = this.getSocketData(socketId);

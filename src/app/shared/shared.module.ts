@@ -29,6 +29,7 @@ import {TranslateModule} from "@ngx-translate/core";
 import { CreateDocComponent } from "./components/create-doc/create-doc.component";
 import { PdfComponent } from "./components/pdf/pdf.component";
 import {NgxExtendedPdfViewerModule} from "ngx-extended-pdf-viewer";
+import {ExpandPathDirective} from "./directives/expand-path.directive";
 
 const components = [
   CreatePhotoComponent,
@@ -53,6 +54,7 @@ const components = [
 const directives = [
   IsLoggedInDirective,
   HighlightDirective,
+  ExpandPathDirective,
   SetHeightDirective,
   EnlargeDirective,
   AddClassDirective,

@@ -3,7 +3,6 @@
   background-color: black;
 }
 
-
 .example-tree-invisible {
   display: none;
 }
@@ -32,10 +31,11 @@
 }
 
 .highlight {
-  background-color: dodgerblue;
+  background-color: yellow;
   //color: white;
-  color: rgb(107, 113, 127);
+  //color: rgb(107, 113, 127);
   box-shadow: 1px 1px 2px 2px lightskyblue;
+  color: #1a1a1a !important;
   border-radius: 3px;
 }
 

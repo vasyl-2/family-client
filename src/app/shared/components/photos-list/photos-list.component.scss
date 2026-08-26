@@ -7,6 +7,10 @@
   height: 100%;
 }
 
+.open-side-bar {
+  font-size: 24px;
+}
+
 .container {
   display: grid;
   //height: 100%;
@@ -172,6 +176,10 @@ h2, h3 {
   justify-content: center;
   align-items: center;
   margin: 10px;
+
+  & button {
+    font-size: 18px;
+  }
 }
 
 .search-title {

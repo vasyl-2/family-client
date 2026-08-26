@@ -64,3 +64,14 @@ export const viewSettingsSelector = createSelector(
   gallerySelector,
   (state: GalleryState) => state.viewSettings,
 );
+
+export const sideBarOpenedSelector = createSelector(
+  gallerySelector,
+  (state: GalleryState) => state.ui.sideBarOpened,
+);
+
+export const selectedChapterSelector = createSelector(
+  gallerySelector,
+  (state: GalleryState) => state.ui.selectedChapter,
+)
+

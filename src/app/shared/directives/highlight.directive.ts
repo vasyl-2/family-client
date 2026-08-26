@@ -1,8 +1,8 @@
 import {
+  AfterViewInit,
   Directive,
   ElementRef,
   HostListener,
-  OnInit,
   Renderer2,
 } from '@angular/core';
 
@@ -13,14 +13,14 @@ import { filter } from 'rxjs/operators';
   selector: '[appHighlight]',
   standalone: false,
 })
-export class HighlightDirective implements OnInit {
+export class HighlightDirective implements AfterViewInit {
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
     private highlightChapterService: HighlightChapterService,
   ) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit() {
     this.highlightChapterService.chapterId$
       .pipe(filter((id: string | undefined) => !!id))
       .subscribe((id: string | undefined) => {
@@ -50,7 +50,6 @@ export class HighlightDirective implements OnInit {
 
     if (!target) return;
 
-
     this.el.nativeElement
       .querySelectorAll('.mat-tree-node')
       .forEach((c: Node) => {
@@ -78,6 +77,7 @@ export class HighlightDirective implements OnInit {
         id,
       );
       if (found) {
+        console.log('found element', element);
         return found;
       }
     }
