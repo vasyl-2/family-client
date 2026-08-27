@@ -117,3 +117,16 @@ mat-card {
 mat-expansion-panel-header.mat-expansion-panel-header mat-focus-indicator mat-expansion-toggle-indicator-after {
   background-color: #1a1a1a !important;
 }
+
+app-photos-list, app-view-settings {
+  --mat-button-text-label-text-color: #b6b68f !important;
+  --mat-button-toggle-text-color: #b6b68f !important;
+  --mat-expansion-header-text-color: #b6b68f !important;
+  --mat-button-toggle-text-size: 18px !important;
+  --mat-expansion-header-description-color:  #b6b68f !important;
+  --mat-expansion-header-text-size: 18px;
+
+  .mat-button-toggle-button {
+    font-size: 18px;
+  }
+}
