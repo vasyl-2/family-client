@@ -130,3 +130,12 @@ app-photos-list, app-view-settings {
     font-size: 18px;
   }
 }
+
+app-entry {
+  .mdc-tab--active.mdc-tab-indicator--active {
+    .mdc-tab__text-label {
+      color: white !important;
+    }
+  }
+
+}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
-import { map, exhaustMap, catchError } from 'rxjs/operators';
+import {map, exhaustMap, catchError, tap} from 'rxjs/operators';
 
 import {
   authenticated,
@@ -31,7 +31,7 @@ import {
   CREATE_ROLE,
   createdRole,
   EDIT_VIDEO_ACTION,
-  editedVideo, RECEIVE_ALL_PDFS, receivedPdfs,
+  editedVideo, RECEIVE_ALL_PDFS, receivedPdfs, editedUser,
 } from './action';
 
 import { CreateChapter } from '../models/dto/create-chapter';
@@ -179,8 +179,9 @@ export class GalleryEffects {
   updateUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EDIT_USER),
+      tap((u) => console.log('TEST______', u)),
       exhaustMap(({ user }: { user: User }) => this.userService.editUser(user)),
-      map((user: User) => createdUser({ user })),
+      map((user: User) => editedUser({ user })),
     ),
   );
 

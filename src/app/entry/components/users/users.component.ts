@@ -47,6 +47,7 @@ export class UsersComponent {
     });
 
     dialogRef.afterClosed().subscribe((u: User) => {
+      console.log('UPDATED__USER____', u);
       if (u) {
         console.log('U_____________', u);
         const rolesChanged = !areEqualFlatArrays(u.role!, user.role!);

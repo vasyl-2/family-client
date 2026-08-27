@@ -17,7 +17,7 @@ import {
   gotPermissions,
   createdRole,
   createdUser,
-  editedVideo, receivedPdfs, openSideBar, closeSideBar, selectChapter,
+  editedVideo, receivedPdfs, openSideBar, closeSideBar, selectChapter, editedUser,
 } from './action';
 import { Chapter } from '../models/chapter';
 import { PhotoMedia } from '../models/photo';
@@ -129,6 +129,15 @@ export const mainReducer = createReducer(
 
   immerOn(createdUser, (state: GalleryState, action): void => {
     state.admin.users?.push(action.user);
+  }),
+
+  immerOn(editedUser, (state: GalleryState, action): void => {
+    console.log('!!!!!!!!!!!!!', action);
+    const user = state.admin.users?.find((u) => u._id === action.user._id);
+    if (user) {
+      console.log('user', user);
+      Object.assign(user, action.user);
+    }
   }),
 
   immerOn(gotRoles, (state: GalleryState, action): void => {

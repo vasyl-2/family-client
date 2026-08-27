@@ -22,6 +22,7 @@ export class UserService implements UserServiceInterface {
   }
 
   editUser(user: User): Observable<User> {
+    console.log('USER___ACTION___222', user);
     return this.http.put<User>(`${environment.apiUrl}/users`, user);
   }
 

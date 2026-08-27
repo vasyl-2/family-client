@@ -28,6 +28,8 @@ import { rolesValidator } from '../../validators/roles-validator';
   standalone: false,
 })
 export class UserEditComponent implements OnInit {
+  showPassword = false;
+
   user!: FormGroup;
   // mutableData!: User;
   roles$!: Observable<Role[] | undefined>;
@@ -63,14 +65,11 @@ export class UserEditComponent implements OnInit {
       if (this.data.role) {
         this.roleControl.setValue(this.data.role);
       }
-      if (this.data.password) {
-        this.passwordControl.setValue(this.data.password);
-      }
     }
 
     this.roles$ = this.store.pipe(select(rolesSelector));
 
-    this.subscribeToNameChange();
+    this.subscribeToEmailChange();
     this.subscribeToRoleChange();
   }
 
@@ -78,9 +77,9 @@ export class UserEditComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  private subscribeToNameChange(): void {
-    this.emailControl.valueChanges.subscribe((name: string) => {
-      this.data.name = name;
+  private subscribeToEmailChange(): void {
+    this.emailControl.valueChanges.subscribe((email: string) => {
+      this.data.email = email;
     });
   }
 
@@ -95,10 +94,7 @@ export class UserEditComponent implements OnInit {
     this.user = this.fB.group({
       email: this.fB.control('', [Validators.required]),
       role: this.fB.control(this.data?.role || [], [rolesValidator()]),
-      password: this.fB.control('', [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
+      password: this.fB.control('', [Validators.minLength(8),]),
     });
   }
 }
